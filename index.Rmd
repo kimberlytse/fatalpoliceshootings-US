@@ -16,15 +16,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Abstract
 
-This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. But I don't want to get into the details because I need to fill in the other things. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).
+This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. ANYWAYS. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).
 
 ## Introduction
 
-If you are intrigued about what I'm going to put in here... Hello World!
+description
 
 ## Background
 
-Look no one needs to know the background of my life as a secret agent... Oh look at the time! 
+description
 
 ## Data, Method and Analysis
 
