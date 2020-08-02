@@ -1,9 +1,2 @@
-name: "personal-website"
+name: "REU Summer 2020"
 output_dir: "."
-navbar:
-  title: "Personal Website"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About Me"
-      href: about.html

@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Kimberly Tse" />
+<meta name="author" content="Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa" />
 
 
-<title>Home</title>
+<title>Analysis and Forecasting of Fatal Police Shootings in the U.S.</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -103,93 +103,6 @@ summary {
 </style>
 
 
-<style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script>
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.parent().addClass('active');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-});
-</script>
 
 <!-- tabsets -->
 
@@ -336,46 +249,193 @@ div.tocify {
 
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Personal Website</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">About Me</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
 <div class="fluid-row" id="header">
 
 
 
-<h1 class="title toc-ignore">Home</h1>
-<h4 class="author">Kimberly Tse</h4>
+<h1 class="title toc-ignore">Analysis and Forecasting of Fatal Police Shootings in the U.S.</h1>
+<h4 class="author">Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa</h4>
 <h4 class="date">7/31/2020</h4>
 
 </div>
 
 
-<div id="hello-world" class="section level2">
-<h2>Hello World</h2>
-<p>This is my test page</p>
+<div id="abstract" class="section level2">
+<h2>Abstract</h2>
+<p>This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. But I don’t want to get into the details because I need to fill in the other things. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).</p>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>If you are intrigued about what I’m going to put in here… Hello World!</p>
+</div>
+<div id="background" class="section level2">
+<h2>Background</h2>
+<p>Look no one needs to know the background of my life as a secret agent… Oh look at the time!</p>
+</div>
+<div id="data-method-and-analysis" class="section level2">
+<h2>Data, Method and Analysis</h2>
+<p>For this portion of the section, I’m going to see how the layout works…</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>For this study, we made use of publicly available data. We used a combination of multiple  different datasets to answer our research question of how multiple different variables affect the  rate of shootings in state and county level. So in order to achieve this we need the following  datasets:</p>
+<ol style="list-style-type: decimal">
+<li>dataset 1</li>
+<li>dataset 2</li>
+<li>dataset 3</li>
+</ol>
+<p>…For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years….</p>
+<p>INCOMING SAMPLE TABLE…</p>
+<table>
+<caption>Name the Table here</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">mpg</th>
+<th align="right">cyl</th>
+<th align="right">disp</th>
+<th align="right">hp</th>
+<th align="right">drat</th>
+<th align="right">wt</th>
+<th align="right">qsec</th>
+<th align="right">vs</th>
+<th align="right">am</th>
+<th align="right">gear</th>
+<th align="right">carb</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mazda RX4</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.620</td>
+<td align="right">16.46</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Mazda RX4 Wag</td>
+<td align="right">21.0</td>
+<td align="right">6</td>
+<td align="right">160</td>
+<td align="right">110</td>
+<td align="right">3.90</td>
+<td align="right">2.875</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Datsun 710</td>
+<td align="right">22.8</td>
+<td align="right">4</td>
+<td align="right">108</td>
+<td align="right">93</td>
+<td align="right">3.85</td>
+<td align="right">2.320</td>
+<td align="right">18.61</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hornet 4 Drive</td>
+<td align="right">21.4</td>
+<td align="right">6</td>
+<td align="right">258</td>
+<td align="right">110</td>
+<td align="right">3.08</td>
+<td align="right">3.215</td>
+<td align="right">19.44</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Hornet Sportabout</td>
+<td align="right">18.7</td>
+<td align="right">8</td>
+<td align="right">360</td>
+<td align="right">175</td>
+<td align="right">3.15</td>
+<td align="right">3.440</td>
+<td align="right">17.02</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="method" class="section level3">
+<h3>Method</h3>
+<div id="exploratory-data-analysis" class="section level4">
+<h4>1. Exploratory Data Analysis</h4>
+<p>This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. ….</p>
+<p>INCOMING VISUAL… <img src="index_files/figure-html/pressure-1.png" width="672" /> INSERT DESCRITPION HERE</p>
+</div>
+<div id="topic-modeling" class="section level4">
+<h4>2. Topic Modeling</h4>
+<p>With the combined dataset of the Washington Post and the Mapping Police Violence, we are able  to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We  first proceeded with word clouds…</p>
+</div>
+<div id="poisson-regression---predicting-rates-of-shootings" class="section level4">
+<h4>3. Poisson Regression - Predicting rates of shootings</h4>
+<p>Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable…..</p>
+<p>INCOMING EQUATION <span class="math inline">\(\log(\mu / t) = \alpha + \beta_{1}X_{1} + ... + \beta_{n}X_{n}\)</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Time Series Forecasting</li>
+</ol>
+<p>Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series …</p>
+</div>
+</div>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<div id="state-level-poisson-regression-results" class="section level3">
+<h3>1. State Level Poisson Regression Results</h3>
+<p>We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure. </p>
+<ol style="list-style-type: decimal">
+<li>One-Variable Poisson Model - Police Expenditure Percentage - State Level</li>
+</ol>
+<p>We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant……</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Full Model</li>
+</ol>
+<p>If we were to look at the full model, we will have all the variables used in the model. Below you  will see all the variables used in the model with varying significance.</p>
+</div>
+<div id="county-level-poisson-regression" class="section level3">
+<h3>2. County Level Poisson Regression</h3>
+<ol style="list-style-type: decimal">
+<li>Full</li>
+<li>Stepwise We get the gist at this point</li>
+</ol>
+</div>
+<div id="time-series" class="section level3">
+<h3>3. Time Series</h3>
+<p>description</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shooting…</p>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion</h2>
+<p>This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year…</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>I do not know how to format the references in RMarkdown</p>
 <pre class="r"><code>summary(cars)</code></pre>
 <pre><code>##      speed           dist       
 ##  Min.   : 4.0   Min.   :  2.00  
@@ -384,12 +444,6 @@ div.tocify {
 ##  Mean   :15.4   Mean   : 42.98  
 ##  3rd Qu.:19.0   3rd Qu.: 56.00  
 ##  Max.   :25.0   Max.   :120.00</code></pre>
-</div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="index_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
 </div>
 
 
@@ -438,7 +492,7 @@ $(document).ready(function ()  {
 
     // establish options
     var options = {
-      selectors: "h1,h2",
+      selectors: "h1,h2,h3,h4",
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {

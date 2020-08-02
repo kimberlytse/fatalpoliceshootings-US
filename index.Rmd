@@ -1,11 +1,11 @@
 ---
-title: "Home"
-author: "Kimberly Tse"
+title: "Analysis and Forecasting of Fatal Police Shootings in the U.S."
+author: "Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa"
 date: "7/31/2020"
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 4
     toc_float: true
     
 ---
@@ -14,21 +14,110 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Hello World
+## Abstract
 
-This is my test page
+This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. But I don't want to get into the details because I need to fill in the other things. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).
+
+## Introduction
+
+If you are intrigued about what I'm going to put in here... Hello World!
+
+## Background
+
+Look no one needs to know the background of my life as a secret agent... Oh look at the time! 
+
+## Data, Method and Analysis
+
+For this portion of the section, I'm going to see how the layout works...
+
+### Data
+
+For this study, we made use of publicly available data. We used a combination of multiple  different datasets to answer our research question of how multiple different variables affect the  rate of shootings in state and county level. So in order to achieve this we need the following  datasets:
+
+1. dataset 1
+2. dataset 2
+3. dataset 3
+
+...For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years....
+
+INCOMING SAMPLE TABLE...
+```{r tables, echo=F}
+library(knitr)
+kable(mtcars[1:5, ], caption = "Name the Table here")
+```
+
+### Method
+#### 1. Exploratory Data Analysis
+
+This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. ....
+
+INCOMING VISUAL...
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+INSERT DESCRITPION HERE
+
+#### 2. Topic Modeling
+
+With the combined dataset of the Washington Post and the Mapping Police Violence, we are able  to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We  first proceeded with word clouds...
+
+
+#### 3. Poisson Regression - Predicting rates of shootings
+
+Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable.....
+
+INCOMING EQUATION
+$\log(\mu / t) = \alpha + \beta_{1}X_{1} + ... + \beta_{n}X_{n}$
+
+4. Time Series Forecasting
+
+Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series ... 
+
+
+## Results
+
+### 1. State Level Poisson Regression Results
+
+We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure. 
+
+1. One-Variable Poisson Model - Police Expenditure Percentage - State Level
+
+We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant......
+
+2. Full Model
+
+If we were to look at the full model, we will have all the variables used in the model. Below you  will see all the variables used in the model with varying significance.
+
+### 2. County Level Poisson Regression
+
+1. Full
+2. Stepwise
+We get the gist at this point
+
+### 3. Time Series
+
+description
+
+## Conclusion
+
+Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shooting...
+
+## Discussion
+
+This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year...
+
+## References
+I do not know how to format the references in RMarkdown
+
+
 
 
 ```{r cars}
 summary(cars)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
