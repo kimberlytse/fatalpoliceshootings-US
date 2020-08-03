@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa" />
+<meta name="author" content="Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime”" />
 
 
 <title>Analysis and Forecasting of Fatal Police Shootings in the U.S.</title>
@@ -254,7 +254,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Analysis and Forecasting of Fatal Police Shootings in the U.S.</h1>
-<h4 class="author">Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa</h4>
+<h4 class="author">Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime”</h4>
 <h4 class="date">7/31/2020</h4>
 
 </div>
@@ -262,117 +262,1794 @@ div.tocify {
 
 <div id="abstract" class="section level2">
 <h2>Abstract</h2>
-<p>This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. ANYWAYS. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).</p>
+<p>Fatal police shootings have been an interest in the political, social, and academic field, as there  has been discrepancy of whether the police used force to protect the people. With the increased  awareness of the Black Lives Matter Movement (BLM) and the movement of Defunding the  Police, there are speculations of the legitimacy of police use-of-force. In this report, we will do  comprehensive analyses making use of factors that may increase the likelihood of fatal police  shootings and whether funding for police departments have a significant relation with fatal police  shootings. To achieve this, we will use multiple different datasets and combine them together.  We were able to observe which factors have a strong correlation on the rate of shootings through  Exploratory Data Analysis which allowed us to see the univariate and multivariate distributions.  We will address the above research questions by making use of Poisson Regression for the rate  of shootings at the state and county levels, and Time Series Forecasting for the monthly number  of shootings in the U.S.</p>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>description</p>
+<p>Fatal police shootings have been an increasing interest in the political, social, and academic field  (Shane 2017). The police use-of-force is meant to be used as a means to apprehend the person  and keep citizens and themselves safe. However, with the increased awareness of the BLM  movement and the movement of Defunding the Police, there are speculations of the legitimacy of  police use-of-force.</p>
+<p>The BLM movement was first founded in the response of the murder of Trayvon Martin with the  purpose to giving black communities power to rise against white supremacy. This movement has  resurfaced due to the murder of George Floyd in May 25, 2020, which spurred a mass movement  of calling out the police for racism and targeting them for police reform. The idea of “Defunding  the Police” was born, with the sole idea of putting more funding into the community rather than law enforcers due to the rising concern of whether the police are actually protecting their  citizens.</p>
+<p>Beginning in 2015, information of each victim claimed from fatal police shootings are listed in  the Washington Post, regarding their demographics, health, and limited information of what the  victim’s action was in the scene of the fatal shooting. However, we cannot tell the whole story  from this data. In various research articles, each has looked at specific factors of fatal police  shootings in a span of one or two years of the occurrence of fatal police shootings. Our dataset is  based from the Washington Post who has started taking note of fatal police shootings occurring  across the United States starting from 2015 and onward. We will combine this dataset with  numerous other datasets that will help further our understanding of our analysis of fatal police shootings. All of these datasets are publicly available and can be obtained to be able to recreate  the process.</p>
+<p>In this report, we will do a comprehensive analysis of fatal police shootings in the U.S. at the  state and county level. Our research questions are 1) What factors may increase the rate of fatal  police shootings at state and county levels, 2) Whether funding for police departments have a  significant relation to fatal police shootings at the state level, and 3) Predict the count of fatal  police shootings that will happen in the U.S. over the second half of the year 2020. We compiled  numerous datasets ranging from January 2015 to June 2020, which are accessible to the public.  Although data regarding this topic are limited, it will at the least provide some insight of fatal  police shootings, helping us predict the rate of fatal police shootings for the next seven months as  well as guiding us for implementing policy decisions regarding fatal police shootings.</p>
 </div>
 <div id="background" class="section level2">
 <h2>Background</h2>
-<p>description</p>
+<p>People would expect the officer to act on whatever means necessary in order to apprehend the  person and protect themselves and the citizens around the area according to Jon (Shane 2020).  However, with the rising attention of the unnecessary force the police have put upon people,  there is no doubt about the legitimacy of the police force and what they should or should not  have done.</p>
+<p>Situational - Race has been a prominent factor of determining its significance for fatal police  shootings, and there seems to be different conclusions of how race affects the likelihood of fatal  police shootings. On one hand, there is research showing that race does impact the likelihood of racial disparities of Blacks and Whites in select cities (Siegel 2019) and at the state level (Mesic  2018). There is also research supporting that there is bias against non-White drivers for traffic stops and searches (Pierson 2020). Though this research is focused on fatal shootings that already occurred, looking at potential situations where people are in confrontation with the police can lead to such occurrences. Further research supports this with resampling of the fatal police shootings when taking the bias out of the sampling (Mentch). There is also research on how the location and economic status relate to racial bias, which shows that there is significant evidence of racial bias in police and even stronger association in metropolitan areas with low income and a sizable amount of Blacks in the area (Ross 2015). On the other hand, there is research that is  against the idea that being a certain race makes you more likely to be shot (Shane 2020).</p>
+<p>Firearm - Firearm has been another prominent factor observed to see if it has any significance on  fatal police shootings, and it seems as it is so as supported by previous research. One of the  research looked into the relation of firearm availability and fatal police shootings (Nagin 2020),  where another looked into whether people who have a firearm in hand when in police  confrontation have a relation with fatal police shootings (Hemenway 2019). In both cases, there seems to be a strong association with a person carrying a firearm and the likelihood of a fatal  police shooting. There was a study on the relation between the strength of firearm legislation and  fatal police shootings, which they found that stricter firearm legislation can associate with lower  fatal police shootings (Kivisto 2017).</p>
+<p>Behavioral - There has been some research of how the actions of the people in confrontation of  the police relate to fatal police shootings. A research study was conducted to see whether  domestic disturbances were more likely to cause a fatal shooting (Pinchevsky 2018). From this  study, there was no significant association of domestic disturbances and the likelihood of a fatal  police shooting, however, people who have a history of crime or who are equipped with a  weapon at the time of police confrontation are more likely to involve a fatal shooting. There was  also a study of suicides by police where they studied events that occurred that led to the fatal  police shooting, the psychological backgrounds of the victims, and classifying them if that case  is considered as suicide by police (Kesic 2012). Researchers found that with the cases observed,  one third of the cases was considered suicide-by-police, on which these cases contained  decedents who had mental or physical disproders and have backgrounds of suicide attemps.</p>
+<p>Location - There has been some research on how location affects the rate of fatal police  shootings, where there are mixed results. A research study was conducted to see if fatal police  shootings occur disproportionately in urban areas and were comparing fatal police shootings in  different areas (urban, suburban, and rural), with the result being that there is not a significant  difference in the rate of fatal police shootings in urban or rural areas, though suburban rates seem  to be lower than the other two location types.</p>
+<p>With all these factors observed in previous research, it is no doubt that this is not a new topic.  However, we will like to expand this topic as we found there is no research on how police  expenditure affects the rate of fatal police shootings. The Defunding the Police movement is our  motivation to explore this factor and see whether funding for police departments have a  significant association with fatal police shootings. We will also forecast the number of fatal  police shootings for the next seven months (until December 2020) and observe any  patterns/trends.</p>
 </div>
 <div id="data-method-and-analysis" class="section level2">
 <h2>Data, Method and Analysis</h2>
-<p>For this portion of the section, I’m going to see how the layout works…</p>
 <div id="data" class="section level3">
 <h3>Data</h3>
-<p>For this study, we made use of publicly available data. We used a combination of multiple  different datasets to answer our research question of how multiple different variables affect the  rate of shootings in state and county level. So in order to achieve this we need the following  datasets:</p>
+<p>For this study, we made use of publicly available data. We used a combination of multiple different datasets to answer our research question of how multiple different variables affect the rate of shootings in state and county level. So in order to achieve this we need the following datasets:</p>
 <ol style="list-style-type: decimal">
-<li>dataset 1</li>
-<li>dataset 2</li>
-<li>dataset 3</li>
+<li>Fatal Police Shootings data collected by Washington Post over the period of 2015-2020  (Washington Post, 2015).</li>
+<li>Mapping Police Violence data over the period of 2013-2020 which contains all types of  deaths caused by police including shootings. (Sinyangwe, S., &amp; McKesson, D., n.d.). </li>
+<li>Suicide Rates across 50 states in the US in 2016. (Violence Policy Center, n.d.) </li>
+<li>Number of Registered Firearms by State in the year of 2019. (Statista Research  Department, 2019).</li>
+<li>US Population Racial Diversity by state for the year of 2017. (Governing, 2017). </li>
+<li>State General Expenditure over the period of 2015-2017. (Tax Policy Center, 2020). </li>
+<li>Offenses known to law enforcement by City over the period of 2015-2018 (Bureau of  Justice Statistics, 2020) </li>
+<li>Officer count by police department in every state for 2015 &amp; 2016. (Governing, 2018)</li>
+<li>Population density by state for 2017. (World Population Review, n.d.). </li>
+<li>Census Age Distribution by State for 2015-2019 where we focused on ages 20-45. (US  Census Bureau, 2020b).</li>
+<li>Census Urbanization Index over the period of 2010-2015. (US Census Bureau, 2019b). </li>
+<li>Census County Land Area 2010 (US Census Bureau, 2019a). </li>
+<li>Census County Male Percentage and Age Distribution 2015-2019 (US Census Bureau,  2020a). </li>
 </ol>
-<p>…For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years….</p>
-<p>INCOMING SAMPLE TABLE…</p>
+<p>For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years. </p>
+<p>Before we work on any type of statistics, we would like to combine these data sets into one. We  made use of a function in R known as left_join which allows us to combine two sets of data  given a common key (or Variable) in both datasets. We combined the datasets in the order they  are specified.  </p>
+<p>Washington Post’s data (1) provides a wide range of variables but the mappings of police  killings data (2) caught our eyes because of the following variables: “Official Action against  officer”, “A brief description of the situation that led to the action”, “Geography” and “Charges  against the Victim.” We combined 1 and 2 by State, Age, Date, and Threat level displayed by the  victim as these were the common variables with similar types of entries. We couldn’t combine them using victim names as both of them had a different way of collecting it. Hence we had to  combine it in a way where we don’t have a loss of data and retain the other valuable information.  </p>
+<p>We then combined 3,4,5,6,7 by State and Year and combined it to the previously combined data.  For 8 and 9, we had to attach it by City, State and Year as these datasets are based off of city  level information. Finally, we attached 10 by State and Year as the key.</p>
+<p>We also created the following variables that we used in the models:</p>
+<ol style="list-style-type: decimal">
+<li>Crime Index per 10k - Summation of all types of crimes in a city divided by 10k. </li>
+<li>Police Expenditure as a Percentage of Total Expenditure - We simply divided the police  expenditure by the total expenditure for each state which gives us a better understanding  of the relationship between those variables.</li>
+<li>Population Diversity Index - Instead of using the population diversity dataset by state for  our model which contains columns for 5 different races which are White, Black,  Hispanic, Asian and Other, we opted to make a new variable which condenses these  variables into one. The formula to calculate it is shown below:</li>
+</ol>
+<p><span class="math inline">\(PopulationDiversity Index = 1 - [Pr(White)^2 + Pr(White)^2 + Pr(Black)^2 + Pr(Hispanic)^2 +Pr(Asian)^2 + Pr(Other)^2]\)</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Urbanization Index - Percentage of urban population in the state/county.</li>
+<li>Decision on Officer - Percentage of incidents where the officer action was justified or  the officer was charged at state/county levels. </li>
+</ol>
+<p>So with all the changes applied to the combined dataset, we produced some summary statistics with the variables that will be used in our Poisson Regression models.</p>
 <table>
-<caption>Name the Table here</caption>
+<caption>Table 1: States Ranked by Shootings per 100k Shooting Rate Jan 2015 - Jun 2020</caption>
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="right">mpg</th>
-<th align="right">cyl</th>
-<th align="right">disp</th>
-<th align="right">hp</th>
-<th align="right">drat</th>
-<th align="right">wt</th>
-<th align="right">qsec</th>
-<th align="right">vs</th>
-<th align="right">am</th>
-<th align="right">gear</th>
-<th align="right">carb</th>
+<th align="right">Rank</th>
+<th align="left">State</th>
+<th align="right">Count</th>
+<th align="right">Rate</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mazda RX4</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.620</td>
-<td align="right">16.46</td>
-<td align="right">0</td>
 <td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
+<td align="left">AK</td>
+<td align="right">39</td>
+<td align="right">5.29</td>
 </tr>
 <tr class="even">
-<td align="left">Mazda RX4 Wag</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.875</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td align="left">Datsun 710</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">108</td>
-<td align="right">93</td>
-<td align="right">3.85</td>
-<td align="right">2.320</td>
-<td align="right">18.61</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">Hornet 4 Drive</td>
-<td align="right">21.4</td>
-<td align="right">6</td>
-<td align="right">258</td>
-<td align="right">110</td>
-<td align="right">3.08</td>
-<td align="right">3.215</td>
-<td align="right">19.44</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">Hornet Sportabout</td>
-<td align="right">18.7</td>
-<td align="right">8</td>
-<td align="right">360</td>
-<td align="right">175</td>
-<td align="right">3.15</td>
-<td align="right">3.440</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
 <td align="right">2</td>
+<td align="left">NM</td>
+<td align="right">106</td>
+<td align="right">5.07</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">OK</td>
+<td align="right">164</td>
+<td align="right">4.17</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">AZ</td>
+<td align="right">253</td>
+<td align="right">3.58</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">CO</td>
+<td align="right">195</td>
+<td align="right">3.45</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">NV</td>
+<td align="right">96</td>
+<td align="right">3.21</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">WV</td>
+<td align="right">54</td>
+<td align="right">2.97</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">MT</td>
+<td align="right">31</td>
+<td align="right">2.93</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">AR</td>
+<td align="right">82</td>
+<td align="right">2.73</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">WY</td>
+<td align="right">14</td>
+<td align="right">2.40</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">ID</td>
+<td align="right">41</td>
+<td align="right">2.37</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">LA</td>
+<td align="right">109</td>
+<td align="right">2.34</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">MO</td>
+<td align="right">139</td>
+<td align="right">2.27</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="left">MS</td>
+<td align="right">65</td>
+<td align="right">2.18</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">KY</td>
+<td align="right">95</td>
+<td align="right">2.13</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="left">AL</td>
+<td align="right">104</td>
+<td align="right">2.13</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="left">OR</td>
+<td align="right">88</td>
+<td align="right">2.12</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="left">HI</td>
+<td align="right">30</td>
+<td align="right">2.11</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="left">TN</td>
+<td align="right">138</td>
+<td align="right">2.05</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="left">WA</td>
+<td align="right">152</td>
+<td align="right">2.04</td>
+</tr>
+<tr class="odd">
+<td align="right">21</td>
+<td align="left">CA</td>
+<td align="right">796</td>
+<td align="right">2.03</td>
+</tr>
+<tr class="even">
+<td align="right">22</td>
+<td align="left">SD</td>
+<td align="right">17</td>
+<td align="right">1.95</td>
+</tr>
+<tr class="odd">
+<td align="right">23</td>
+<td align="left">UT</td>
+<td align="right">60</td>
+<td align="right">1.92</td>
+</tr>
+<tr class="even">
+<td align="right">24</td>
+<td align="left">DC</td>
+<td align="right">13</td>
+<td align="right">1.89</td>
+</tr>
+<tr class="odd">
+<td align="right">25</td>
+<td align="left">SC</td>
+<td align="right">88</td>
+<td align="right">1.75</td>
+</tr>
+<tr class="even">
+<td align="right">26</td>
+<td align="left">GA</td>
+<td align="right">181</td>
+<td align="right">1.73</td>
+</tr>
+<tr class="odd">
+<td align="right">27</td>
+<td align="left">TX</td>
+<td align="right">480</td>
+<td align="right">1.69</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="left">KS</td>
+<td align="right">49</td>
+<td align="right">1.68</td>
+</tr>
+<tr class="odd">
+<td align="right">29</td>
+<td align="left">FL</td>
+<td align="right">350</td>
+<td align="right">1.66</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="left">ME</td>
+<td align="right">22</td>
+<td align="right">1.65</td>
+</tr>
+<tr class="odd">
+<td align="right">31</td>
+<td align="left">WI</td>
+<td align="right">91</td>
+<td align="right">1.57</td>
+</tr>
+<tr class="even">
+<td align="right">32</td>
+<td align="left">NC</td>
+<td align="right">156</td>
+<td align="right">1.51</td>
+</tr>
+<tr class="odd">
+<td align="right">33</td>
+<td align="left">ND</td>
+<td align="right">11</td>
+<td align="right">1.45</td>
+</tr>
+<tr class="even">
+<td align="right">34</td>
+<td align="left">VT</td>
+<td align="right">9</td>
+<td align="right">1.44</td>
+</tr>
+<tr class="odd">
+<td align="right">35</td>
+<td align="left">IN</td>
+<td align="right">95</td>
+<td align="right">1.42</td>
+</tr>
+<tr class="even">
+<td align="right">36</td>
+<td align="left">DE</td>
+<td align="right">13</td>
+<td align="right">1.36</td>
+</tr>
+<tr class="odd">
+<td align="right">37</td>
+<td align="left">OH</td>
+<td align="right">155</td>
+<td align="right">1.33</td>
+</tr>
+<tr class="even">
+<td align="right">38</td>
+<td align="left">MD</td>
+<td align="right">79</td>
+<td align="right">1.31</td>
+</tr>
+<tr class="odd">
+<td align="right">39</td>
+<td align="left">NE</td>
+<td align="right">24</td>
+<td align="right">1.25</td>
+</tr>
+<tr class="even">
+<td align="right">40</td>
+<td align="left">VA</td>
+<td align="right">95</td>
+<td align="right">1.12</td>
+</tr>
+<tr class="odd">
+<td align="right">41</td>
+<td align="left">MN</td>
+<td align="right">61</td>
+<td align="right">1.10</td>
+</tr>
+<tr class="even">
+<td align="right">42</td>
+<td align="left">IA</td>
+<td align="right">32</td>
+<td align="right">1.02</td>
+</tr>
+<tr class="odd">
+<td align="right">43</td>
+<td align="left">NH</td>
+<td align="right">13</td>
+<td align="right">0.96</td>
+</tr>
+<tr class="even">
+<td align="right">44</td>
+<td align="left">PA</td>
+<td align="right">108</td>
+<td align="right">0.84</td>
+</tr>
+<tr class="odd">
+<td align="right">45</td>
+<td align="left">IL</td>
+<td align="right">103</td>
+<td align="right">0.81</td>
+</tr>
+<tr class="even">
+<td align="right">46</td>
+<td align="left">MI</td>
+<td align="right">78</td>
+<td align="right">0.78</td>
+</tr>
+<tr class="odd">
+<td align="right">47</td>
+<td align="left">NJ</td>
+<td align="right">68</td>
+<td align="right">0.77</td>
+</tr>
+<tr class="even">
+<td align="right">48</td>
+<td align="left">CT</td>
+<td align="right">21</td>
+<td align="right">0.59</td>
+</tr>
+<tr class="odd">
+<td align="right">49</td>
+<td align="left">NY</td>
+<td align="right">101</td>
+<td align="right">0.52</td>
+</tr>
+<tr class="even">
+<td align="right">50</td>
+<td align="left">MA</td>
+<td align="right">35</td>
+<td align="right">0.51</td>
+</tr>
+<tr class="odd">
+<td align="right">51</td>
+<td align="left">RI</td>
+<td align="right">4</td>
+<td align="right">0.38</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Table 2. State Level Summary Statistics for Quantitative Variables [Mean (SD)]</caption>
+<colgroup>
+<col width="2%" />
+<col width="9%" />
+<col width="9%" />
+<col width="6%" />
+<col width="10%" />
+<col width="8%" />
+<col width="9%" />
+<col width="20%" />
+<col width="9%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="left">Shootings per 100k</th>
+<th align="left">Count of Shootings</th>
+<th align="left">Victim Age</th>
+<th align="left">Population in 10k</th>
+<th align="left">Firearms per 10k</th>
+<th align="left">Crime Index per 10k</th>
+<th align="left">Police Expenditure as a fraction of Total</th>
+<th align="left">Population Density</th>
+<th align="left">Population Diversity Index</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="left">0.92 (0.151)</td>
+<td align="left">7 (1.117)</td>
+<td align="left">33.29 (10.53)</td>
+<td align="left">73.663 (0.3552)</td>
+<td align="left">278.57</td>
+<td align="left">1027.16 (235.41)</td>
+<td align="left">0.028 (0.0009)</td>
+<td align="left">1.29</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="left">0.4 (0.119)</td>
+<td align="left">19 (5.782)</td>
+<td align="left">40.41 (14.33)</td>
+<td align="left">487.6236 (1.8899)</td>
+<td align="left">345.08</td>
+<td align="left">1025.29 (350.84)</td>
+<td align="left">0.031 (0.0002)</td>
+<td align="left">96.59</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="odd">
+<td align="left">AR</td>
+<td align="left">0.54 (0.179)</td>
+<td align="left">16 (5.403)</td>
+<td align="left">39.69 (13.97)</td>
+<td align="left">300.7871 (1.5591)</td>
+<td align="left">361.73</td>
+<td align="left">1041.54 (385.16)</td>
+<td align="left">0.028 (0.0008)</td>
+<td align="left">58.07</td>
+<td align="left">0.45</td>
+</tr>
+<tr class="even">
+<td align="left">AZ</td>
+<td align="left">0.67 (0.104)</td>
+<td align="left">47 (7.358)</td>
+<td align="left">34.71 (12.9)</td>
+<td align="left">695.26 (13.2994)</td>
+<td align="left">294.69</td>
+<td align="left">782.85 (259.51)</td>
+<td align="left">0.051 (0.001)</td>
+<td align="left">63.36</td>
+<td align="left">0.6</td>
+</tr>
+<tr class="odd">
+<td align="left">CA</td>
+<td align="left">0.4 (0.074)</td>
+<td align="left">157 (28.382)</td>
+<td align="left">33.81 (11.35)</td>
+<td align="left">3911.0256 (19.1636)</td>
+<td align="left">96.31</td>
+<td align="left">654.21 (296.84)</td>
+<td align="left">0.04 (0.0011)</td>
+<td align="left">255.09</td>
+<td align="left">0.69</td>
+</tr>
+<tr class="even">
+<td align="left">CO</td>
+<td align="left">0.59 (0.104)</td>
+<td align="left">33 (6.068)</td>
+<td align="left">36.36 (12.37)</td>
+<td align="left">562.9002 (12.4221)</td>
+<td align="left">200.29</td>
+<td align="left">793.96 (253.08)</td>
+<td align="left">0.038 (0.0011)</td>
+<td align="left">55.25</td>
+<td align="left">0.49</td>
+</tr>
+<tr class="odd">
+<td align="left">CT</td>
+<td align="left">0.12 (0.031)</td>
+<td align="left">4 (1.105)</td>
+<td align="left">31.85 (12.92)</td>
+<td align="left">357.4336 (0.6564)</td>
+<td align="left">209.49</td>
+<td align="left">371.78 (113.59)</td>
+<td align="left">0.035 (0.0006)</td>
+<td align="left">738.46</td>
+<td align="left">0.52</td>
+</tr>
+<tr class="even">
+<td align="left">DC</td>
+<td align="left">0.53 (0.229)</td>
+<td align="left">4 (1.557)</td>
+<td align="left">38.08 (14.46)</td>
+<td align="left">68.6753 (1.0135)</td>
+<td align="left">871.41</td>
+<td align="left">1119.94 (55.92)</td>
+<td align="left">0.047 (0.0005)</td>
+<td align="left">11595.57</td>
+<td align="left">0.65</td>
+</tr>
+<tr class="odd">
+<td align="left">DE</td>
+<td align="left">0.41 (0.22)</td>
+<td align="left">4 (2.1)</td>
+<td align="left">33 (12.61)</td>
+<td align="left">95.7234 (1.3043)</td>
+<td align="left">55.18</td>
+<td align="left">1028.22 (324.33)</td>
+<td align="left">0.036 (0.0012)</td>
+<td align="left">498.93</td>
+<td align="left">0.56</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="left">0.29 (0.027)</td>
+<td align="left">60 (4.995)</td>
+<td align="left">36.9 (13.01)</td>
+<td align="left">2079.7327 (53.3029)</td>
+<td align="left">208.13</td>
+<td align="left">926.85 (317.87)</td>
+<td align="left">0.054 (0.001)</td>
+<td align="left">400.72</td>
+<td align="left">0.62</td>
+</tr>
+<tr class="odd">
+<td align="left">GA</td>
+<td align="left">0.31 (0.076)</td>
+<td align="left">32 (8.142)</td>
+<td align="left">36.42 (14.28)</td>
+<td align="left">1043.2035 (17.5465)</td>
+<td align="left">216.69</td>
+<td align="left">1065.79 (521.92)</td>
+<td align="left">0.038 (0.0003)</td>
+<td align="left">184.01</td>
+<td align="left">0.62</td>
+</tr>
+<tr class="even">
+<td align="left">HI</td>
+<td align="left">0.52 (0.231)</td>
+<td align="left">7 (3.284)</td>
+<td align="left">38.17 (11.43)</td>
+<td align="left">142.1098 (0.4353)</td>
+<td align="left">60.98</td>
+<td align="left">678.67 (7.71)</td>
+<td align="left">0.034 (0.0007)</td>
+<td align="left">221.1</td>
+<td align="left">0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="left">0.19 (0.059)</td>
+<td align="left">6 (1.865)</td>
+<td align="left">30.77 (7.15)</td>
+<td align="left">314.016 (1.5318)</td>
+<td align="left">116.37</td>
+<td align="left">805.9 (316.56)</td>
+<td align="left">0.026 (0.0005)</td>
+<td align="left">56.62</td>
+<td align="left">0.26</td>
+</tr>
+<tr class="even">
+<td align="left">ID</td>
+<td align="left">0.47 (0.182)</td>
+<td align="left">8 (3.238)</td>
+<td align="left">40.82 (11.7)</td>
+<td align="left">172.2304 (5.195)</td>
+<td align="left">341.69</td>
+<td align="left">501.85 (168.17)</td>
+<td align="left">0.038 (0.0015)</td>
+<td align="left">21.44</td>
+<td align="left">0.31</td>
+</tr>
+<tr class="odd">
+<td align="left">IL</td>
+<td align="left">0.18 (0.028)</td>
+<td align="left">23 (3.594)</td>
+<td align="left">31.07 (10.36)</td>
+<td align="left">1281.914 (4.2399)</td>
+<td align="left">115.22</td>
+<td align="left">838.59 (255.16)</td>
+<td align="left">0.045 (0.0014)</td>
+<td align="left">229.31</td>
+<td align="left">0.57</td>
+</tr>
+<tr class="even">
+<td align="left">IN</td>
+<td align="left">0.25 (0.048)</td>
+<td align="left">17 (3.162)</td>
+<td align="left">39.01 (13.58)</td>
+<td align="left">667.235 (4.7824)</td>
+<td align="left">200.23</td>
+<td align="left">948.64 (277.24)</td>
+<td align="left">0.025 (0.0004)</td>
+<td align="left">187.18</td>
+<td align="left">0.36</td>
+</tr>
+<tr class="odd">
+<td align="left">KS</td>
+<td align="left">0.32 (0.072)</td>
+<td align="left">9 (2.086)</td>
+<td align="left">38.43 (12.94)</td>
+<td align="left">291.044 (0.161)</td>
+<td align="left">186.95</td>
+<td align="left">850.91 (389.45)</td>
+<td align="left">0.032 (0.0004)</td>
+<td align="left">35.61</td>
+<td align="left">0.41</td>
+</tr>
+<tr class="even">
+<td align="left">KY</td>
+<td align="left">0.37 (0.067)</td>
+<td align="left">17 (2.977)</td>
+<td align="left">39.79 (12.46)</td>
+<td align="left">445.3966 (2.056)</td>
+<td align="left">210.42</td>
+<td align="left">533.6 (259.17)</td>
+<td align="left">0.02 (0.0006)</td>
+<td align="left">113.38</td>
+<td align="left">0.28</td>
+</tr>
+<tr class="odd">
+<td align="left">LA</td>
+<td align="left">0.42 (0.109)</td>
+<td align="left">20 (5.11)</td>
+<td align="left">36.37 (12.04)</td>
+<td align="left">466.2826 (1.0786)</td>
+<td align="left">249.63</td>
+<td align="left">1188.75 (382.78)</td>
+<td align="left">0.039 (0.0004)</td>
+<td align="left">107.97</td>
+<td align="left">0.55</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="left">0.16 (0.039)</td>
+<td align="left">11 (2.631)</td>
+<td align="left">40.61 (9.19)</td>
+<td align="left">682.7789 (3.0228)</td>
+<td align="left">58.42</td>
+<td align="left">476.6 (130.21)</td>
+<td align="left">0.033 (0.0001)</td>
+<td align="left">886.95</td>
+<td align="left">0.47</td>
+</tr>
+<tr class="odd">
+<td align="left">MD</td>
+<td align="left">0.23 (0.06)</td>
+<td align="left">14 (3.583)</td>
+<td align="left">35.46 (13.49)</td>
+<td align="left">602.6503 (2.9987)</td>
+<td align="left">212.88</td>
+<td align="left">1058.03 (480.64)</td>
+<td align="left">0.045 (0.0005)</td>
+<td align="left">625.08</td>
+<td align="left">0.64</td>
+</tr>
+<tr class="even">
+<td align="left">ME</td>
+<td align="left">0.39 (0.24)</td>
+<td align="left">5 (3.195)</td>
+<td align="left">40.09 (15.93)</td>
+<td align="left">133.7175 (0.5642)</td>
+<td align="left">130.2</td>
+<td align="left">499.44 (224.79)</td>
+<td align="left">0.026 (0.0009)</td>
+<td align="left">43.47</td>
+<td align="left">0.13</td>
+</tr>
+<tr class="odd">
+<td align="left">MI</td>
+<td align="left">0.14 (0.034)</td>
+<td align="left">14 (3.365)</td>
+<td align="left">35.99 (11.85)</td>
+<td align="left">995.666 (2.217)</td>
+<td align="left">83.72</td>
+<td align="left">735.97 (354.88)</td>
+<td align="left">0.03 (0.0003)</td>
+<td align="left">176.93</td>
+<td align="left">0.42</td>
+</tr>
+<tr class="even">
+<td align="left">MN</td>
+<td align="left">0.22 (0.038)</td>
+<td align="left">12 (2.057)</td>
+<td align="left">37.42 (12.99)</td>
+<td align="left">553.527 (5.7741)</td>
+<td align="left">178.12</td>
+<td align="left">692.03 (290.92)</td>
+<td align="left">0.034 (0.0008)</td>
+<td align="left">70.81</td>
+<td align="left">0.35</td>
+</tr>
+<tr class="odd">
+<td align="left">MO</td>
+<td align="left">0.39 (0.078)</td>
+<td align="left">24 (4.773)</td>
+<td align="left">35.45 (12.76)</td>
+<td align="left">610.6379 (2.8524)</td>
+<td align="left">144.56</td>
+<td align="left">1135.18 (420.53)</td>
+<td align="left">0.039 (0.0004)</td>
+<td align="left">89.34</td>
+<td align="left">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="left">0.44 (0.165)</td>
+<td align="left">13 (4.899)</td>
+<td align="left">37.38 (12.48)</td>
+<td align="left">298.3967 (0.5483)</td>
+<td align="left">175.43</td>
+<td align="left">989.03 (266.53)</td>
+<td align="left">0.029 (0.0001)</td>
+<td align="left">63.65</td>
+<td align="left">0.54</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="left">0.5 (0.081)</td>
+<td align="left">5 (0.871)</td>
+<td align="left">36.9 (9.88)</td>
+<td align="left">105.6929 (1.7024)</td>
+<td align="left">222.17</td>
+<td align="left">1008.19 (276.73)</td>
+<td align="left">0.035 (0.0024)</td>
+<td align="left">7.34</td>
+<td align="left">0.25</td>
+</tr>
+<tr class="even">
+<td align="left">NC</td>
+<td align="left">0.27 (0.055)</td>
+<td align="left">28 (5.635)</td>
+<td align="left">37.99 (14.23)</td>
+<td align="left">1028.9266 (18.4036)</td>
+<td align="left">176.17</td>
+<td align="left">889.09 (462.66)</td>
+<td align="left">0.039 (0.0005)</td>
+<td align="left">214.79</td>
+<td align="left">0.55</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="left">0.37 (0.154)</td>
+<td align="left">3 (1.168)</td>
+<td align="left">31 (6.12)</td>
+<td align="left">75.719 (0.2771)</td>
+<td align="left">260.44</td>
+<td align="left">585.98 (165.78)</td>
+<td align="left">0.023 (0.0016)</td>
+<td align="left">10.99</td>
+<td align="left">0.28</td>
+</tr>
+<tr class="even">
+<td align="left">NE</td>
+<td align="left">0.34 (0.107)</td>
+<td align="left">6 (1.998)</td>
+<td align="left">36.92 (11.72)</td>
+<td align="left">191.278 (2.1055)</td>
+<td align="left">155.57</td>
+<td align="left">775.18 (98.78)</td>
+<td align="left">0.028 (0.0003)</td>
+<td align="left">25.2</td>
+<td align="left">0.36</td>
+</tr>
+<tr class="odd">
+<td align="left">NH</td>
+<td align="left">0.18 (0.049)</td>
+<td align="left">2 (0.65)</td>
+<td align="left">38.54 (12.82)</td>
+<td align="left">134.9048 (1.0544)</td>
+<td align="left">439.9</td>
+<td align="left">281.32 (134.62)</td>
+<td align="left">0.038 (0.0012)</td>
+<td align="left">151.57</td>
+<td align="left">0.18</td>
+</tr>
+<tr class="even">
+<td align="left">NJ</td>
+<td align="left">0.14 (0.024)</td>
+<td align="left">12 (2.111)</td>
+<td align="left">34.45 (13.2)</td>
+<td align="left">887.9904 (1.5927)</td>
+<td align="left">101.6</td>
+<td align="left">646.72 (241.81)</td>
+<td align="left">0.038 (0.0003)</td>
+<td align="left">1219.9</td>
+<td align="left">0.63</td>
+</tr>
+<tr class="odd">
+<td align="left">NM</td>
+<td align="left">0.93 (0.159)</td>
+<td align="left">20 (3.324)</td>
+<td align="left">36.23 (12.8)</td>
+<td align="left">209.2597 (0.2535)</td>
+<td align="left">505.76</td>
+<td align="left">1190.53 (410.87)</td>
+<td align="left">0.032 (0.0008)</td>
+<td align="left">17.25</td>
+<td align="left">0.61</td>
+</tr>
+<tr class="even">
+<td align="left">NV</td>
+<td align="left">0.57 (0.12)</td>
+<td align="left">17 (3.439)</td>
+<td align="left">37.93 (13.08)</td>
+<td align="left">296.8595 (9.2818)</td>
+<td align="left">326.47</td>
+<td align="left">618.97 (162.07)</td>
+<td align="left">0.058 (0.0003)</td>
+<td align="left">27.95</td>
+<td align="left">0.66</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="left">0.09 (0.018)</td>
+<td align="left">18 (3.563)</td>
+<td align="left">40.2 (14.33)</td>
+<td align="left">1955.8885 (8.4697)</td>
+<td align="left">42.39</td>
+<td align="left">547.04 (229.92)</td>
+<td align="left">0.037 (0.0001)</td>
+<td align="left">416.86</td>
+<td align="left">0.63</td>
+</tr>
+<tr class="even">
+<td align="left">OH</td>
+<td align="left">0.24 (0.045)</td>
+<td align="left">28 (5.246)</td>
+<td align="left">34.32 (13.82)</td>
+<td align="left">1165.3983 (3.1831)</td>
+<td align="left">150.87</td>
+<td align="left">799.39 (341.49)</td>
+<td align="left">0.035 (0.0005)</td>
+<td align="left">286.41</td>
+<td align="left">0.36</td>
+</tr>
+<tr class="odd">
+<td align="left">OK</td>
+<td align="left">0.74 (0.141)</td>
+<td align="left">29 (5.558)</td>
+<td align="left">39.24 (14.26)</td>
+<td align="left">393.1914 (1.6638)</td>
+<td align="left">211.38</td>
+<td align="left">944.71 (357.01)</td>
+<td align="left">0.035 (0.0005)</td>
+<td align="left">57.48</td>
+<td align="left">0.55</td>
+</tr>
+<tr class="even">
+<td align="left">OR</td>
+<td align="left">0.36 (0.052)</td>
+<td align="left">15 (2.16)</td>
+<td align="left">40.99 (13.95)</td>
+<td align="left">413.4783 (8.9287)</td>
+<td align="left">180.8</td>
+<td align="left">704.22 (357.21)</td>
+<td align="left">0.03 (0.0003)</td>
+<td align="left">43.98</td>
+<td align="left">0.41</td>
+</tr>
+<tr class="odd">
+<td align="left">PA</td>
+<td align="left">0.15 (0.035)</td>
+<td align="left">20 (4.462)</td>
+<td align="left">37.18 (14.68)</td>
+<td align="left">1279.2654 (1.108)</td>
+<td align="left">212.18</td>
+<td align="left">695.71 (224.44)</td>
+<td align="left">0.031 (0.0009)</td>
+<td align="left">286.37</td>
+<td align="left">0.4</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+<td align="left">0.17 (0.04)</td>
+<td align="left">2 (0.422)</td>
+<td align="left">30.8 (17.49)</td>
+<td align="left">105.6812 (0.0622)</td>
+<td align="left">44.05</td>
+<td align="left">556.82 (243.45)</td>
+<td align="left">0.041 (0.0002)</td>
+<td align="left">1023.11</td>
+<td align="left">0.45</td>
+</tr>
+<tr class="odd">
+<td align="left">SC</td>
+<td align="left">0.31 (0.069)</td>
+<td align="left">16 (3.3)</td>
+<td align="left">40.21 (13.84)</td>
+<td align="left">502.5089 (11.1099)</td>
+<td align="left">197.67</td>
+<td align="left">1138.43 (594.39)</td>
+<td align="left">0.03 (0.0005)</td>
+<td align="left">170.23</td>
+<td align="left">0.52</td>
+</tr>
+<tr class="even">
+<td align="left">SD</td>
+<td align="left">0.36 (0.082)</td>
+<td align="left">3 (0.697)</td>
+<td align="left">35.44 (9.62)</td>
+<td align="left">87.2097 (1.3411)</td>
+<td align="left">357.08</td>
+<td align="left">727.54 (274.8)</td>
+<td align="left">0.029 (0.0004)</td>
+<td align="left">11.69</td>
+<td align="left">0.31</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+<td align="left">0.37 (0.087)</td>
+<td align="left">25 (6.007)</td>
+<td align="left">38.91 (12.97)</td>
+<td align="left">672.8293 (9.4336)</td>
+<td align="left">180.08</td>
+<td align="left">958.78 (483.93)</td>
+<td align="left">0.041 (0.0011)</td>
+<td align="left">165.07</td>
+<td align="left">0.42</td>
+</tr>
+<tr class="even">
+<td align="left">TX</td>
+<td align="left">0.31 (0.058)</td>
+<td align="left">88 (16.03)</td>
+<td align="left">35.35 (12.17)</td>
+<td align="left">2810.4758 (58.88)</td>
+<td align="left">258.2</td>
+<td align="left">755.13 (269.87)</td>
+<td align="left">0.036 (0.0002)</td>
+<td align="left">110.59</td>
+<td align="left">0.65</td>
+</tr>
+<tr class="odd">
+<td align="left">UT</td>
+<td align="left">0.35 (0.131)</td>
+<td align="left">11 (4.21)</td>
+<td align="left">34.14 (10.14)</td>
+<td align="left">309.9797 (9.0703)</td>
+<td align="left">301.69</td>
+<td align="left">890.6 (626.86)</td>
+<td align="left">0.029 (0.0012)</td>
+<td align="left">38.85</td>
+<td align="left">0.37</td>
+</tr>
+<tr class="even">
+<td align="left">VA</td>
+<td align="left">0.21 (0.054)</td>
+<td align="left">17 (4.519)</td>
+<td align="left">36.82 (14.16)</td>
+<td align="left">846.4853 (7.6511)</td>
+<td align="left">421.73</td>
+<td align="left">661.12 (280.43)</td>
+<td align="left">0.034 (0.0004)</td>
+<td align="left">216.46</td>
+<td align="left">0.57</td>
+</tr>
+<tr class="odd">
+<td align="left">VT</td>
+<td align="left">0.34 (0.125)</td>
+<td align="left">2 (0.782)</td>
+<td align="left">44.67 (16.32)</td>
+<td align="left">62.4173 (0.0477)</td>
+<td align="left">123.62</td>
+<td align="left">592.41 (141.4)</td>
+<td align="left">0.03 (0.001)</td>
+<td align="left">67.9</td>
+<td align="left">0.14</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="left">0.36 (0.096)</td>
+<td align="left">27 (7.296)</td>
+<td align="left">39.15 (12.26)</td>
+<td align="left">737.8278 (16.4893)</td>
+<td align="left">162.49</td>
+<td align="left">1234.07 (619.33)</td>
+<td align="left">0.029 (0.0012)</td>
+<td align="left">114.38</td>
+<td align="left">0.5</td>
+</tr>
+<tr class="odd">
+<td align="left">WI</td>
+<td align="left">0.29 (0.082)</td>
+<td align="left">17 (4.724)</td>
+<td align="left">36.75 (12.82)</td>
+<td align="left">579.2315 (2.6352)</td>
+<td align="left">137.49</td>
+<td align="left">740.16 (332.67)</td>
+<td align="left">0.036 (0.0011)</td>
+<td align="left">107.53</td>
+<td align="left">0.33</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="left">0.6 (0.129)</td>
+<td align="left">11 (2.315)</td>
+<td align="left">42.84 (14.73)</td>
+<td align="left">181.6404 (1.9079)</td>
+<td align="left">229.33</td>
+<td align="left">843.89 (572.67)</td>
+<td align="left">0.024 (0.0001)</td>
+<td align="left">74.76</td>
+<td align="left">0.15</td>
+</tr>
+<tr class="odd">
+<td align="left">WY</td>
+<td align="left">0.71 (0.333)</td>
+<td align="left">4 (1.956)</td>
+<td align="left">39.86 (10.65)</td>
+<td align="left">58.2157 (0.3774)</td>
+<td align="left">2302.73</td>
+<td align="left">553.77 (131.33)</td>
+<td align="left">0.025 (0.0002)</td>
+<td align="left">5.9</td>
+<td align="left">0.28</td>
+</tr>
+<tr class="even">
+<td align="left">US</td>
+<td align="left">1.91 (1.06)</td>
+<td align="left">105.94 (131.35)</td>
+<td align="left">37 (13)</td>
+<td align="left">2132.5446 (1514.7346)</td>
+<td align="left">174.35 (118.82)</td>
+<td align="left">759.93 (358.26)</td>
+<td align="left">0.0396 (0.0065)</td>
+<td align="left">228.21 (432.22)</td>
+<td align="left">0.59 (0.12)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Table 3. State Level Summary Statistics for Categorical Variables in Percentages</caption>
+<colgroup>
+<col width="2%" />
+<col width="5%" />
+<col width="8%" />
+<col width="12%" />
+<col width="8%" />
+<col width="12%" />
+<col width="5%" />
+<col width="5%" />
+<col width="12%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">State</th>
+<th align="right">Gender Male</th>
+<th align="right">Victim Race Black</th>
+<th align="left">Officer Charged (Justified)</th>
+<th align="right">Victim Not Charged</th>
+<th align="right">Victim mental illness False</th>
+<th align="right">Victim Shot</th>
+<th align="right">Victim Armed</th>
+<th align="left">Threat Level Attack (Other)</th>
+<th align="right">Victim Not Fleeing</th>
+<th align="right">Body Camera Absent</th>
+<th align="left">Rural (Suburban)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="right">94.87</td>
+<td align="right">8.33</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">84.62</td>
+<td align="right">97.44</td>
+<td align="right">66.67</td>
+<td align="left">74.36 (25.64)</td>
+<td align="right">55.56</td>
+<td align="right">89.74</td>
+<td align="left">50 (15.38)</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="right">93.27</td>
+<td align="right">32.63</td>
+<td align="left">1.17 (1.17)</td>
+<td align="right">99.04</td>
+<td align="right">75.00</td>
+<td align="right">94.23</td>
+<td align="right">66.36</td>
+<td align="left">72.12 (21.15)</td>
+<td align="right">64.71</td>
+<td align="right">86.54</td>
+<td align="left">42.86 (14.29)</td>
+</tr>
+<tr class="odd">
+<td align="left">AR</td>
+<td align="right">98.78</td>
+<td align="right">34.72</td>
+<td align="left">NA (1.94)</td>
+<td align="right">100.00</td>
+<td align="right">84.15</td>
+<td align="right">98.78</td>
+<td align="right">59.76</td>
+<td align="left">67.07 (28.05)</td>
+<td align="right">73.68</td>
+<td align="right">95.12</td>
+<td align="left">50.79 (15.87)</td>
+</tr>
+<tr class="even">
+<td align="left">AZ</td>
+<td align="right">93.28</td>
+<td align="right">7.66</td>
+<td align="left">1.81 (NA)</td>
+<td align="right">99.60</td>
+<td align="right">81.42</td>
+<td align="right">95.26</td>
+<td align="right">51.72</td>
+<td align="left">63.64 (32.81)</td>
+<td align="right">67.49</td>
+<td align="right">89.72</td>
+<td align="left">12.02 (25.48)</td>
+</tr>
+<tr class="odd">
+<td align="left">CA</td>
+<td align="right">95.10</td>
+<td align="right">17.39</td>
+<td align="left">0.83 (0.61)</td>
+<td align="right">99.75</td>
+<td align="right">77.26</td>
+<td align="right">93.09</td>
+<td align="right">38.54</td>
+<td align="left">54.65 (39.2)</td>
+<td align="right">67.02</td>
+<td align="right">85.80</td>
+<td align="left">7.86 (39.75)</td>
+</tr>
+<tr class="even">
+<td align="left">CO</td>
+<td align="right">96.92</td>
+<td align="right">10.71</td>
+<td align="left">NA (5.13)</td>
+<td align="right">100.00</td>
+<td align="right">87.18</td>
+<td align="right">97.44</td>
+<td align="right">66.52</td>
+<td align="left">63.08 (34.87)</td>
+<td align="right">50.54</td>
+<td align="right">89.23</td>
+<td align="left">16.67 (26.39)</td>
+</tr>
+<tr class="odd">
+<td align="left">CT</td>
+<td align="right">100.00</td>
+<td align="right">15.00</td>
+<td align="left">NA (36.88)</td>
+<td align="right">100.00</td>
+<td align="right">76.19</td>
+<td align="right">80.95</td>
+<td align="right">20.59</td>
+<td align="left">57.14 (38.1)</td>
+<td align="right">55.00</td>
+<td align="right">85.71</td>
+<td align="left">NA (7.69)</td>
+</tr>
+<tr class="even">
+<td align="left">DC</td>
+<td align="right">84.62</td>
+<td align="right">92.31</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">84.62</td>
+<td align="right">100.00</td>
+<td align="right">53.85</td>
+<td align="left">76.92 (23.08)</td>
+<td align="right">69.23</td>
+<td align="right">76.92</td>
+<td align="left">NA (100)</td>
+</tr>
+<tr class="odd">
+<td align="left">DE</td>
+<td align="right">100.00</td>
+<td align="right">50.00</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">69.23</td>
+<td align="right">100.00</td>
+<td align="right">61.54</td>
+<td align="left">53.85 (38.46)</td>
+<td align="right">61.54</td>
+<td align="right">84.62</td>
+<td align="left">16.67 (25)</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="right">94.86</td>
+<td align="right">34.26</td>
+<td align="left">1.21 (0.41)</td>
+<td align="right">99.71</td>
+<td align="right">73.14</td>
+<td align="right">94.86</td>
+<td align="right">53.78</td>
+<td align="left">64.57 (31.43)</td>
+<td align="right">68.45</td>
+<td align="right">95.14</td>
+<td align="left">13.16 (17.29)</td>
+</tr>
+<tr class="odd">
+<td align="left">GA</td>
+<td align="right">92.78</td>
+<td align="right">43.75</td>
+<td align="left">2.46 (0.57)</td>
+<td align="right">98.90</td>
+<td align="right">79.01</td>
+<td align="right">93.37</td>
+<td align="right">62.19</td>
+<td align="left">76.8 (19.89)</td>
+<td align="right">66.09</td>
+<td align="right">90.61</td>
+<td align="left">27.78 (11.11)</td>
+</tr>
+<tr class="even">
+<td align="left">HI</td>
+<td align="right">93.33</td>
+<td align="right">3.45</td>
+<td align="left">NA (0.91)</td>
+<td align="right">100.00</td>
+<td align="right">80.00</td>
+<td align="right">90.00</td>
+<td align="right">36.67</td>
+<td align="left">66.67 (33.33)</td>
+<td align="right">68.97</td>
+<td align="right">90.00</td>
+<td align="left">30.77 (7.69)</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="right">93.75</td>
+<td align="right">22.58</td>
+<td align="left">NA (0.85)</td>
+<td align="right">100.00</td>
+<td align="right">78.12</td>
+<td align="right">96.88</td>
+<td align="right">62.50</td>
+<td align="left">59.38 (37.5)</td>
+<td align="right">46.67</td>
+<td align="right">81.25</td>
+<td align="left">37.04 (11.11)</td>
+</tr>
+<tr class="even">
+<td align="left">ID</td>
+<td align="right">95.12</td>
+<td align="right">2.70</td>
+<td align="left">NA (1.87)</td>
+<td align="right">100.00</td>
+<td align="right">85.37</td>
+<td align="right">97.56</td>
+<td align="right">69.57</td>
+<td align="left">70.73 (24.39)</td>
+<td align="right">65.00</td>
+<td align="right">85.37</td>
+<td align="left">44.44 (13.89)</td>
+</tr>
+<tr class="odd">
+<td align="left">IL</td>
+<td align="right">96.12</td>
+<td align="right">58.59</td>
+<td align="left">0.2 (0.42)</td>
+<td align="right">99.03</td>
+<td align="right">82.52</td>
+<td align="right">95.15</td>
+<td align="right">68.85</td>
+<td align="left">63.11 (29.13)</td>
+<td align="right">47.47</td>
+<td align="right">89.32</td>
+<td align="left">15.56 (43.33)</td>
+</tr>
+<tr class="even">
+<td align="left">IN</td>
+<td align="right">97.89</td>
+<td align="right">31.87</td>
+<td align="left">NA (1.69)</td>
+<td align="right">100.00</td>
+<td align="right">73.68</td>
+<td align="right">95.79</td>
+<td align="right">63.16</td>
+<td align="left">72.63 (26.32)</td>
+<td align="right">72.04</td>
+<td align="right">86.32</td>
+<td align="left">25 (40.79)</td>
+</tr>
+<tr class="odd">
+<td align="left">KS</td>
+<td align="right">93.88</td>
+<td align="right">12.50</td>
+<td align="left">NA (3.04)</td>
+<td align="right">100.00</td>
+<td align="right">75.51</td>
+<td align="right">91.84</td>
+<td align="right">58.93</td>
+<td align="left">73.47 (22.45)</td>
+<td align="right">64.58</td>
+<td align="right">93.88</td>
+<td align="left">23.81 (35.71)</td>
+</tr>
+<tr class="even">
+<td align="left">KY</td>
+<td align="right">95.74</td>
+<td align="right">17.24</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">92.63</td>
+<td align="right">97.89</td>
+<td align="right">60.00</td>
+<td align="left">73.68 (21.05)</td>
+<td align="right">66.67</td>
+<td align="right">88.42</td>
+<td align="left">57.89 (13.16)</td>
+</tr>
+<tr class="odd">
+<td align="left">LA</td>
+<td align="right">98.17</td>
+<td align="right">58.82</td>
+<td align="left">1.25 (3.76)</td>
+<td align="right">99.08</td>
+<td align="right">78.90</td>
+<td align="right">96.33</td>
+<td align="right">59.63</td>
+<td align="left">67.89 (22.02)</td>
+<td align="right">68.00</td>
+<td align="right">87.16</td>
+<td align="left">32.97 (23.08)</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="right">100.00</td>
+<td align="right">24.24</td>
+<td align="left">NA (0.83)</td>
+<td align="right">100.00</td>
+<td align="right">68.57</td>
+<td align="right">100.00</td>
+<td align="right">39.55</td>
+<td align="left">62.86 (37.14)</td>
+<td align="right">57.14</td>
+<td align="right">97.14</td>
+<td align="left">NA (48.28)</td>
+</tr>
+<tr class="odd">
+<td align="left">MD</td>
+<td align="right">94.94</td>
+<td align="right">61.04</td>
+<td align="left">0.81 (NA)</td>
+<td align="right">98.73</td>
+<td align="right">72.15</td>
+<td align="right">97.47</td>
+<td align="right">55.70</td>
+<td align="left">59.49 (39.24)</td>
+<td align="right">72.73</td>
+<td align="right">72.15</td>
+<td align="left">3.12 (32.81)</td>
+</tr>
+<tr class="even">
+<td align="left">ME</td>
+<td align="right">95.45</td>
+<td align="right">4.76</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">90.91</td>
+<td align="right">95.45</td>
+<td align="right">59.09</td>
+<td align="left">54.55 (36.36)</td>
+<td align="right">83.33</td>
+<td align="right">100.00</td>
+<td align="left">73.33 (6.67)</td>
+</tr>
+<tr class="odd">
+<td align="left">MI</td>
+<td align="right">97.44</td>
+<td align="right">33.80</td>
+<td align="left">NA (0.82)</td>
+<td align="right">100.00</td>
+<td align="right">67.95</td>
+<td align="right">93.59</td>
+<td align="right">57.24</td>
+<td align="left">75.64 (23.08)</td>
+<td align="right">79.22</td>
+<td align="right">89.74</td>
+<td align="left">23.53 (30.88)</td>
+</tr>
+<tr class="even">
+<td align="left">MN</td>
+<td align="right">96.72</td>
+<td align="right">16.67</td>
+<td align="left">2.87 (6.57)</td>
+<td align="right">98.36</td>
+<td align="right">65.57</td>
+<td align="right">95.08</td>
+<td align="right">55.00</td>
+<td align="left">60.66 (29.51)</td>
+<td align="right">79.66</td>
+<td align="right">68.85</td>
+<td align="left">25.49 (19.61)</td>
+</tr>
+<tr class="odd">
+<td align="left">MO</td>
+<td align="right">93.53</td>
+<td align="right">39.34</td>
+<td align="left">0.65 (1.45)</td>
+<td align="right">99.28</td>
+<td align="right">84.89</td>
+<td align="right">97.84</td>
+<td align="right">69.61</td>
+<td align="left">74.1 (22.3)</td>
+<td align="right">57.36</td>
+<td align="right">98.56</td>
+<td align="left">20.69 (40.52)</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="right">96.92</td>
+<td align="right">37.70</td>
+<td align="left">NA (NA)</td>
+<td align="right">98.46</td>
+<td align="right">86.15</td>
+<td align="right">100.00</td>
+<td align="right">65.15</td>
+<td align="left">70.77 (21.54)</td>
+<td align="right">51.67</td>
+<td align="right">93.85</td>
+<td align="left">50 (6.25)</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="right">96.77</td>
+<td align="right">NA</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">87.10</td>
+<td align="right">93.55</td>
+<td align="right">61.29</td>
+<td align="left">58.06 (38.71)</td>
+<td align="right">71.43</td>
+<td align="right">93.55</td>
+<td align="left">41.67 (8.33)</td>
+</tr>
+<tr class="even">
+<td align="left">NC</td>
+<td align="right">96.79</td>
+<td align="right">34.46</td>
+<td align="left">NA (1.97)</td>
+<td align="right">100.00</td>
+<td align="right">78.85</td>
+<td align="right">96.15</td>
+<td align="right">74.87</td>
+<td align="left">68.59 (28.21)</td>
+<td align="right">69.54</td>
+<td align="right">84.62</td>
+<td align="left">33.61 (11.76)</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="right">100.00</td>
+<td align="right">NA</td>
+<td align="left">NA (6.45)</td>
+<td align="right">100.00</td>
+<td align="right">81.82</td>
+<td align="right">100.00</td>
+<td align="right">45.45</td>
+<td align="left">63.64 (36.36)</td>
+<td align="right">54.55</td>
+<td align="right">90.91</td>
+<td align="left">50 (16.67)</td>
+</tr>
+<tr class="even">
+<td align="left">NE</td>
+<td align="right">95.83</td>
+<td align="right">20.83</td>
+<td align="left">NA (10.39)</td>
+<td align="right">100.00</td>
+<td align="right">79.17</td>
+<td align="right">91.67</td>
+<td align="right">50.00</td>
+<td align="left">70.83 (29.17)</td>
+<td align="right">78.26</td>
+<td align="right">91.67</td>
+<td align="left">20 (35)</td>
+</tr>
+<tr class="odd">
+<td align="left">NH</td>
+<td align="right">100.00</td>
+<td align="right">NA</td>
+<td align="left">NA (3.23)</td>
+<td align="right">100.00</td>
+<td align="right">53.85</td>
+<td align="right">100.00</td>
+<td align="right">61.54</td>
+<td align="left">30.77 (46.15)</td>
+<td align="right">84.62</td>
+<td align="right">92.31</td>
+<td align="left">50 (10)</td>
+</tr>
+<tr class="even">
+<td align="left">NJ</td>
+<td align="right">97.06</td>
+<td align="right">50.00</td>
+<td align="left">2.3 (NA)</td>
+<td align="right">98.53</td>
+<td align="right">79.41</td>
+<td align="right">100.00</td>
+<td align="right">45.35</td>
+<td align="left">51.47 (39.71)</td>
+<td align="right">69.35</td>
+<td align="right">97.06</td>
+<td align="left">7.02 (42.11)</td>
+</tr>
+<tr class="odd">
+<td align="left">NM</td>
+<td align="right">94.34</td>
+<td align="right">1.08</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">82.08</td>
+<td align="right">98.11</td>
+<td align="right">65.09</td>
+<td align="left">63.21 (28.3)</td>
+<td align="right">66.00</td>
+<td align="right">85.85</td>
+<td align="left">31.03 (16.09)</td>
+</tr>
+<tr class="even">
+<td align="left">NV</td>
+<td align="right">96.88</td>
+<td align="right">17.65</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">71.88</td>
+<td align="right">92.71</td>
+<td align="right">58.87</td>
+<td align="left">66.67 (29.17)</td>
+<td align="right">68.13</td>
+<td align="right">67.71</td>
+<td align="left">11.27 (40.85)</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="right">96.04</td>
+<td align="right">51.11</td>
+<td align="left">0.9 (4.12)</td>
+<td align="right">99.01</td>
+<td align="right">63.37</td>
+<td align="right">91.09</td>
+<td align="right">50.47</td>
+<td align="left">78.22 (21.78)</td>
+<td align="right">64.95</td>
+<td align="right">86.14</td>
+<td align="left">13.41 (58.54)</td>
+</tr>
+<tr class="even">
+<td align="left">OH</td>
+<td align="right">96.77</td>
+<td align="right">38.36</td>
+<td align="left">2.02 (1.38)</td>
+<td align="right">98.06</td>
+<td align="right">75.48</td>
+<td align="right">97.42</td>
+<td align="right">53.62</td>
+<td align="left">61.29 (34.84)</td>
+<td align="right">69.80</td>
+<td align="right">91.61</td>
+<td align="left">17.69 (36.92)</td>
+</tr>
+<tr class="odd">
+<td align="left">OK</td>
+<td align="right">98.17</td>
+<td align="right">21.33</td>
+<td align="left">2.05 (3.6)</td>
+<td align="right">98.78</td>
+<td align="right">78.05</td>
+<td align="right">92.07</td>
+<td align="right">55.29</td>
+<td align="left">70.12 (27.44)</td>
+<td align="right">63.52</td>
+<td align="right">84.15</td>
+<td align="left">47.24 (22.83)</td>
+</tr>
+<tr class="even">
+<td align="left">OR</td>
+<td align="right">97.73</td>
+<td align="right">9.21</td>
+<td align="left">NA (2.21)</td>
+<td align="right">100.00</td>
+<td align="right">69.32</td>
+<td align="right">93.18</td>
+<td align="right">56.76</td>
+<td align="left">54.55 (39.77)</td>
+<td align="right">72.50</td>
+<td align="right">93.18</td>
+<td align="left">25.76 (19.7)</td>
+</tr>
+<tr class="odd">
+<td align="left">PA</td>
+<td align="right">97.22</td>
+<td align="right">44.21</td>
+<td align="left">0.8 (1.51)</td>
+<td align="right">98.15</td>
+<td align="right">75.00</td>
+<td align="right">89.81</td>
+<td align="right">53.51</td>
+<td align="left">70.37 (26.85)</td>
+<td align="right">71.43</td>
+<td align="right">100.00</td>
+<td align="left">19.1 (28.09)</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+<td align="right">100.00</td>
+<td align="right">50.00</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">100.00</td>
+<td align="right">100.00</td>
+<td align="right">20.00</td>
+<td align="left">100 (NA)</td>
+<td align="right">NA</td>
+<td align="right">75.00</td>
+<td align="left">NA (66.67)</td>
+</tr>
+<tr class="odd">
+<td align="left">SC</td>
+<td align="right">95.45</td>
+<td align="right">33.75</td>
+<td align="left">4.92 (1.88)</td>
+<td align="right">97.73</td>
+<td align="right">80.68</td>
+<td align="right">95.45</td>
+<td align="right">70.41</td>
+<td align="left">72.73 (23.86)</td>
+<td align="right">69.05</td>
+<td align="right">87.50</td>
+<td align="left">46.58 (9.59)</td>
+</tr>
+<tr class="even">
+<td align="left">SD</td>
+<td align="right">100.00</td>
+<td align="right">NA</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">64.71</td>
+<td align="right">100.00</td>
+<td align="right">70.59</td>
+<td align="left">82.35 (17.65)</td>
+<td align="right">66.67</td>
+<td align="right">94.12</td>
+<td align="left">53.85 (NA)</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+<td align="right">94.93</td>
+<td align="right">25.00</td>
+<td align="left">NA (0.81)</td>
+<td align="right">100.00</td>
+<td align="right">75.36</td>
+<td align="right">99.28</td>
+<td align="right">55.03</td>
+<td align="left">68.12 (28.99)</td>
+<td align="right">67.41</td>
+<td align="right">91.30</td>
+<td align="left">34.51 (13.27)</td>
+</tr>
+<tr class="even">
+<td align="left">TX</td>
+<td align="right">93.75</td>
+<td align="right">23.06</td>
+<td align="left">1.96 (0.7)</td>
+<td align="right">99.38</td>
+<td align="right">81.46</td>
+<td align="right">93.12</td>
+<td align="right">63.37</td>
+<td align="left">66.04 (29.79)</td>
+<td align="right">64.69</td>
+<td align="right">91.67</td>
+<td align="left">22.22 (18.78)</td>
+</tr>
+<tr class="odd">
+<td align="left">UT</td>
+<td align="right">100.00</td>
+<td align="right">12.28</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">73.33</td>
+<td align="right">98.33</td>
+<td align="right">42.50</td>
+<td align="left">53.33 (38.33)</td>
+<td align="right">57.89</td>
+<td align="right">68.33</td>
+<td align="left">6.38 (17.02)</td>
+</tr>
+<tr class="even">
+<td align="left">VA</td>
+<td align="right">93.68</td>
+<td align="right">43.48</td>
+<td align="left">1.09 (1.7)</td>
+<td align="right">98.95</td>
+<td align="right">72.63</td>
+<td align="right">96.84</td>
+<td align="right">62.11</td>
+<td align="left">67.37 (29.47)</td>
+<td align="right">67.74</td>
+<td align="right">87.37</td>
+<td align="left">35.8 (20.99)</td>
+</tr>
+<tr class="odd">
+<td align="left">VT</td>
+<td align="right">100.00</td>
+<td align="right">NA</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">55.56</td>
+<td align="right">88.89</td>
+<td align="right">55.56</td>
+<td align="left">55.56 (33.33)</td>
+<td align="right">66.67</td>
+<td align="right">66.67</td>
+<td align="left">71.43 (28.57)</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="right">96.71</td>
+<td align="right">16.67</td>
+<td align="left">NA (0.85)</td>
+<td align="right">100.00</td>
+<td align="right">65.79</td>
+<td align="right">93.42</td>
+<td align="right">48.41</td>
+<td align="left">57.89 (37.5)</td>
+<td align="right">70.14</td>
+<td align="right">90.79</td>
+<td align="left">18.18 (17.36)</td>
+</tr>
+<tr class="odd">
+<td align="left">WI</td>
+<td align="right">98.90</td>
+<td align="right">22.73</td>
+<td align="left">5.25 (1.34)</td>
+<td align="right">98.90</td>
+<td align="right">73.63</td>
+<td align="right">97.80</td>
+<td align="right">61.21</td>
+<td align="left">52.75 (46.15)</td>
+<td align="right">68.97</td>
+<td align="right">85.71</td>
+<td align="left">42.25 (18.31)</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="right">96.30</td>
+<td align="right">17.39</td>
+<td align="left">NA (1.71)</td>
+<td align="right">100.00</td>
+<td align="right">77.78</td>
+<td align="right">100.00</td>
+<td align="right">62.96</td>
+<td align="left">70.37 (27.78)</td>
+<td align="right">61.54</td>
+<td align="right">90.74</td>
+<td align="left">60 (13.33)</td>
+</tr>
+<tr class="odd">
+<td align="left">WY</td>
+<td align="right">92.86</td>
+<td align="right">NA</td>
+<td align="left">NA (NA)</td>
+<td align="right">100.00</td>
+<td align="right">64.29</td>
+<td align="right">92.86</td>
+<td align="right">42.86</td>
+<td align="left">50 (28.57)</td>
+<td align="right">69.23</td>
+<td align="right">100.00</td>
+<td align="left">25 (8.33)</td>
+</tr>
+<tr class="even">
+<td align="left">US</td>
+<td align="right">95.61</td>
+<td align="right">27.72</td>
+<td align="left">1.03 (1.18)</td>
+<td align="right">99.00</td>
+<td align="right">78.00</td>
+<td align="right">93.13</td>
+<td align="right">50.95</td>
+<td align="left">59.02 (35.03)</td>
+<td align="right">66.87</td>
+<td align="right">88.43</td>
+<td align="left">11.02 (48.13)</td>
 </tr>
 </tbody>
 </table>
@@ -381,69 +2058,685 @@ div.tocify {
 <h3>Method</h3>
 <div id="exploratory-data-analysis" class="section level4">
 <h4>1. Exploratory Data Analysis</h4>
-<p>This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. ….</p>
-<p>INCOMING VISUAL… <img src="index_files/figure-html/pressure-1.png" width="672" /> INSERT DESCRITPION HERE</p>
+<p>This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. In order to see the  relationship clearly, we made visualizations which helps us better understand the correlation  between them. In scatter plots, we are trying to see if the linear relationship is positive or  negative. If it’s positive then it means that an increase in the variable will cause an increase in the  Shootings on average. The slope of the line will tell us by how much will change occur. The bar  charts show a comparison between the different categories within the variable. It depicts how  largely disproportionate some of the categories are when it comes to certain variables such as  Threat Level displayed by a victim and the proportion of Victim Race Percentage compared to  the Population Race Percentages.</p>
+<p>We performed the Exploratory Data Analysis to help us get a better understanding of these  variables and also give us an insight into which variables should be prioritized more in the  context of our Regression Modeling. Shown below are the most important visualizations that  proved to be very helpful during our process of EDA.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We compiled the total number of shootings for each state throughout the time period of the data  from 2015 to 2020. We ranked the states in the descending order based on the total number of  shootings. Using the ranks, we plotted the number of shootings in each for the top 10 states by  year in order for us to see the trend for these moving from one year to another.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>For this visual, we went through the same procedure as the previous one but instead of looking at  the raw counts, we considered using Shootings per 100k Population for each state. We plotted the top 10 states with the highest rate of Shootings per 100k </p>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We computed the number of shootings throughout the US by each month and year. We changed  those values into Time Series data and we were able to make this visual that encompass the  entire US with the monthly number of shootings. This also gives us an insight on the trend  certain months have in common. </p>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>This is partially similar to Fig 2 but here we collect the rate of Shootings per 100k for every state  by year. We made use of a stacked barplot to visually represent the comparison between certain  states. Even though California had the highest number of shootings, Alaska turned out to be the  one that had the higher rate shootings by population.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>With this visual, we were trying to figure out if the days of the week have any impact in the  number of shootings. There are observable patterns but they aren’t highly significant for us to  draw any conclusions.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>For Police Expenditure, we had data for the years of 2015-2017. Just like previous stacked  barplot, this helps us understand how different states spend their funding for the police  department alone. Again, they are just raw numbers spent on the Police Department per Capita  for each state.  </p>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>For this visual, we divided the Police Expenditure by Total Expenditure for each state and then  we plotted it against Shootings per 100k for those. We are able to see a downwards trend as we  move to the next year. This is also because some of the states with the highest police expenditure  as a fraction of total expenditure have less shootings. For example, DC has the highest police  expenditure per capita and has one of the highest fractions as well but it has a lower rate of  shootings.  </p>
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>This visual is similar to the previous one but it’s annualized which means that we took the sum of  the values and divided it by 3 as we only have data for the years of 2015-2017 for Police  expenditure.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We used the formula mentioned above to calculate the population diversity for each State by  year. Population Diversity is the chance of two people are of a different race from a state in  percentage. So this visual shows a positive correlation between Annualized Population Diversity  and the rate of Shootings per 100k. Even though the correlation is positive, it isn’t very strong  meaning that the change in Shootings per 100k as Population Diversity increases isn’t huge.  </p>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>We calculated the Crime Index by adding up all the crimes in a state and dividing it by the  population. In this case, we have Crime Index per 10k Population plotted against the rate of  Shootings per 10k. You might have noticed the word Annualized, this means that both values  were added by States for all years and divided by 4 as we only have 4 years of Crime Data.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>This visual is able to show the distribution in the Population Racial Diversity and the Victim  Racial Diversity in one. This helps us see that the African American are represented more in the  shootings than in the population itself.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Similar to the other visuals, we are trying to see the relation between Percentage of Black  Population and Black victims involved in the shootings by state. This is also annualized which  means each value was added by States for all years and divided by 5.41667 because we have 5  years and 5 months of data (i.e. <span class="math inline">\(5 + \frac{5}{12} = 5 + 0.4166... ≈ 5.41667\)</span>). This shows a very strong correlation between these variables which later proves to be a very important variable in our  model. </p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>We made use of the officer count data for the years of 2015 and 2016 and plotted it against  shootings per 10k to keep the proportions equal. For the both years, it depicts a downward trend  slope which means that if the officer count per 10k increases then the rate of shootings per 10k  decreases with a significant amount.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>We had data on what type of action was taken against the officer involved in the incident. For  example, Justified means that the officers action was justified to proceed to shoot the victim or  Charged means that the officer was charged with murder or other. So we collected the  percentages for each state by year and combined the percentages for Justified and Charged. Next,  we plotted Percentage of Decision Made against the rate of Shootings per 100k. We are able to  see a clear downward trend as the percentage of Decision made on officer increases.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>We plotted annualized suicide rates against the rate of shootings per 100k as a way to see how  firearm availablity affects the rate of shootings by each state. A shooting incident is possible if  the Victim was armed with some type of weapon. So if the firearm availability is high then it  could correlate to higher rates of shootings. We clearly see an upward trend as the suicide rate  per 100k increases  .</p>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>This visual is almost the same as the one above but the only difference is that we used the  Registered Firearms per 100k data as another way to compare firearm availability to rate of  shootings per 100k. Similar to the visual above, this one shows an upward trend as the  Registered Firearms per 100k increases.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>Urbanization Index is a way to see what percentage of the population lives in an urban area. As  we can observe from this visual, there is a downward trend as the Annualized Urbanization Index  increases. But the slope of the line isn’t very steep meaning the change caused by the  Urbanization Index isn’t drastic.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>We used the data on Firearm Fatalities per 100k against the rate of Shootings per 10k by each  county for all the years from 2015 to 2020. Since most of the data was close to 0, we used a log  transformation in order for us to see the relationship clearly. As we can see, the relationship is a  strong downward trend but we have to keep in mind that this visual uses the log of the values we  have originally. So even though this shows a strong negative correlation, in the actual numbers,  this correlation isn’t as significant. </p>
 </div>
 <div id="topic-modeling" class="section level4">
 <h4>2. Topic Modeling</h4>
-<p>With the combined dataset of the Washington Post and the Mapping Police Violence, we are able  to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We  first proceeded with word clouds…</p>
+<p>WORD CLOUDS WILL HAVE TO WAIT</p>
+<p>Taking out topic-specific words did not seem to help as there were even more words that each  group had in common. There seems to be no distinction between the groups of words for each  race based on these visuals, so we decided to take a different approach to see if we can group  each description by topic and be able to see if there are any patterns of topics for each race.  Topic modeling is a method in text mining that allows us to classify words in groups that share a  focus. The method used for this is Latent Dirichlet allocation, where we can treat each topic as a  mixture of words that will convey something contributing to that particular topic.</p>
+<p>We decided to first figure out the optimal amount of topics that we can group the words, keeping  in mind of maximum coverage and minimum overlapping. We want each topic to span over all  the words that can be relevant to that topic and avoid leaving out key words that can fall into that  particular topic. At the same time, we want the minimum overlapping of words so that we can  avoid confusion of the topics presented and find distinction between other topics. The following  two methods are used to find the appropriate amount of topics: 1) To train the LDA model of a  sequence of topics and select the number of topics that will best give us both maximum coverage  and minimum overlapping, and 2) To manually run the data for each number of topics and see  what number of topics are best fit for our dataset.</p>
+<p>Again, we took out stop words and topic-specific words that do not take out the context of the  situation. We used method 1 to narrow down our options to a certain range of the number of  topics, which the range of 3-7 topics were optimal.</p>
 </div>
+</div>
+</div>
+<div id="fit-models-done." class="section level2">
+<h2>fit models… done.</h2>
+</div>
+<div id="calculate-metrics" class="section level2">
+<h2>calculate metrics:</h2>
+</div>
+<div id="griffiths2004-done." class="section level2">
+<h2>Griffiths2004… done.</h2>
+</div>
+<div id="caojuan2009-done." class="section level2">
+<h2>CaoJuan2009… done.</h2>
+</div>
+<div id="arun2010-done." class="section level2">
+<h2>Arun2010… done.</h2>
+</div>
+<div id="deveaud2014-done." class="section level2">
+<h2>Deveaud2014… done.</h2>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>We then ran the LDA model manually, going through each number of topics from 3, 4, 5, 6, and  7 and seeing the classification of words of each topic with the interest of seeing what number of  topics would best cover the words without having much overlapping with other topics.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>There seems to be no apparent distinction between each topic when we run the LDA model, and  as we go up in the number of topics, more words become more frequent in each of the topics. We  conclude that there seems to be no significance of the association of race and the events that  occur that lead to the fatal police shooting.</p>
 <div id="poisson-regression---predicting-rates-of-shootings" class="section level4">
 <h4>3. Poisson Regression - Predicting rates of shootings</h4>
-<p>Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable…..</p>
-<p>INCOMING EQUATION <span class="math inline">\(\log(\mu / t) = \alpha + \beta_{1}X_{1} + ... + \beta_{n}X_{n}\)</span></p>
-<ol start="4" style="list-style-type: decimal">
-<li>Time Series Forecasting</li>
-</ol>
-<p>Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series …</p>
+<p>Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable <span class="math inline">\(Y\)</span> is a count whereas the predictor variables can be both categorical and numerical. We can also have <span class="math inline">\(Y/t\)</span> , the rate (or incidence) as the response variable, where <span class="math inline">\(t\)</span> is an interval reprsenting time, space, or some other grouping. In our case, we need the rate of fatal police shootings, this, population is our <span class="math inline">\(t\)</span>. The expected value of <span class="math inline">\(Y\)</span> is denoted by $E(Y) = $. In the same way, <span class="math inline">\(E(Y/t) = /t\)</span>. The Poisson log-linear regression for the expected rate of counts has the form as shown below:</p>
+<center>
+<span class="math inline">\(\log(\mu / t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}\)</span>
+</center>
+<center>
+<span class="math inline">\(\log(\mu) - \log(t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}\)</span>
+</center>
+<center>
+<span class="math inline">\(\log(\mu) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n} + \log(t).....(1)\)</span>
+</center>
+<p><span class="math inline">\((X_{1}, X_{2},... X_{n})\)</span> are the predictor values and <span class="math inline">\((_{1}, _{2},... _{n})\)</span> are the estimates for the predictor variables for the variable respectively. The constant <span class="math inline">\(\alpha\)</span> is <span class="math inline">\(_{0}\)</span> which is the intercept for our response variables and it’s assumed that <span class="math inline">\(X_{0}\)</span> is 1. Thus, <span class="math inline">\(\alpha = X_{0}\)</span>. The term “<span class="math inline">\(-\log(t)\)</span>” is an adjustment term which is referred to as the offset. As a multiplicative model, the Poisson long-linear model with a log link for rate is:</p>
+<center>
+<span class="math inline">\(\log(\mu / t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}\)</span>
+</center>
+<center>
+<span class="math inline">\(\mu / t = e^\alpha * e^{\beta_{1}X_{1}} * e^{\beta_{2}X_{2}} * ... * e^{\beta_{n}X_{n}}\)</span>
+</center>
+<center>
+<span class="math inline">\(\mu =t * e^\alpha * e^{\beta_{1}X_{1}} * e^{\beta_{2}X_{2}} * ... * e^{\beta_{n}X_{n}}.....(2)\)</span>
+</center>
+<p>The expected value of counts depends on both <span class="math inline">\(t\)</span> and <span class="math inline">\(X_i\)</span>, both of which are predictor variables in   the regression.</p>
+<p>Before we start with modelling the rate of shootings using the Poisson regression, we have to test  our count column using goodness of fit test. This test will tell us if using Poisson regression  would be the best approach to this response variable. In other words, we are trying to see if the  count data follows the poisson distribution. In order to do that, we used an R function, goodfit,  where we specify the type to be a poisson distribution. Next, we ran a chi-squared test for the  observed and fitted columns from the goodness of fit test. We got a p-value of 0.4204, in other  words, p-value &gt; 0.05. This means that we cannot reject the null hypothesis that the observed data is statistically similar to the expected data. Also, it means that the count data is best fit for  the response variable in a poisson regression model. </p>
+<p>Now that we have the goodness of fit and chi-square tests to back our decision to go with  Poisson regression, we will list the variables being used in our model. All the variables listed  below are chosen on the basis of our research question but also because of strong correlation  between them and shooting rates from our observations in Exploratory Data Analysis from  section 4.2.1. Our Poisson regression model will be used for analysis on the state and county  level. For our full model, we used the following predictor variables: Year, Percentage of Black  Population, Registered Firearms per 10k, Crime Index per 10k, Police Expenditure as a fraction  of the total, Population Density, Population Diversity Index, Decision Made on Officer (Charged  or Justified), Urbanization Index, Male proportion in the population, and the Percentage of State  Population in the Age Group 20-45 years. Our goal by using Poisson regression is to produce a  robust model for the rates of shootings rather than just raw count. Thus, inside the glm function  we will offset the response variable by the log of Population. An offset variable is one that is  treated like a regression covariate whose parameter is fixed to be 1.0. Offset variables are most  often used to scale the modeling of the mean in Poisson regression situations with a log link.  This will allow us to model rate data.  </p>
+<p>When running with the full model of the Poisson regression, some of the variables weren’t  significant based on the p-value. So we used the stepwise variable selection where we let the  program choose the best variables suited for the model. It tries to fit multiple different models  based on the variables available and finally it settles on the model that has the smallest AIC  value out of all the test run models that the function went through. The stepwise variable  selection doesn’t conclude a robust model based on the p-value for each variable but more so on  the smallest AIC value possible. This could mean that, in the stepwise Poisson regression model  we could have a couple of insignificant variables which shouldn’t be considered for  interpretation. After we ran the stepwise model, we got the following predictors as the best fit to  predict the rate data: Percentage of Black Population, Registered Firearms per 10k, Crime Index  per 10k, Police Expenditure as a fraction of the total, Population Diversity Index, Percentage of  official action taken against the officer, Urbanization Index, Male proportion in the population,  and the Percentage of State Population in the Age Group 20-45 years. We did something similar  with a Negative Binomial Regression model with count data, but we were satisfied with the  Poisson regression model for the rate data. We concluded that Poisson regression is very  adequate to help us answer our research question.</p>
 </div>
+<div id="time-series-forecasting" class="section level4">
+<h4>4. Time Series Forecasting</h4>
+<p>Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series Forecasting which is to make  predictions about the future where we try to fit a model on a historical date and use them to  predict future observations. For this, we grouped our Washington Post’s fatal shootings by  month from January 2015 to May 2020 and acquired a count for every month, for each year.  Using the ts function in R, we were able to change the vector of counts into a time series data. A  time series is a series of data points indexed in a timely order. In our case, the data is ordered by  Month with every succession in Year. We were then able to plot the time series data.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>The visual above is the observed data of the counts of fatal police shootings over the period  2015-2020. Using the same time series data, we will try to see if there are any similarities in  patterns for each year. </p>
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>The plot above shows seasonality (second row) within the years and a trend (third row) that  grows upwards.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>As we can observe in the months of February and September, there are huge downfalls of count  from the previous and the next month. In the similar manner, the month of March in the majority  of the years fatal police shootings has peaked. These observations are very important as this is  what we will be looking out when the model is built using certain R functions.</p>
+<p>The first method we used for our time series forecasting is called HoltWinters. Holt-Winters is a  model of time series behavior, allowing us to model three aspects of the time series: a typical  value (average), a slope (trend) over time and a cyclical repeating pattern (seasonality). It uses  exponential smoothing to encode lots of values from the past and use them to predict “typical”  values for the future. The three aspects of time series behavior are expressed as three types of  exponential smoothing which we used to test the accuracy and prediction levels as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Simple Exponential - includes model levels only</li>
+<li>Double Exponential - includes model levels and trend</li>
+<li>Triple Exponential - includes model levels, trend, and seasonal components</li>
+</ol>
+<p>Out of these three models, the third type turned out to be the best for our forecasting as it has  patterns that fits right in with the historical data and also gives a leeway with the forecasting with  a 95% CI for the point estimate.</p>
+<p>We started testing with other models including ARIMA (Autoregressive Integrated Moving  Averages), Arima with non-zero mean, ETS(Exponential Smoothing State Space), Neural  Network Time Series Forecasts, MLP (Multi-Layer Perceptron) and ELM (Extreme Learning  Machines) Time series models for our forecasting.</p>
+<p>ETS modeling does not make any assumption of any successive correlations and is usually used  for additive data. ARIMA models assume correlation between successive values and is used for  stationary data (or no apparent trend). If there is an increasing or decreasing trend, you can difference it however many times needed to make it stationary, and you can make the ARIMA  model based on the number of differences. NNAR models are based on neural networking,  taking in lagged inputs, number of nodes, and hidden layers to determine the forecast based on  the data. Currently there are two types of neural networks available for time series forecasting,  both are feed-forward neural networks: 1) MLP and 2) ELM. A feed-forward neural network is  an Artificial Neural Network (ANN) wherein the connection between the nodes do not form a  cycle. MLP is a class of networks that consists of multiple layers of computational units, usually  interconnected in a feed-forward way. Each neuron in one layer has direct connection to the  neurons of the subsequent layer. MLP also uses backpropagation training to determine the  weights of each path to the next layer until it reaches an output. ELM is an emerging machine  learning technique which is based on the neural network concept and includes both single and  multi-hidden-layer neural networks. Unlike MLP, ELM does not use backpropagation, allowing  for a faster result, but at the cost of accuracy of the result. Both mlp and elp functions are found  in the neuralnet package in R.  </p>
+<p>Most of the neural network models for the time series didn’t stand out but one with a good  accuracy level and it was the MLP Time series model. We found a good fit using this model  because we let the model choose the number of hidden nodes where we capped the max nodes to  be 10. So the model goes through a different amount of nodes throughout the run and picks the  best on the validation set MSE (Mean Squared Error). For the results, we are only going to  consider the HoltWinters Type 3 and MLP models for our forecastings.</p>
 </div>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
 <div id="state-level-poisson-regression-results" class="section level3">
 <h3>1. State Level Poisson Regression Results</h3>
-<p>We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure. </p>
+<p>We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure.</p>
+<p>For each table in this section, there are three columns: Variable, IRR with the confidence interval, and P-Value. The variable column tells us what variable we are looking at. The IRR is the number outside the parentheses and is the exponentiated coefficient. The confidence interval is inside the parentheses, and it tells the probability that it will contain the true value of the coefficient, given a percentage of confidence. We used a 95% confidence variable for these models, so 95% of the time when an experiment like this is run under the model, it will contain the coefficient. The P-Value tells us the significance of the variable in the model. P-values less than 0.05 are considered significant.</p>
 <ol style="list-style-type: decimal">
 <li>One-Variable Poisson Model - Police Expenditure Percentage - State Level</li>
 </ol>
-<p>We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant……</p>
+<p>We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant.</p>
+<table>
+<caption>Table 4: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2017</caption>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">2.27E-06 (1.89E-06,2.74E-06)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Police expenditure as a percentage of total</td>
+<td align="left">1.0809 (1.0297,1.1342)</td>
+<td align="right">0.00161</td>
+</tr>
+</tbody>
+</table>
+<p>We performed a single variable predictor poisson regression using just the Police Expenditure data from 2015 to 2017. As we can see, we have a positive IRR for the variable which suggests that there is a positive association between police expenditure as a percentage of total expenditure and the rate of shootings on average.</p>
+<table>
+<caption>Table 5: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2020</caption>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">2.198E-06 (1.928E-06,2.507E-06)</td>
+<td align="right">0.0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">Police expenditure as a percentage of total</td>
+<td align="left">1.0881 (1.0515,1.1258)</td>
+<td align="right">1.3e-06</td>
+</tr>
+</tbody>
+</table>
+<p>Here as well, we have a positive IRR which suggests the same as above. But you might notice a slight difference in the IRR values. This is due to the fact that the model is from 2015 to 2020. For this model, we imputed the means of the 3 years of data for police expenditure and pasted it to the remaining years where we have no data available. This move of imputing averages for the full model is justifiable for two reasons:</p>
+<ol style="list-style-type: decimal">
+<li>The IRR values for both one predictor Poisson regression models are very similar. They won’t have two very drastic changes from one another.</li>
+<li>States percentages spent on police from the total from 2015 to 2017 doesn’t change a lot. As shown below, you can see that from one year to another, these randomly chosen states don’t change a lot.</li>
+</ol>
+<table>
+<caption>Table 6: Percentage of Police Expenditure from Total for random States by Years</caption>
+<thead>
+<tr class="header">
+<th align="right">Year</th>
+<th align="right">DC</th>
+<th align="right">FL</th>
+<th align="right">KY</th>
+<th align="right">WY</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2015</td>
+<td align="right">4.72</td>
+<td align="right">5.28</td>
+<td align="right">2.06</td>
+<td align="right">2.54</td>
+</tr>
+<tr class="even">
+<td align="right">2016</td>
+<td align="right">4.65</td>
+<td align="right">5.41</td>
+<td align="right">1.96</td>
+<td align="right">2.57</td>
+</tr>
+<tr class="odd">
+<td align="right">2017</td>
+<td align="right">4.78</td>
+<td align="right">5.52</td>
+<td align="right">2.10</td>
+<td align="right">2.51</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the reasons stated above, it’s a valid decision to impute the NA (missing) values with the averages of the available data. So for the next coming models, we will be using imputed data.</p>
+<p>Normally, when we run a summary of a model we get a column named “Estimate” that will gives us β, or the coefficients of this Poisson log-linear regression. From Equations (1) and (2) in section 4.2.3, we can observe that it’s easier to understand the change in the rate rather than the change in the log of the rate. That’s why we exponentiated the Estimates which will give us the IRR (Incidence Rate Ratio). So now we can clearly understand the changes in the rate based on the IRR of each variable. To know whether a factor causes a reduction or increase, we use this equation: <em>IRR - 1</em>, where IRR is the incident rate ratio (or the exponentiated β term) of the factor in mind. If the difference is negative, the factor in mind causes a reduction. If the difference is positive, the factor in mind causes an increase.</p>
+<p>The IRR is 1.0881 for the percentage of police expenditure spent out of the total expenditure. If we’re looking at only this variable in respect of the rate of fatal police shootings, then a percent increase in the percentage of the police expenditure spent out of the total expenditure will cause an increase of 8.81% in the rate of shootings on average. We obtain the percentage by using the IRR equation mentioned above which is: <em>IRR - 1</em> = 1.0881 - 1 = 8.81%. Simply put, if there is a percent increase in the percentage of police expenditure spent out of the total expenditure, then there will be a multiplicative increase of 1.0881 in the rate of shootings.</p>
 <ol start="2" style="list-style-type: decimal">
-<li>Full Model</li>
+<li>Full Poisson Model - State Level</li>
 </ol>
 <p>If we were to look at the full model, we will have all the variables used in the model. Below you  will see all the variables used in the model with varying significance.</p>
+<table>
+<caption>Table 7: Coefficients for Full Poisson Regression Model - State Level 2015-2020</caption>
+<colgroup>
+<col width="61%" />
+<col width="29%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">3.31E-08 (1.75E-21,629488.7)</td>
+<td align="right">0.26953</td>
+</tr>
+<tr class="even">
+<td align="left">Year</td>
+<td align="left">0.99860 (0.98360,1.01390)</td>
+<td align="right">0.85880</td>
+</tr>
+<tr class="odd">
+<td align="left">Black Population Percentage</td>
+<td align="left">0.96370 (0.95830,0.96900)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Registered Firearms per 10k</td>
+<td align="left">1.00052 (1.00035,1.00067)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Population Density</td>
+<td align="left">0.99996 (0.99990,1.00001)</td>
+<td align="right">0.16400</td>
+</tr>
+<tr class="even">
+<td align="left">Population Diversity</td>
+<td align="left">1.01660 (1.01270,1.02060)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Decision Made on Officer (Charged or Justified)</td>
+<td align="left">0.99610 (0.99190,1.00009)</td>
+<td align="right">0.06076</td>
+</tr>
+<tr class="even">
+<td align="left">Urbanization Index</td>
+<td align="left">0.96140 (0.95720,0.96570)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Male Percentage in Population</td>
+<td align="left">1.08300 (1.01610,1.15380)</td>
+<td align="right">0.01394</td>
+</tr>
+<tr class="even">
+<td align="left">Percentage of state population in the age group 20-45 years</td>
+<td align="left">1.12230 (1.09590,1.14950)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Crime Index per 10k</td>
+<td align="left">1.00093 (1.00079,1.00110)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Police expenditure as a percentage of total</td>
+<td align="left">1.41720 (1.34770,1.49030)</td>
+<td align="right">0.00000</td>
+</tr>
+</tbody>
+</table>
+<p>This model covers all the variables we want to explore in our modeling, hence, the full regression model. The variables we used are Year, Black Population Percentage, Registered Firearm per 10k population, Population Density, Population Diversity, Decision Made on Officer (Charged or Justified), Urbanization Index, Male Percentage in Population, Percentage of state population in the age of 20-45 years, Crime Index per 10k population, and Police Expenditure as a percentage of Total Expenditure. Based on the p-value, we can see from this model that some of the variables which are not significant. Year and Population Density are not significantly associated with the rate of fatal police shootings in this case.</p>
+<p>We are able to use the step function for the Poisson regression so that we may take out variables that may not contribute to the model. As stated in the methods section, the step function determines what variables will produce the lowest AIC value; it does not look at the p-value specifically so there may be some non-significant variables in the stepwise model.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Stepwise Poisson Model - State Level</li>
+</ol>
+<p>Once we ran our poisson regression model with stepwise variable selection for our rate data with the significant variables, we got the following table:</p>
+<table style="width:100%;">
+<caption>Table 8: Coefficients for Stepwise Poisson Regression Model - State Level 2015-2020</caption>
+<colgroup>
+<col width="60%" />
+<col width="32%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">2.096E-09 (9.818E-11,4.559E-08)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Black Population Percentage</td>
+<td align="left">0.96360 (0.95830,0.96900)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Registered Firearms per 10k</td>
+<td align="left">1.00050 (1.00040,1.00070)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Population Density</td>
+<td align="left">0.99996 (0.99990,1.00001)</td>
+<td align="right">0.16288</td>
+</tr>
+<tr class="odd">
+<td align="left">Population Diversity Index</td>
+<td align="left">1.01660 (1.01270,1.02050)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Decision Made on Officer (Charged or Justified)</td>
+<td align="left">0.99600 (0.99200,1.00010)</td>
+<td align="right">0.05986</td>
+</tr>
+<tr class="odd">
+<td align="left">Urbanization Index</td>
+<td align="left">0.96140 (0.95720,0.96570)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Male Percentage in Population</td>
+<td align="left">1.08260 (1.01580,1.15320)</td>
+<td align="right">0.01430</td>
+</tr>
+<tr class="odd">
+<td align="left">Percentage of state population in the age group 20-45 years</td>
+<td align="left">1.12250 (1.09620,1.14960)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Crime Index per 10k</td>
+<td align="left">1.00090 (1.00080,1.00110)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="odd">
+<td align="left">Police expenditure as a percentage of total</td>
+<td align="left">1.41740 (1.34790,1.49050)</td>
+<td align="right">0.00000</td>
+</tr>
+</tbody>
+</table>
+<p>As we can see above, all the variables are highly significant in terms of p-value (with the exception of Population Density and Decision Made on Officer (Charged or Justified). These variables were chosen by the model using the stepwise variable selection in the function of our full model. We can observe that an unit increase in Black Population Percentage would cause a reduction of 3.64%in the rate of shootings on average. Also, a percent increase in the Population Diversity Index which is the probability of two people being a different race would cause an increase of 1.66% in the rate of shootings on average.</p>
+<p>The variable that will cause the largest reduction is the Urbanization Index with a one unit increase causing a reduction of 3.86%in the rates of shootings on average. On the other hand, Police Expenditure as a percentage of total will cause the largest increase. A one unit increase in Police Expenditure as a percentage of total expenditure will cause an increase of 41.74% in the rates of shootings on average.</p>
 </div>
 <div id="county-level-poisson-regression" class="section level3">
 <h3>2. County Level Poisson Regression</h3>
+<p>We ran two models of the Poisson Regression at the county level: Full and stepwise model. In this section, we are focused on the overall result based on these models.</p>
 <ol style="list-style-type: decimal">
-<li>Full</li>
-<li>Stepwise We get the gist at this point</li>
+<li>Full Poisson Model - County Level</li>
 </ol>
+<p>We did the same process of modeling at the county level. Below is the table of all the variables used in the model at this level. We did not have registered firearms at the county level, but we have firearm fatalities, which still deals with the holding of a firearm.</p>
+<table>
+<caption>Table 9: Coefficients for Full Poisson Regression Model - County Level 2015-2020</caption>
+<colgroup>
+<col width="56%" />
+<col width="34%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">1.47E+35 (5.77E+06,4.52E+63)</td>
+<td align="right">0.01538</td>
+</tr>
+<tr class="even">
+<td align="left">Year</td>
+<td align="left">0.95339 (0.92287,0.98482)</td>
+<td align="right">0.00398</td>
+</tr>
+<tr class="odd">
+<td align="left">Officer Count per 10k Population</td>
+<td align="left">1.00553 (0.99322,1.01708)</td>
+<td align="right">0.36320</td>
+</tr>
+<tr class="even">
+<td align="left">Crime Index per 10k Population</td>
+<td align="left">0.99965 (0.99909,1.00021)</td>
+<td align="right">0.22692</td>
+</tr>
+<tr class="odd">
+<td align="left">Population Diversity</td>
+<td align="left">0.99681 (0.99195,1.00171)</td>
+<td align="right">0.20072</td>
+</tr>
+<tr class="even">
+<td align="left">Black Percentage in Population</td>
+<td align="left">1.00133 (0.99377,1.00885)</td>
+<td align="right">0.72797</td>
+</tr>
+<tr class="odd">
+<td align="left">Urbanization Index</td>
+<td align="left">0.97150 (0.96408,0.97911)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Firearm Fatalities per 100k Population</td>
+<td align="left">1.00005 (0.99999,1.00011)</td>
+<td align="right">0.09206</td>
+</tr>
+<tr class="odd">
+<td align="left">Population Density</td>
+<td align="left">0.99988 (0.99982,0.99994)</td>
+<td align="right">0.00012</td>
+</tr>
+<tr class="even">
+<td align="left">Male Population Percentage</td>
+<td align="left">1.11385 (1.00788,1.22988)</td>
+<td align="right">0.03376</td>
+</tr>
+<tr class="odd">
+<td align="left">Percentage of Population of the ages 20-45</td>
+<td align="left">1.01080 (0.99083,1.03103)</td>
+<td align="right">0.28979</td>
+</tr>
+<tr class="even">
+<td align="left">Decision made on Officer (Charged or Justified)</td>
+<td align="left">1.00318 (0.99891,1.00709)</td>
+<td align="right">0.12645</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: decimal">
+<li>Stepwise Poisson Model - County Level</li>
+</ol>
+<p>Once we run the model with the step function, we get this table.</p>
+<table>
+<caption>Table 10: Coefficients for Stepwise Poisson Regression Model - County Level 2015-2020</caption>
+<colgroup>
+<col width="56%" />
+<col width="34%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">IRR (2.5%,97.5%)</th>
+<th align="right">P-Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">4.78E+36 (1.84E+08,1.49E+65)</td>
+<td align="right">0.01151</td>
+</tr>
+<tr class="even">
+<td align="left">Year</td>
+<td align="left">0.95213(0.92168,0.98350)</td>
+<td align="right">0.00306</td>
+</tr>
+<tr class="odd">
+<td align="left">Urbanization Index</td>
+<td align="left">0.97142 (0.96474,0.97831)</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td align="left">Population Density</td>
+<td align="left">0.99991 (0.99986,0.99996)</td>
+<td align="right">0.00031</td>
+</tr>
+<tr class="odd">
+<td align="left">Male Population Percentage</td>
+<td align="left">1.10194 (1.03573,1.17252)</td>
+<td align="right">0.00216</td>
+</tr>
+<tr class="even">
+<td align="left">Decision Made on Officer (Charged or Justified)</td>
+<td align="left">1.00331 (0.99909,1.00716)</td>
+<td align="right">0.10637</td>
+</tr>
+</tbody>
+</table>
+<p>As noted with the step function, it takes out the variables that do not decrease the AIC value. In this case, all the variables are highly significant except for Decision Made on Officer (Charged or Justified) and the Intercept.</p>
+<p>The variable that will cause the largest reduction is the Year with a one unit increase causing a reduction of 4.79%in the rates of shootings on average. On the other hand, Male Population Percentage will cause the largest increase. A one unit increase in Male Population Percentage will cause an increase of 10.19% in the rates of shootings on average.</p>
 </div>
 <div id="time-series" class="section level3">
 <h3>3. Time Series</h3>
-<p>description</p>
+<p>As we mentioned earlier, we will only be showing the results from the Triple Exponential  HoltWinters and the Multi - Layer Perceptron (MLP) time series model.</p>
+<p>Let’s begin with the HoltWinters model. Below is the plot predicted by this model with some  error margins:</p>
+<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>As we can observe, the prediction seems to fit right in the pattern of the pre-existing data from  the Washington Post. We will review the exact number output by the models for the forecasting  from June 2020 to December 2020.</p>
+<table>
+<caption>Table 11: Time Series Forecasting with HoltWinters Triple Exponential (Jun 2020 - Dec 2020) </caption>
+<thead>
+<tr class="header">
+<th align="left">Month</th>
+<th align="right">Point.Forecast</th>
+<th align="right">Low 95%</th>
+<th align="right">Low 80%</th>
+<th align="right">High 80%</th>
+<th align="right">High 95%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Jun-20</td>
+<td align="right">92.64</td>
+<td align="right">69.02</td>
+<td align="right">77.19</td>
+<td align="right">108.09</td>
+<td align="right">116.27</td>
+</tr>
+<tr class="even">
+<td align="left">Jul-20</td>
+<td align="right">95.13</td>
+<td align="right">71.19</td>
+<td align="right">79.48</td>
+<td align="right">110.79</td>
+<td align="right">119.07</td>
+</tr>
+<tr class="odd">
+<td align="left">Aug-20</td>
+<td align="right">91.17</td>
+<td align="right">66.91</td>
+<td align="right">75.31</td>
+<td align="right">107.04</td>
+<td align="right">115.43</td>
+</tr>
+<tr class="even">
+<td align="left">Sep-20</td>
+<td align="right">80.04</td>
+<td align="right">55.45</td>
+<td align="right">63.96</td>
+<td align="right">96.11</td>
+<td align="right">104.62</td>
+</tr>
+<tr class="odd">
+<td align="left">Oct-20</td>
+<td align="right">90.31</td>
+<td align="right">65.40</td>
+<td align="right">74.02</td>
+<td align="right">106.60</td>
+<td align="right">115.22</td>
+</tr>
+<tr class="even">
+<td align="left">Nov-20</td>
+<td align="right">84.67</td>
+<td align="right">59.43</td>
+<td align="right">68.17</td>
+<td align="right">101.18</td>
+<td align="right">109.92</td>
+</tr>
+<tr class="odd">
+<td align="left">Dec-20</td>
+<td align="right">93.22</td>
+<td align="right">67.63</td>
+<td align="right">76.49</td>
+<td align="right">109.95</td>
+<td align="right">118.80</td>
+</tr>
+</tbody>
+</table>
+<p>Point forecast is the column of interest as it is the blue line in the middle of the prediction. The  shaded regions are the low and high 85% and 95% respectively. This is a good prediction based  on the pattern we observed with the seasonal plot and we saw that during September the count  goes down and in October it goes up again which is depicted by our model as well. The same thing happens when we move from October to November where the count goes down but not as  much as it does in September.</p>
+<p>We will now see how the MLP model compares to the HoltWinters. For this MLP model we  passed through an automatic hidden layer specification which choses an adequate amount of  hidden layers for the model to be trained properly. The prediction by the MLP model is shown  below:</p>
+<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>One distinguishable thing with MLP is that it doesn’t provide an error margin when it comes to  time series predictions. The gray lines after mid 2020 are from the training run where the model  tries to reduce the error margin. Once the error margin has reached its minimum, the model  outputs a blue line as its final prediction. These lines could change with each run as the  perceptrons are trained differently each time so it’s highly recommended to set a seed in R  beforehand to obtain the same results.</p>
+<table>
+<caption>Table 12: Time Series Forecasting by MLP model (Jun 2020 - Dec 2020) ) </caption>
+<thead>
+<tr class="header">
+<th align="left">Month</th>
+<th align="right">Point Forecast</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Jun-20</td>
+<td align="right">91.15</td>
+</tr>
+<tr class="even">
+<td align="left">Jul-20</td>
+<td align="right">87.25</td>
+</tr>
+<tr class="odd">
+<td align="left">Aug-20</td>
+<td align="right">97.42</td>
+</tr>
+<tr class="even">
+<td align="left">Sep-20</td>
+<td align="right">84.06</td>
+</tr>
+<tr class="odd">
+<td align="left">Oct-20</td>
+<td align="right">94.04</td>
+</tr>
+<tr class="even">
+<td align="left">Nov-20</td>
+<td align="right">97.29</td>
+</tr>
+<tr class="odd">
+<td align="left">Dec-20</td>
+<td align="right">88.52</td>
+</tr>
+</tbody>
+</table>
+<p>This is the result outputted by the MLP model for our time series forecasting. Since the MLP model doesn’t give us a confidence interval, the point forecasts for any month should be interpreted on average. So, in December, there will be 88.52 shootings on average. Based on the point forecast for the respective months, we notice the same pattern as we saw in the seasonality visual from section 4.2.4. September seems to have the lowest number of shootings as it did for the other 5 years. We also see that July is a little lower compared to June and August which still follows the seasonality for two of the years from the data. What’s interesting to see is that November reached above 95 when it has never reached over 85 in the existing data. Because as we see in the seasonality visual, we see that November has had almost the same number of shootings except for one of the years. Out of those, November outnumbers August which explains why in the prediction table we see that it has outnumbered August just by a count of 3.</p>
 </div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shooting…</p>
+<p>Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shootings and the forecasts of fatal police shootings in the future. In this  report, we are trying to see the overall factors that affect the rate of fatal police shootings as well  as focusing on police expenditure and the forecast of future fatal police shootings for the next  seven months. Within our exploratory data analysis, we are able to visually see what factors may  contribute to the increase of the rate of fatal police shootings as well as if there were any  disparities between race and the events that lead up to the fatal shooting. From this stage, we  found that there was no apparent association of race and the events that lead up to the fatal  shooting.</p>
+<p>The variables that significantly affects the average rate of fatal police shootings at the state level  are the Black population percentage, Registered Firearm per 10k population, Population  Diversity Index, Urbanization Index, Male percentage in Population, the percent of State  Population between the ages of 20-45, Crime Index per 10k population, and Police Expenditure  as a percentage of Total Expenditure. Looking at the IRR for each variable and based on the  equation that determines , we see that on average, the rate of fatal police shootings decreases if  the percentage of the black population, population density, or urbanization index increases, given  that all other variables stay constant. On average, the rate of fatal police shootings would  increase if firearm registration per 10k population, population diversity index, male percentage in  population, percentage of state population in the age group of 20-45 years old, crime index per  10k population, and the percentage of governmental expenditure spent on the police over the  total, given that all other variables stay constant.</p>
+<p>At the state level, we realized that the variable that will cause the greatest change in the average  rate of fatal police shootings is the percentage of government expenditure spent on the police.  For each unit increase of the percentage of expenditure spent on the police over the total, the  average rate of fatal police shootings would increase by 41.74%. At the county level, we realized  that Male Population will cause the greatest change in the average rate of fatal police shootings.  For each unit increase of the percent of Male population, the average rate or fatal police  shootings would increase by 10.19%.As observed from the tables for state and city level, they  have shown that they have different results in what variables are significant and what variables  have the greatest effect on the average rate of fatal police shootings.</p>
+<p>We made use of multiple different methods and settled on the one that showed high accuracy and  appropriate fit to the existing data. We were able to build a good forecasting model for our time  series data which doesn’t underfit or overfit the existing data. Both the HoltWinters and MLP  models produced good predictions which had high accuracy. Both the models seem to follow the  pattern that was depicted by the historical data. The predictions were able to capture the key  points such as the peaks and troughs from our time series data. It was clearly shown in the  months of September which always had a lower number of shootings compared to the previous  and the next month. Based on what we found, multiple factors play a role in affecting the rate of  fatal police shootings, with some having greater effect than others.</p>
 </div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
-<p>This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year…</p>
+<p>This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year. Though our research was thorough to  our best ability, data availability on this topic is limited. There were lots of datasets that were  incomplete and there were not many reports of data from the police departments. There were also  numerous datasets that are not available for free use so that the public knows the knowledge of  this topic. If we were able to work with complete datasets at the time of the research, we will be  able to give a more complete and comprehensive analysis on fatal police shootings in the U.S.</p>
+<p>We have contributed to the literature by making use of Police Expenditure and Officer Count in  the state level analysis. We have also contributed by performing a Time Series Forecasting. Not  a lot of people had access to the number of observations of shootings that we did. Hence, it  helped us make a good prediction based on the shootings by month for the 5 Years and 5 Months  of data that we had access to. We also made use of lots of variables in the county level analysis  where we made use of Firearm Fatalities, Officer Count and Distinct Population Diversities.</p>
+<p>Based on what we’ve seen, we can make a few suggestions of what may cause a fatal police  shooting. At the state level, it seems to show that the more money spent on police expenditure, the higher the rate of fatal shootings will be on average. As shown in Figure 7, there is an  upward trend of the percentage of money spent for each state on the Police Department and the  number of shootings that took place in each state for the years of 2015 to 2017. Although more  research is needed to explore the relation of expenditure spent on the police and fatal police  shootings, it seems that there is an association between police expenditure spending and fatal  police shootings. As there seems to be different variables that affect the rate of shootings on  average at each level, there should be implementations that occur both at county and state level  in order to curb the fatal police shootings. State and county-level powers should also  communicate more about police policy so that implementation of police policy is regulated.</p>
+<p>Looking at the overall spectrum, one way to decrease the rate of fatal police shootings would be  to have more regulation of owning a firearm, both in the household and training the police force.  There should be appropriate consequences that should be addressed when using a gun  inappropriately. This leads to another idea that there should be a process where the police have to  undergo each time an event like this occurs. There are too many pending investigations of fatal  police shootings when it comes to charging an officer or not, which may not give a sense of  consequence. This can also be extended to the judicial system where they address this issue  quickly and effectively. </p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p>I do not know how to format the references in RMarkdown</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<p>Black Lives Matter. (2013, June). Retrieved June 23, 2020, from <a href="https://blacklivesmatter.com/" class="uri">https://blacklivesmatter.com/</a></p>
+<p>Bureau of Justice Statistics. (2020, January 17). Bureau of Justice Statistics (BJS) - Offenses Known to Law Enforcement in Large Cities, 2018. <a href="https://www.bjs.gov/index.cfm?ty=pbdetail&amp;iid=6786" class="uri">https://www.bjs.gov/index.cfm?ty=pbdetail&amp;iid=6786</a></p>
+<p>Governing. (2017). State Population By Race, Ethnicity Data. Governing. <a href="https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html" class="uri">https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html</a></p>
+<p>Governing. (2018, July 2). Police Employment, Officers Per Capita Rates for U.S. Cities. <a href="https://www.governing.com/gov-data/safety-justice/police-officers-per-capita-rates-employment-for-city-departments.html" class="uri">https://www.governing.com/gov-data/safety-justice/police-officers-per-capita-rates-employment-for-city-departments.html</a></p>
+<p>Hemenway, D., Azrael, D., Conner, A., &amp; Miller, M. (2019). Retrieved June 23, 2020. Variation in rates of fatal police shootings across US states: the role of firearm availability. Journal of urban health, 96(1), 63-73.</p>
+<p>Hemenway, D., Berrigan, J., Azrael, D., Barber, C., &amp; Miller, M. (2020). Retrieved June 23, 2020. Fatal police shootings of civilians, by rurality. Preventive medicine, 106046.</p>
+<p>Kesic, D., Thomas, S. D., &amp; Ogloff, J. R. (2012). Retrieved June 23, 2020. Analysis of fatal police shootings: Time, space, and suicide by police. Criminal Justice and Behavior, 39(8), 1107-1125.</p>
+<p>Kivisto, A. J., Ray, B., &amp; Phalen, P. L. (2017). Retrieved June 23, 2020. Firearm legislation and fatal police shootings in the United States. American journal of public health, 107(7), 1068-1075.</p>
+<p>Mentch, L. (2020). Retrieved June 23, 2020. On Racial Disparities in Recent Fatal Police Shootings. Statistics and Public Policy, 7(1), 9-18.</p>
+<p>Mesic, A., Franklin, L., Cansever, A., Potter, F., Sharma, A., Knopov, A., &amp; Siegel, M. (2018). Retrieved June 23, 2020. The relationship between structural racism and black-white disparities in fatal police shootings at the state level. Journal of the National Medical Association, 110(2), 106-116.</p>
+<p>Nagin, D. S. (2020). Retrieved June 23, 2020. Firearm availability and fatal police shootings. The ANNALS of the American Academy of Political and Social Science, 687(1), 49-57.</p>
+<p>Pierson, E., Simoiu, C., Overgoor, J., Corbett-Davies, S., Jenson, D., Shoemaker, A., … &amp; Goel, S. (2020). Retrieved June 23, 2020. A large-scale analysis of racial disparities in police stops across the United States. Nature human behaviour, 1-10.</p>
+<p>Ross, C. T. (2015). Retrieved June 23, 2020. A multi-level Bayesian analysis of racial bias in police shootings at the county-level in the United States, 2011–2014. PloS one, 10(11), e0141854.</p>
+<p>Shane, J. M., Lawton, B., &amp; Swenson, Z. (2017). Retrieved June 23, 2020. The prevalence of fatal police shootings by US police, 2015–2016: Patterns and answers from a new data set. Journal of criminal justice, 52, 101-111.</p>
+<p>Siegel, M., Sherman, R., Li, C., &amp; Knopov, A. (2019). Retrieved June 23, 2020. The Relationship between Racial Residential Segregation and Black-White Disparities in Fatal Police Shootings at the City Level, 2013–2017. Journal of the National Medical Association, 111(6), 580-587.</p>
+<p>Sinyangwe, S., &amp; McKesson, D. (n.d.). Mapping Police Violence. Mapping Police Violence. Retrieved June 23, 2020, from <a href="https://mappingpoliceviolence.org/" class="uri">https://mappingpoliceviolence.org/</a></p>
+<p>Statista Research Department. (2019, September 5). U.S. - number of registered weapons by state 2019. Statista. <a href="https://www.statista.com/statistics/215655/number-of-registered-weapons-in-the-us-by-state/" class="uri">https://www.statista.com/statistics/215655/number-of-registered-weapons-in-the-us-by-state/</a></p>
+<p>Tax Policy Center. (2020, June 18). State and Local General Expenditures, Per Capita. <a href="https://www.taxpolicycenter.org/statistics/state-and-local-general-expenditures-capita" class="uri">https://www.taxpolicycenter.org/statistics/state-and-local-general-expenditures-capita</a></p>
+<p>US Census Bureau. (2019a, February 5). USA Counties: 2011. The United States Census Bureau. <a href="https://www.census.gov/library/publications/2011/compendia/usa-counties-2011.html#LND" class="uri">https://www.census.gov/library/publications/2011/compendia/usa-counties-2011.html#LND</a></p>
+<p>US Census Bureau. (2019b, December 2). 2010 Census Urban and Rural Classification and Urban Area Criteria. The United States Census Bureau. <a href="https://www.census.gov/programs-surveys/geography/guidance/geo-areas/urban-rural/2010-urban-rural.html" class="uri">https://www.census.gov/programs-surveys/geography/guidance/geo-areas/urban-rural/2010-urban-rural.html</a></p>
+<p>US Census Bureau. (2019c, December 30). State Population Totals: 2010-2019. The United States Census Bureau. <a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html" class="uri">https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html</a></p>
+<p>US Census Bureau. (2020a, June 22). County Population by Characteristics: 2010-2019. The United States Census Bureau. <a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html" class="uri">https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html</a></p>
+<p>US Census Bureau. (2020b, June 22). State Population by Characteristics: 2010-2019. The United States Census Bureau. <a href="https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-detail.html" class="uri">https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-detail.html</a></p>
+<p>Violence Policy Center. State Firearm Suicide Rates, 2016. (n.d.). Retrieved June 23, 2020, from <a href="https://vpc.org/press/state-firearm-suicide-rates-2016/" class="uri">https://vpc.org/press/state-firearm-suicide-rates-2016/</a></p>
+<p>Washington Post. (2015). Fatal Force. <a href="https://www.washingtonpost.com/graphics/investigations/police-shootings-database/" class="uri">https://www.washingtonpost.com/graphics/investigations/police-shootings-database/</a> World Population Review. (n.d.). United States by Density 2020. Retrieved June 23, 2020, from <a href="https://worldpopulationreview.com/state-rankings/state-densities" class="uri">https://worldpopulationreview.com/state-rankings/state-densities</a></p>
 </div>
 
 

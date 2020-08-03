@@ -1,6 +1,6 @@
 ---
 title: "Analysis and Forecasting of Fatal Police Shootings in the U.S."
-author: "Arbaaz Mohideen, Kimberly Tse, Dr. Sayed Mostafa"
+author: "Arbaaz Mohideen & Kimberly Tse - \"Partners in Crime\""
 date: "7/31/2020"
 output: 
   html_document:
@@ -14,110 +14,974 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, message=FALSE, echo = FALSE, warning=FALSE}
+# All the libraries used so far
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(gganimate)
+library(gifski)
+library(wordcloud)
+library(wordcloud2)
+library(RColorBrewer)
+library(tm)
+library(readr)
+library(MASS)
+library(pscl)
+library(jtools)
+library(vcd)
+library(scales)
+library(forecast)
+library(nnfor)
+library(imputeTS)
+library(readxl)
+library(knitr)
+library(rmarkdown)
+```
+
+```{r, echo=FALSE,include=FALSE,warning=FALSE}
+shootings_killings <- read_csv("shootings_killings.csv")
+
+suicide_race_firearm_pop <- read_csv("suicide_race_firearm_pop.csv")
+
+offense <- read_csv("offense.csv")
+
+state_local_expenditures_15_17 <- read_csv("state_local_expenditures_15-17.csv")
+
+policedep_count_complete <- read_csv("policedep_count_complete.csv")
+
+combined_2017_2020_populations <- read_csv("combined_2017_2020_populations.csv")
+
+Correlation_complete_dat <- read_csv("Correlation_complete_dat.csv")
+
+model_dat <- read_csv("model_dat.csv")
+
+state_level_model <- read_csv("state_level_model_final.csv")
+
+county_level_model <- read_csv("county_level_model.csv")
+```
+
+```{r,warning=FALSE,include=FALSE,echo=FALSE}
+newdat1 = left_join(shootings_killings,suicide_race_firearm_pop,by=c("Year","State"))
+
+newdat11 = newdat1%>%
+  group_by(Year,State,Population)%>%
+  tally()%>%
+  mutate(Shootings_10k = n*10000/Population,Shootings_100k=n*100000/Population)
+
+newdat2 = left_join(newdat1,newdat11,by=c("Year","State","Population"))
+
+newdat3 = left_join(newdat2,offense,by=c("Year","State","City"))
+
+newdat4 = left_join(newdat3,state_local_expenditures_15_17,by=c("Year","State"))
+
+newdat5 = left_join(newdat4, policedep_count_complete, by=c("Year","County","City","State"))
+
+complete_dat = left_join(newdat5, combined_2017_2020_populations, by=c("Year","State"))
+
+#This is saved and furthered cleaned in excel. The cleaned version is used for the model
+model_complete_dat = complete_dat%>%
+  mutate(armed_simplified = ifelse(Shootings_armed%in%c("air pistol","Airsoft pistol",
+                                              "BB gun","BB gun and vehicle",
+                                              "bean-bag gun","gun","gun and car",
+                                              "gun and knife","gun and sword",
+                                              "gun and vehicle", "guns and explosives",
+                                              "hatchet and gun", "machete and gun",
+                                              "nail gun", "pellet gun"),1,0),
+         official_action = ifelse(`Official disposition of death (justified or other)`%in%
+                                    c("Charged", "Charged with 2nd degree murder",
+                              "Charged with a crime", "Charged with felony murder",
+                              "Charged with manslaughter", "Charged with manslaughter, acquitted",
+                              "Charged with murder", "Charged with murder, Acquitted",
+                              "Charged with negligent homicide, Acquitted",
+                              "Charged with reckless homicide", "Charged, Acquitted",
+                              "Charged, Convicted of 2nd degree manslaughter, Sentenced to 4 years",
+                              "Charged, convicted of manslaughter", "Charged, Convicted of manslaughter, Sentenced to 2.5 years in prison",
+                              "Charged, Convicted, Sentenced to 5 years in prison",
+                              "Charged, Mistrial declared", "Charged, Mistrial declared, Pled Guilty for Violating Scott's Civil Rights",
+                              "Criminal", "Unjustified, Officer fired"),"Charged",
+                              ifelse(`Official disposition of death (justified or other)`%in%c("Justified", "Justified by Attorney General",
+                              "Justified by County Attorney","Justified by County Prosecutor",
+                              "Justified by District Attorney", "Justified by Fifth Judicial Circuit Solicitor",
+                              "Justified by outside agency", "Justified by Prosecuting Attorney",
+                              "Justified by Prosecutor","Justified by Prosecutor's Office",
+                              "Justified by State's Attorney","Justified by State Attorney",
+                              "Justified; New York State Police investigation; Schwalm's brother offered condolences to the deputy because of his brother's illness."),"Justified", ifelse(`Official disposition of death (justified or other)`%in%c("Ongoing investigation", "Under investigation"),"Ongoing",ifelse(`Official disposition of death (justified or other)`%in%c("Grand jury/No bill or Cleared","No Known Charges","Unknown","Unreported"),"Unreported","Pending")))),
+         Victim_Criminal_Charges_Simplified = ifelse(`Criminal Charges?`%in%c("Charged with a crime","Charged with manslaughter","Charged, Acquitted","Charged, Convicted, Sentenced to 2.5 years in prison","Charged, Convicted, Sentenced to 4 years","Charged, Convicted, Sentenced to 40 years in prison","Charged, Convicted, Sentenced to 5 years in prison","Charged, Mistrial","Charged, Mistrial, Plead Guilty to Civil Rights Charges"),"Charged","No Charges"))
+```
+
+
 ## Abstract
 
-This is my testing page, so essentially, I can talk about myself here and explain why I am so awesome. ANYWAYS. I am assuming that this is a WRITE-UP format with all the coding (invisible) and visuals(visible).
+Fatal police shootings have been an interest in the political, social, and academic field, as there  has been discrepancy of whether the police used force to protect the people. With the increased  awareness of the Black Lives Matter Movement (BLM) and the movement of Defunding the  Police, there are speculations of the legitimacy of police use-of-force. In this report, we will do  comprehensive analyses making use of factors that may increase the likelihood of fatal police  shootings and whether funding for police departments have a significant relation with fatal police  shootings. To achieve this, we will use multiple different datasets and combine them together.  We were able to observe which factors have a strong correlation on the rate of shootings through  Exploratory Data Analysis which allowed us to see the univariate and multivariate distributions.  We will address the above research questions by making use of Poisson Regression for the rate  of shootings at the state and county levels, and Time Series Forecasting for the monthly number  of shootings in the U.S.
 
 ## Introduction
 
-description
+Fatal police shootings have been an increasing interest in the political, social, and academic field  (Shane 2017). The police use-of-force is meant to be used as a means to apprehend the person  and keep citizens and themselves safe. However, with the increased awareness of the BLM  movement and the movement of Defunding the Police, there are speculations of the legitimacy of  police use-of-force.
+
+The BLM movement was first founded in the response of the murder of Trayvon Martin with the  purpose to giving black communities power to rise against white supremacy. This movement has  resurfaced due to the murder of George Floyd in May 25, 2020, which spurred a mass movement  of calling out the police for racism and targeting them for police reform. The idea of “Defunding  the Police” was born, with the sole idea of putting more funding into the community rather than law enforcers due to the rising concern of whether the police are actually protecting their  citizens.
+
+Beginning in 2015, information of each victim claimed from fatal police shootings are listed in  the Washington Post, regarding their demographics, health, and limited information of what the  victim’s action was in the scene of the fatal shooting. However, we cannot tell the whole story  from this data. In various research articles, each has looked at specific factors of fatal police  shootings in a span of one or two years of the occurrence of fatal police shootings. Our dataset is  based from the Washington Post who has started taking note of fatal police shootings occurring  across the United States starting from 2015 and onward. We will combine this dataset with  numerous other datasets that will help further our understanding of our analysis of fatal police shootings. All of these datasets are publicly available and can be obtained to be able to recreate  the process.
+
+In this report, we will do a comprehensive analysis of fatal police shootings in the U.S. at the  state and county level. Our research questions are 1) What factors may increase the rate of fatal  police shootings at state and county levels, 2) Whether funding for police departments have a  significant relation to fatal police shootings at the state level, and 3) Predict the count of fatal  police shootings that will happen in the U.S. over the second half of the year 2020. We compiled  numerous datasets ranging from January 2015 to June 2020, which are accessible to the public.  Although data regarding this topic are limited, it will at the least provide some insight of fatal  police shootings, helping us predict the rate of fatal police shootings for the next seven months as  well as guiding us for implementing policy decisions regarding fatal police shootings.
 
 ## Background
 
-description
+People would expect the officer to act on whatever means necessary in order to apprehend the  person and protect themselves and the citizens around the area according to Jon (Shane 2020).  However, with the rising attention of the unnecessary force the police have put upon people,  there is no doubt about the legitimacy of the police force and what they should or should not  have done.
+
+Situational - Race has been a prominent factor of determining its significance for fatal police  shootings, and there seems to be different conclusions of how race affects the likelihood of fatal  police shootings. On one hand, there is research showing that race does impact the likelihood of racial disparities of Blacks and Whites in select cities (Siegel 2019) and at the state level (Mesic  2018). There is also research supporting that there is bias against non-White drivers for traffic stops and searches (Pierson 2020). Though this research is focused on fatal shootings that already occurred, looking at potential situations where people are in confrontation with the police can lead to such occurrences. Further research supports this with resampling of the fatal police shootings when taking the bias out of the sampling (Mentch). There is also research on how the location and economic status relate to racial bias, which shows that there is significant evidence of racial bias in police and even stronger association in metropolitan areas with low income and a sizable amount of Blacks in the area (Ross 2015). On the other hand, there is research that is  against the idea that being a certain race makes you more likely to be shot (Shane 2020).
+
+Firearm - Firearm has been another prominent factor observed to see if it has any significance on  fatal police shootings, and it seems as it is so as supported by previous research. One of the  research looked into the relation of firearm availability and fatal police shootings (Nagin 2020),  where another looked into whether people who have a firearm in hand when in police  confrontation have a relation with fatal police shootings (Hemenway 2019). In both cases, there seems to be a strong association with a person carrying a firearm and the likelihood of a fatal  police shooting. There was a study on the relation between the strength of firearm legislation and  fatal police shootings, which they found that stricter firearm legislation can associate with lower  fatal police shootings (Kivisto 2017).
+
+Behavioral - There has been some research of how the actions of the people in confrontation of  the police relate to fatal police shootings. A research study was conducted to see whether  domestic disturbances were more likely to cause a fatal shooting (Pinchevsky 2018). From this  study, there was no significant association of domestic disturbances and the likelihood of a fatal  police shooting, however, people who have a history of crime or who are equipped with a  weapon at the time of police confrontation are more likely to involve a fatal shooting. There was  also a study of suicides by police where they studied events that occurred that led to the fatal  police shooting, the psychological backgrounds of the victims, and classifying them if that case  is considered as suicide by police (Kesic 2012). Researchers found that with the cases observed,  one third of the cases was considered suicide-by-police, on which these cases contained  decedents who had mental or physical disproders and have backgrounds of suicide attemps.
+
+Location - There has been some research on how location affects the rate of fatal police  shootings, where there are mixed results. A research study was conducted to see if fatal police  shootings occur disproportionately in urban areas and were comparing fatal police shootings in  different areas (urban, suburban, and rural), with the result being that there is not a significant  difference in the rate of fatal police shootings in urban or rural areas, though suburban rates seem  to be lower than the other two location types.
+
+With all these factors observed in previous research, it is no doubt that this is not a new topic.  However, we will like to expand this topic as we found there is no research on how police  expenditure affects the rate of fatal police shootings. The Defunding the Police movement is our  motivation to explore this factor and see whether funding for police departments have a  significant association with fatal police shootings. We will also forecast the number of fatal  police shootings for the next seven months (until December 2020) and observe any  patterns/trends.
 
 ## Data, Method and Analysis
 
-For this portion of the section, I'm going to see how the layout works...
-
 ### Data
 
-For this study, we made use of publicly available data. We used a combination of multiple  different datasets to answer our research question of how multiple different variables affect the  rate of shootings in state and county level. So in order to achieve this we need the following  datasets:
+For this study, we made use of publicly available data. We used a combination of multiple different datasets to answer our research question of how multiple different variables affect the rate of shootings in state and county level. So in order to achieve this we need the following datasets:
 
-1. dataset 1
-2. dataset 2
-3. dataset 3
+1. Fatal Police Shootings data collected by Washington Post over the period of 2015-2020  (Washington Post, 2015).
+2. Mapping Police Violence data over the period of 2013-2020 which contains all types of  deaths caused by police including shootings. (Sinyangwe, S., & McKesson, D., n.d.).  
+3. Suicide Rates across 50 states in the US in 2016. (Violence Policy Center, n.d.)  
+4.  Number of Registered Firearms by State in the year of 2019. (Statista Research  Department, 2019).
+5. US Population Racial Diversity by state for the year of 2017. (Governing, 2017).  
+6. State General Expenditure over the period of 2015-2017. (Tax Policy Center, 2020). 
+7. Offenses known to law enforcement by City over the period of 2015-2018 (Bureau of  Justice Statistics, 2020)  
+8. Officer count by police department in every state for 2015 & 2016. (Governing, 2018)
+9. Population density by state for 2017. (World Population Review, n.d.). 
+10. Census Age Distribution by State for 2015-2019 where we focused on ages 20-45. (US  Census Bureau, 2020b).
+11. Census Urbanization Index over the period of 2010-2015. (US Census Bureau, 2019b).  
+12. Census County Land Area 2010 (US Census Bureau, 2019a).  
+13. Census County Male Percentage and Age Distribution 2015-2019 (US Census Bureau,  2020a). 
 
-...For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years....
+For the suicide rates data, we were only able to find it for the year of 2016. So we made an  assumption that the suicide rates doesn’t change based on the year. So we mapped the same  numbers for every year by state. We applied the same assumption for US population Racial  Diversity. For the Population density, we found the average for the years of 2017 and 2020 and  mapped it onto all years considering the same assumption that the density won’t change  drastically within 6 years. Since we do not have the data for 2020 for the Census Age  distribution, we get the averages of the years of 2015-2019 and imputate into the year of 2020,  assuming that the age distribution does not change much over the years. 
 
-INCOMING SAMPLE TABLE...
-```{r tables, echo=F}
+Before we work on any type of statistics, we would like to combine these data sets into one. We  made use of a function in R known as left_join which allows us to combine two sets of data  given a common key (or Variable) in both datasets. We combined the datasets in the order they  are specified.  
+
+Washington Post’s data (1) provides a wide range of variables but the mappings of police  killings data (2) caught our eyes because of the following variables: “Official Action against  officer”, “A brief description of the situation that led to the action”, “Geography” and “Charges  against the Victim.” We combined 1 and 2 by State, Age, Date, and Threat level displayed by the  victim as these were the common variables with similar types of entries. We couldn’t combine them using victim names as both of them had a different way of collecting it. Hence we had to  combine it in a way where we don’t have a loss of data and retain the other valuable information.  
+
+We then combined 3,4,5,6,7 by State and Year and combined it to the previously combined data.  For 8 and 9, we had to attach it by City, State and Year as these datasets are based off of city  level information. Finally, we attached 10 by State and Year as the key.
+
+We also created the following variables that we used in the models:
+
+1. Crime Index per 10k - Summation of all types of crimes in a city divided by 10k.  
+2. Police Expenditure as a Percentage of Total Expenditure - We simply divided the police  expenditure by the total expenditure for each state which gives us a better understanding  of the relationship between those variables.
+3. Population Diversity Index - Instead of using the population diversity dataset by state for  our model which contains columns for 5 different races which are White, Black,  Hispanic, Asian and Other, we opted to make a new variable which condenses these  variables into one. The formula to calculate it is shown below:
+
+$PopulationDiversity Index = 1 - [Pr(White)^2 + Pr(White)^2 + Pr(Black)^2 + Pr(Hispanic)^2 +Pr(Asian)^2 + Pr(Other)^2]$
+
+4. Urbanization Index - Percentage of urban population in the state/county.
+5. Decision on Officer  - Percentage of incidents where the officer action was justified or  the officer was charged at state/county levels. 
+
+So with all the changes applied to the combined dataset, we produced some summary statistics with the variables that will be used in our Poisson Regression models. 
+
+```{r Table 1, echo=F, message = F}
 library(knitr)
-kable(mtcars[1:5, ], caption = "Name the Table here")
+state.summary.rate = read_csv("summary-state-rank.csv")
+state.summary.rate = state.summary.rate%>% 
+  na.omit()
+kable(state.summary.rate, caption = "Table 1: States Ranked by Shootings per 100k Shooting Rate Jan 2015 - Jun 2020")
 ```
+
+
+```{r Table 2, echo=F, message = F}
+state.summary.vars.quant = read_csv("state-summary-vars-quantitative.csv")
+kable(state.summary.vars.quant, caption = "Table 2. State Level Summary Statistics for Quantitative Variables  [Mean (SD)]")
+```
+
+
+```{r Table 3, echo=F, message = F}
+state.summary.vars.cat = read_csv("state-summary-vars-categorical.csv")
+kable(state.summary.vars.cat, caption = "Table 3. State Level Summary Statistics for Categorical Variables in Percentages")
+```
+
 
 ### Method
 #### 1. Exploratory Data Analysis
 
-This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. ....
+This section is dedicated to understanding the relationship between the various variables from  the combined dataset and Shootings data from the Washington Post. In order to see the  relationship clearly, we made visualizations which helps us better understand the correlation  between them. In scatter plots, we are trying to see if the linear relationship is positive or  negative. If it's positive then it means that an increase in the variable will cause an increase in the  Shootings on average. The slope of the line will tell us by how much will change occur. The bar  charts show a comparison between the different categories within the variable. It depicts how  largely disproportionate some of the categories are when it comes to certain variables such as  Threat Level displayed by a victim and the proportion of Victim Race Percentage compared to  the Population Race Percentages.
 
-INCOMING VISUAL...
-```{r pressure, echo=FALSE}
-plot(pressure)
+We performed the Exploratory Data Analysis to help us get a better understanding of these  variables and also give us an insight into which variables should be prioritized more in the  context of our Regression Modeling. Shown below are the most important visualizations that  proved to be very helpful during our process of EDA.
+
+```{r, echo=FALSE, message= F}
+s_k_count = shootings_killings%>%
+  group_by(Year,State)%>%
+  tally()%>%
+  mutate(n_changed=ifelse(Year==2020,2*n,n))
+
+s_k_count_arr = s_k_count%>%
+  group_by(State)%>%
+  summarise(total_n=sum(n_changed))%>%
+  arrange(desc(total_n))
+
+newdat2%>%
+  group_by(Year,State)%>%
+  filter(State%in%s_k_count_arr$State[1:10])%>%
+  mutate(n_changed=ifelse(Year==2020,2*n,n))%>%
+  ggplot(aes(x=Year,y=n_changed,col=State))+
+  geom_line(show.legend = F)+
+  scale_y_continuous(trans='log10')+
+  geom_text(aes(label=paste(n_changed,State)),vjust=-0.5,size=3,check_overlap = T,show.legend = F)+
+  labs(x="Year",y="Number of Shootings",title="Annual number of shootings (Top 10 States)")
+
 ```
-INSERT DESCRITPION HERE
+
+We compiled the total number of shootings for each state throughout the time period of the data  from 2015 to 2020. We ranked the states in the descending order based on the total number of  shootings. Using the ranks, we plotted the number of shootings in each for the top 10 states by  year in order for us to see the trend for these moving from one year to another.
+
+```{r, echo=FALSE, message= F}
+sk_shoot = newdat2%>%
+  group_by(Year,State)%>%
+  mutate(shoot_100k = ifelse(Year==2020,2*Shootings_100k,Shootings_100k))%>%
+  summarise(shoot_100k_changed = mean(shoot_100k))
+
+sk_shoot_arr = sk_shoot%>%
+  group_by(State)%>%
+  summarise(total_shoot = sum(shoot_100k_changed))%>%
+  arrange(desc(total_shoot))
+
+sk_shoot%>%
+  filter(State%in%sk_shoot_arr$State[1:10])%>%
+  ggplot(aes(x=Year,y=shoot_100k_changed,col=State))+
+  geom_line(show.legend = F)+
+  geom_text(aes(label=paste(State,round(shoot_100k_changed,2))),vjust=-1,size=3,check_overlap = T,show.legend = F)+
+  labs(X="Year",y="Shootings per 100k",title = "Annual Shootings per 100k (Top 10 States)")
+
+```
+
+For this visual, we went through the same procedure as the previous one but instead of looking at  the raw counts, we considered using Shootings per 100k Population for each state. We plotted the top 10 states with the highest rate of Shootings per 100k 
+
+```{r, echo=FALSE, message= F}
+shootings_killings%>%
+  group_by(Year,Month)%>%
+  tally()%>%
+  mutate(m_y=as.Date(paste(Year,Month,"01",sep = "-"),format="%Y-%m-%d"))%>%
+  filter(Year!=2020 | Month!=6)%>% #Removing the sixth month as we dont have full month data
+  ggplot(
+    aes( x=m_y,
+         y=n,
+         col=Year)
+    ) +
+  geom_point(show.legend = F)+
+  geom_line(show.legend = F)+
+  geom_text(aes(label=n),vjust=-0.8,size=3,check_overlap = F,col="black")+
+  theme(axis.text.x=element_text(angle=90),axis.text=element_text(size=6))+
+  labs(x="Month & Year",y="Number of shootings",title="Full view of number of shootings 2015-2020")+
+  scale_x_date(date_labels = "%b %Y", breaks = seq(as.Date("2015-01-01"), as.Date("2020-5-31"), by="1 month"))
+
+```
+
+We computed the number of shootings throughout the US by each month and year. We changed  those values into Time Series data and we were able to make this visual that encompass the  entire US with the monthly number of shootings. This also gives us an insight on the trend  certain months have in common. 
+
+```{r, echo=FALSE, message= F}
+newdat2%>%
+  group_by(Year,State)%>%
+  summarise(Shoot_100k = mean(Shootings_100k,na.rm = T))%>%
+  ggplot(aes(x = State, y = Shoot_100k,fill=Year))+
+  geom_bar(aes(reorder(State,-Shoot_100k)),show.legend = T,position = "stack",stat="identity")+
+  labs(x="State",y="Number of shootings per 100k",title= "Fatal Shootings by state 2015-2020")+
+  scale_y_continuous()+
+  theme(axis.text.x=element_text(angle=45),axis.text=element_text(size=6))
+
+```
+
+This is partially similar to Fig 2 but here we collect the rate of Shootings per 100k for every state  by year. We made use of a stacked barplot to visually represent the comparison between certain  states. Even though California had the highest number of shootings, Alaska turned out to be the  one that had the higher rate shootings by population.
+
+```{r, echo=FALSE, message= F}
+shootings_killings%>%
+  mutate(date_modified =as.Date(paste(Year,Month,Day,sep = "-"),"%Y-%m-%d"),
+         weekday = weekdays(date_modified))%>%
+  group_by(Year,weekday)%>%
+  tally()%>%
+  ggplot(aes(x=factor(weekday,level=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")),y=n,fill=weekday))+
+  geom_bar(stat="identity",show.legend = F)+
+  geom_text(aes(label=n),vjust=1.5,size=2.5,show.legend = F)+
+  facet_wrap(~Year,scales="free")+
+  scale_x_discrete(labels=c("Mon","Tue","Wed","Thur","Fri","Sat","Sun"))+
+  theme(axis.text.x=element_text(angle=90))+
+  labs(x="Days of the week",y="Numer of Shootings",title="Number of shootings by days of the week")
+
+```
+
+With this visual, we were trying to figure out if the days of the week have any impact in the  number of shootings. There are observable patterns but they aren’t highly significant for us to  draw any conclusions.
+
+```{r, echo=FALSE, message= F}
+new_state_expediture = state_local_expenditures_15_17[-c(1,2,9,16,22,30,43,48,54,61,62,69,76,82,90,103,108,114,121,122,129,136,142,150,163,168,174),]
+
+new_state_expediture%>%
+  ggplot(aes(x=State, y = police_expenditure))+
+  geom_bar(aes(fill=Year,reorder(State,-police_expenditure)),position ="stack",stat="identity")+
+  labs(x="State",y="Police Expenditure",title = "Expenditure on PD Per-Capita 2015-2017")+
+  theme(axis.text.x=element_text(angle=90))+
+  scale_fill_continuous(limits=c(2015, 2017), breaks=seq(2015,2017,by=1))
+
+```
+
+For Police Expenditure, we had data for the years of 2015-2017. Just like previous stacked  barplot, this helps us understand how different states spend their funding for the police  department alone. Again, they are just raw numbers spent on the Police Department per Capita  for each state.  
+
+```{r, echo=FALSE, message= F}
+newdat4%>%
+  mutate(pol_frac_tot = police_expenditure/total_expenditure)%>%
+  group_by(Year,State)%>%
+  summarise(shoot_100k = mean(Shootings_100k),p_f_t = mean(pol_frac_tot))%>%
+  filter(Year%in%c(2015,2016,2017))%>%
+  ggplot(aes(x=p_f_t,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=1.2,size=3)+
+  facet_wrap(~Year,scales="free")+
+  geom_smooth(method="lm",se=F,col="red")+
+  labs(x="Fraction of police from total expenditure",y="Shootings per 100k",title="Shootings per 100k vs police fraction of total expenditure 2015-2017")
+
+```
+
+For this visual, we divided the Police Expenditure by Total Expenditure for each state and then  we plotted it against Shootings per 100k for those. We are able to see a downwards trend as we  move to the next year. This is also because some of the states with the highest police expenditure  as a fraction of total expenditure have less shootings. For example, DC has the highest police  expenditure per capita and has one of the highest fractions as well but it has a lower rate of  shootings.  
+
+```{r, echo=FALSE, message= F}
+newdat4%>%
+  mutate(pol_frac_tot = police_expenditure/total_expenditure)%>%
+  filter(Year%in%c(2015,2016,2017))%>%
+  group_by(Year,State)%>%
+  summarise(shoot_100k = mean(Shootings_100k),p_f_t = mean(pol_frac_tot*100))%>%
+  group_by(State)%>%
+  summarise(shoot_100k = sum(shoot_100k)/3,p_f_t = sum(p_f_t)/3)%>%
+  ggplot(aes(x=p_f_t,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=1.2,size=3)+
+  geom_smooth(method="lm",se=F,col="red")+
+  labs(x="Annualized percentage of police from total expenditure",y="Annualized Shootings per 100k",title="Annualized Shootings per 100k vs police fraction of total expenditure 2015-2017")
+
+```
+
+This visual is similar to the previous one but it's annualized which means that we took the sum of  the values and divided it by 3 as we only have data for the years of 2015-2017 for Police  expenditure.
+
+```{r, echo=FALSE, message= F}
+state_level_model%>%
+  mutate(shootings_100k = Count*100000/Population)%>%
+  group_by(State)%>%
+  summarise(shoot_100k = sum(shootings_100k)/6,
+            pop_div = mean(pop_diversity))%>%
+  ggplot(aes(x=pop_div,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=-0.5,size=3)+
+  geom_smooth(method= "lm",se=F,col="blue")+
+  labs(x="Population Diversity",y="Shootings per 100k")
+
+```
+
+We used the formula mentioned above to calculate the population diversity for each State by  year. Population Diversity is the chance of two people are of a different race from a state in  percentage. So this visual shows a positive correlation between Annualized Population Diversity  and the rate of Shootings per 100k. Even though the correlation is positive, it isn’t very strong  meaning that the change in Shootings per 100k as Population Diversity increases isn’t huge.  
+
+```{r, echo=FALSE, message= F, warning = F}
+annual_crime=newdat3%>%
+  group_by(Year,State)%>%
+  summarise(s_s=mean(Shootings_10k),s_c=mean(Crime_Index_10k,na.rm=T))%>%
+  filter(Year%in%c(2015,2016,2017,2018))
+
+annual_crime%>%
+  group_by(State)%>%
+  summarise(s_a_s=sum(s_s)/4,s_a_c=sum(s_c)/4)%>%
+  ggplot(aes(x=s_a_c,y=s_a_s))+
+  scale_x_continuous(trans='log10') +
+  scale_y_continuous(trans='log10') +
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),show.legend = F,check_overlap = T,vjust=1,hjust=-0.2)+
+  labs(x="Crime Index per 10k (log10)",y="Shootings per 10k (log10)",title="Shootings vs Crime Index 2015-2018")+
+  geom_smooth(method="lm",se=F,col="orange")
+
+```
+
+We calculated the Crime Index by adding up all the crimes in a state and dividing it by the  population. In this case, we have Crime Index per 10k Population plotted against the rate of  Shootings per 10k. You might have noticed the word Annualized, this means that both values  were added by States for all years and divided by 4 as we only have 4 years of Crime Data.
+
+```{r, echo=FALSE, message= F}
+shooting_race = shootings_killings%>%
+  group_by(Year,Race)%>%
+  tally()%>%
+  na.omit()
+
+attach(shooting_race)
+race_perc = round(c(n[1:6]/sum(n[1:6]),n[7:12]/sum(n[7:12]),n[13:18]/sum(n[13:18]),
+  n[19:24]/sum(n[19:24]),n[25:30]/sum(n[25:30]),n[31:36]/sum(n[31:36]))*100,3)
+
+#A B H N O W
+#Manually collected diversity data for the entire US
+pop_perc = c(5  ,  12  , 18  , 1   , 2  , 62,   #2015
+             5  ,  12  , 18  , 2   , 2  , 61,   #2016
+             6  ,  12  , 18  , 1   , 2  , 61,   #2017
+             6  ,  12  , 18  , 2   , 2  , 60,   #2018
+             5.9,  13.4, 18.5, 0.6 , 1.5, 60.1, #2019
+             5.83, 12.54,18.73,2.29, 0.91,59.7) #2020
+
+shooting_race = cbind(shooting_race,race_perc,pop_perc)
+names(shooting_race)[4] = paste("Race_perc")
+names(shooting_race)[5] = paste("Pop_perc")
+
+shooting_race_visual = shooting_race[,-3] 
+
+srv = shooting_race_visual%>%
+  gather("Percentage","Value",-c(Year, Race))
+
+srv%>%
+  ggplot(aes(x = Race, y = Value,fill=Percentage))+
+  geom_col(aes(reorder(Race,-Value)),position="dodge")+
+  facet_wrap(~Year)+
+  labs(y="Percentage",y="Race",title="Population vs Shooting by Race 2015-2020")+
+  scale_fill_discrete(name = "", labels = c("Population", "Shooting"))+
+  theme(axis.text.x=element_text(size=13))
+
+```
+
+This visual is able to show the distribution in the Population Racial Diversity and the Victim  Racial Diversity in one. This helps us see that the African American are represented more in the  shootings than in the population itself.
+
+```{r, echo=FALSE, message= F}
+black_shootings = complete_dat%>%
+  group_by(Year,State,Race)%>%
+  tally()%>%
+  mutate(shooting_race = n*100/sum(n))%>%
+  filter(Race=="B")
+
+black_pop = suicide_race_firearm_pop[,c(1,2,6)]
+
+black_proportions = left_join(black_shootings,black_pop,by=c("Year","State"))
+
+black_proportions%>%
+  group_by(State)%>%
+  summarise(s_r_a=sum(shooting_race)/5.4166667,b_p_a=mean(Black_Percent))%>%
+  ggplot(aes(x=b_p_a,y=s_r_a))+
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),size=3,vjust=1)+
+  geom_smooth(method="lm",se=F,col="red")+
+  scale_x_continuous(breaks = seq(0,45,5))+
+  labs(x="Percentage of Black Population",y="Percentage of Black Shootings",title="Black Population vs Shootings")
+
+```
+
+Similar to the other visuals, we are trying to see the relation between Percentage of Black  Population and Black victims involved in the shootings by state. This is also annualized which  means each value was added by States for all years and divided by 5.41667 because we have 5  years and 5 months of data (i.e. $5 + \frac{5}{12} = 5 + 0.4166... ≈ 5.41667$). This shows a very strong correlation between these variables which later proves to be a very important variable in our  model. 
+
+```{r, echo=FALSE, message= F, warning = F}
+complete_dat%>%
+  filter(Year%in%c(2015,2016))%>%
+  ggplot(aes(x=officers_per_10k_pop,y=Shootings_10k,col=Police_Dept))+
+  geom_point(show.legend = F)+
+  scale_x_continuous(trans='log10')+
+  scale_y_continuous(trans='log10')+
+  facet_wrap(~Year,scales="free")+
+  geom_smooth(method="lm",se=F,col="red")+
+  labs(x="Officer per 10k by Department (log10)",y="Shootings per 10k(log10)",title="Fatal Shootings vs Officer per 10k")
+```
+
+We made use of the officer count data for the years of 2015 and 2016 and plotted it against  shootings per 10k to keep the proportions equal. For the both years, it depicts a downward trend  slope which means that if the officer count per 10k increases then the rate of shootings per 10k  decreases with a significant amount.
+
+```{r, echo=FALSE, message= F}
+state_level_model%>%
+  mutate(Count = ifelse(Year==2020,Count/2,Count),
+         Shootings_100k = Count*100000/Population)%>%
+  filter(official_action_taken!=0)%>%
+  ggplot(aes(x=official_action_taken,y=Shootings_100k))+
+  geom_point()+
+  geom_smooth(method="lm",se=F)+
+  geom_text(aes(label=State),vjust=-0.5,size=2.5,check_overlap = T)+
+  labs(x="Decision Made on Officer (Charged or Justified)",y = "Shootings per 100k")
+
+```
+
+We had data on what type of action was taken against the officer involved in the incident. For  example, Justified means that the officers action was justified to proceed to shoot the victim or  Charged means that the officer was charged with murder or other. So we collected the  percentages for each state by year and combined the percentages for Justified and Charged. Next,  we plotted Percentage of Decision Made against the rate of Shootings per 100k. We are able to  see a clear downward trend as the percentage of Decision made on officer increases.
+
+```{r, echo=FALSE, message= F}
+annual_ss = newdat2%>%
+  group_by(Year,State)%>%
+  summarise(shoot_100k = mean(Shootings_100k),suicide_100k = mean(Suicide_Rate_100k))
+
+annual_ss%>%
+  group_by(State)%>%
+  summarise(shoot_annual_100k = sum(shoot_100k)/5.41666667,
+            suicide_annual_100k = sum(suicide_100k)/5.41666667)%>%
+  na.omit()%>% #Since we dont have data on suicide rates for DC
+  ggplot(aes(x=suicide_annual_100k,y=shoot_annual_100k))+
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),vjust=-1,size=3,check_overlap = T)+
+  geom_smooth(method="lm",se=F,col="red")+
+  labs(x="Annualized Suicide Rates per 100k",y="Annualized Shootings per 100k",title="Annualized Shootings vs Suicide Rates by state")
+
+```
+
+We plotted annualized suicide rates against the rate of shootings per 100k as a way to see how  firearm availablity affects the rate of shootings by each state. A shooting incident is possible if  the Victim was armed with some type of weapon. So if the firearm availability is high then it  could correlate to higher rates of shootings. We clearly see an upward trend as the suicide rate  per 100k increases  .
+
+```{r, echo=FALSE, message= F}
+firearm_annual = newdat2%>%
+  group_by(Year,State)%>%
+  summarise(shoot_100k = mean(Shootings_100k),firearm = mean(Firearm_per_10k)*10) #since its 10k we would like it to be per 100k
+
+firearm_annual%>%
+  group_by(State)%>%
+  summarise(shoot_a = sum(shoot_100k)/5.41666667,
+            firearm_a = sum(firearm)/5.41666667)%>%
+  ggplot(aes(x=firearm_a, y=shoot_a))+
+  geom_point(show.legend = F)+
+  scale_x_continuous(trans='log10')+
+  scale_y_continuous(trans='log10')+
+  geom_text(aes(label=State),vjust=-1,size=3,check_overlap = T)+
+  geom_smooth(method="lm",se=F,col="blue")+
+  labs(x="Registered Firearms per 100k",y="Shootings per 100k",title="Shootings vs Registered Firearms ")
+```
+
+This visual is almost the same as the one above but the only difference is that we used the  Registered Firearms per 100k data as another way to compare firearm availability to rate of  shootings per 100k. Similar to the visual above, this one shows an upward trend as the  Registered Firearms per 100k increases.
+
+```{r, echo=FALSE, message= F, warning=F}
+state_level_model%>%
+  mutate(shootings_100k = Count*100000/Population)%>%
+  group_by(State)%>%
+  summarise(shoot_100k = sum(shootings_100k)/5.4166667,
+            Urban_Index = mean(Urbanization_Index))%>%
+  ggplot(aes(x=Urban_Index,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=-0.5,size=3)+
+  geom_smooth(method= "lm",se=F,col="red")+
+  labs(x="Urbanization Index",y="Shootings per 100k")
+
+```
+
+Urbanization Index is a way to see what percentage of the population lives in an urban area. As  we can observe from this visual, there is a downward trend as the Annualized Urbanization Index  increases. But the slope of the line isn’t very steep meaning the change caused by the  Urbanization Index isn’t drastic.
+
+```{r, echo=FALSE, message= F, warning =F}
+county_level_model%>%
+  mutate(shootings_10k = Count*10000/population)%>%
+  ggplot(aes(y=log(shootings_10k),x=log(firearm_fatalities_100k)))+
+  geom_point()+
+  geom_smooth(method = "lm",se=F)+
+  labs(x = "Log of Firearm Fatalitites in 100k", y = "Log of Shootings per 10k")
+
+```
+
+We used the data on Firearm Fatalities per 100k against the rate of Shootings per 10k by each  county for all the years from 2015 to 2020. Since most of the data was close to 0, we used a log  transformation in order for us to see the relationship clearly. As we can see, the relationship is a  strong downward trend but we have to keep in mind that this visual uses the log of the values we  have originally. So even though this shows a strong negative correlation, in the actual numbers,  this correlation isn’t as significant. 
 
 #### 2. Topic Modeling
 
-With the combined dataset of the Washington Post and the Mapping Police Violence, we are able  to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We  first proceeded with word clouds...
+WORD CLOUDS WILL HAVE TO WAIT
+
+Taking out topic-specific words did not seem to help as there were even more words that each  group had in common. There seems to be no distinction between the groups of words for each  race based on these visuals, so we decided to take a different approach to see if we can group  each description by topic and be able to see if there are any patterns of topics for each race.  Topic modeling is a method in text mining that allows us to classify words in groups that share a  focus. The method used for this is Latent Dirichlet allocation, where we can treat each topic as a  mixture of words that will convey something contributing to that particular topic.
+
+We decided to first figure out the optimal amount of topics that we can group the words, keeping  in mind of maximum coverage and minimum overlapping. We want each topic to span over all  the words that can be relevant to that topic and avoid leaving out key words that can fall into that  particular topic. At the same time, we want the minimum overlapping of words so that we can  avoid confusion of the topics presented and find distinction between other topics. The following  two methods are used to find the appropriate amount of topics: 1) To train the LDA model of a  sequence of topics and select the number of topics that will best give us both maximum coverage  and minimum overlapping, and 2) To manually run the data for each number of topics and see  what number of topics are best fit for our dataset.
+
+Again, we took out stop words and topic-specific words that do not take out the context of the  situation. We used method 1 to narrow down our options to a certain range of the number of  topics, which the range of 3-7 topics were optimal.
+
+```{r, echo=FALSE, message= F, warning =F}
+invisible(lapply(paste0("package:", names(sessionInfo()$otherPkgs)),   # Unload add-on packages
+                 detach,
+                 character.only = TRUE, unload = TRUE))
+library("ldatuning")
+library("topicmodels")
+library(stringr)
+library(ggplot2)
+library(tidytext)
+library(readr)
+library(tm)
+library(dplyr)
+library(broom)
+library(SnowballC)
+
+sk = read_csv("shootings_killings.csv")
+sk_h = sk %>% 
+  select(`A brief description of the circumstances surrounding the death`) 
+
+# Method 1 - Getting topic range
+df_corpus = Corpus(VectorSource(sk_h))
+
+
+# remove topic specific words
+topicStopWords = c("police", "shot", "officers", "killed", "said", "officer", 
+                   "deputies", "deputy", "responded", "around",
+                   "according", "began", "stop", "arrived", "report", 
+                   "reportedly", "got", "county")
+
+df_corpus = df_corpus %>% 
+  tm_map(tolower) %>% 
+  tm_map(removePunctuation) %>% 
+  tm_map(removeNumbers) %>% 
+  tm_map(removeWords, stopwords("english")) %>% 
+  tm_map(removeWords, topicStopWords) %>% 
+  tm_map(stripWhitespace)
+
+
+dtm = DocumentTermMatrix(df_corpus) 
+matrix = as.matrix(dtm)
+words = sort(rowSums(matrix), decreasing = T)
+df = data.frame(word = names(words), freq = words)
+
+# For saving description coln
+# setwd("D:/REU/R/workSpace/graphs")
+# write.csv(df, "Description.csv", row.names = F)
+
+result = FindTopicsNumber(
+  dtm,
+  topics = seq(from = 2, to = 20, by = 1),
+  metrics = c("Griffiths2004", "CaoJuan2009", "Arun2010", "Deveaud2014"),
+  method = "Gibbs",
+  control = list(seed = 100),
+  mc.cores = 4L,
+  verbose = TRUE
+)
+FindTopicsNumber_plot(result)
+
+```
+
+We then ran the LDA model manually, going through each number of topics from 3, 4, 5, 6, and  7 and seeing the classification of words of each topic with the interest of seeing what number of  topics would best cover the words without having much overlapping with other topics.
+
+```{r, echo=FALSE, message= F, warning =F}
+
+DocToMat = DocumentTermMatrix(df_corpus)
+
+ap_lda = LDA(DocToMat, k = 3, control = list(seed = 100))
+
+ap_topics = tidy(ap_lda, matrix = "beta")
+
+ap_top_terms = ap_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() +
+  scale_x_reordered()
+```
+
+There seems to be no apparent distinction between each topic when we run the LDA model, and  as we go up in the number of topics, more words become more frequent in each of the topics. We  conclude that there seems to be no significance of the association of race and the events that  occur that lead to the fatal police shooting.
+
+
+```{r, echo=FALSE, message= F, warning =F}
+invisible(lapply(paste0("package:", names(sessionInfo()$otherPkgs)),   # Unload add-on packages
+                 detach,
+                 character.only = TRUE, unload = TRUE))
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(gganimate)
+library(gifski)
+library(wordcloud)
+library(wordcloud2)
+library(RColorBrewer)
+library(tm)
+library(readr)
+library(MASS)
+library(pscl)
+library(jtools)
+library(vcd)
+library(scales)
+library(forecast)
+library(nnfor)
+library(imputeTS)
+library(readxl)
+library(knitr)
+
+```
 
 
 #### 3. Poisson Regression - Predicting rates of shootings
 
-Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable.....
+Poisson Regression is a generalized linear model form of regression analysis used to model count  and rate data. The response variable $Y$ is a count whereas the predictor variables can be both categorical and numerical. We can also have $Y/t$ , the rate (or incidence) as the response variable, where $t$ is an interval reprsenting time, space, or some other grouping. In our case, we need the rate of fatal police shootings, this, population is our $t$. The expected value of $Y$ is denoted by $E(Y) = $. In the same way, $E(Y/t) = /t$. The Poisson log-linear regression for the expected rate of counts has the form as shown below:
 
-INCOMING EQUATION
-$\log(\mu / t) = \alpha + \beta_{1}X_{1} + ... + \beta_{n}X_{n}$
+<center> $\log(\mu / t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}$ </center>
 
-4. Time Series Forecasting
 
-Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series ... 
+<center> $\log(\mu) - \log(t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}$ </center>
 
+
+<center> $\log(\mu) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n} + \log(t).....(1)$ </center>
+
+
+$(X_{1}, X_{2},... X_{n})$ are the predictor values and $(_{1}, _{2},... _{n})$ are the estimates for the predictor variables for the variable respectively. The constant $\alpha$ is $_{0}$ which is the intercept for our response variables and it's assumed that $X_{0}$ is 1. Thus, $\alpha = X_{0}$. The term "$-\log(t)$" is an adjustment term which is referred to as the offset. As a multiplicative model, the Poisson long-linear model with a log link for rate is:
+
+<center> $\log(\mu / t) = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2} + ... + \beta_{n}X_{n}$ </center>
+
+
+<center> $\mu / t = e^\alpha * e^{\beta_{1}X_{1}} * e^{\beta_{2}X_{2}} * ... * e^{\beta_{n}X_{n}}$ </center>
+
+
+<center> $\mu =t * e^\alpha * e^{\beta_{1}X_{1}} * e^{\beta_{2}X_{2}} * ... * e^{\beta_{n}X_{n}}.....(2)$ </center>
+
+
+The expected value of counts depends on both $t$ and $X_i$, both of which are predictor variables in   the regression.
+
+Before we start with modelling the rate of shootings using the Poisson regression, we have to test  our count column using goodness of fit test. This test will tell us if using Poisson regression  would be the best approach to this response variable. In other words, we are trying to see if the  count data follows the poisson distribution. In order to do that, we used an R function, goodfit,  where we specify the type to be a poisson distribution. Next, we ran a chi-squared test for the  observed and fitted columns from the goodness of fit test. We got a p-value of 0.4204, in other  words, p-value > 0.05. This means that we cannot reject the null hypothesis that the observed data is statistically similar to the expected data. Also, it means that the count data is best fit for  the response variable in a poisson regression model. 
+
+Now that we have the goodness of fit and chi-square tests to back our decision to go with  Poisson regression, we will list the variables being used in our model. All the variables listed  below are chosen on the basis of our research question but also because of strong correlation  between them and shooting rates from our observations in Exploratory Data Analysis from  section 4.2.1. Our Poisson regression model will be used for analysis on the state and county  level. For our full model, we used the following predictor variables: Year, Percentage of Black  Population, Registered Firearms per 10k, Crime Index per 10k, Police Expenditure as a fraction  of the total, Population Density, Population Diversity Index, Decision Made on Officer (Charged  or Justified), Urbanization Index, Male proportion in the population, and the Percentage of State  Population in the Age Group 20-45 years. Our goal by using Poisson regression is to produce a  robust model for the rates of shootings rather than just raw count. Thus, inside the glm function  we will offset the response variable by the log of Population. An offset variable is one that is  treated like a regression covariate whose parameter is fixed to be 1.0. Offset variables are most  often used to scale the modeling of the mean in Poisson regression situations with a log link.  This will allow us to model rate data.  
+
+When running with the full model of the Poisson regression, some of the variables weren’t  significant based on the p-value. So we used the stepwise variable selection where we let the  program choose the best variables suited for the model. It tries to fit multiple different models  based on the variables available and finally it settles on the model that has the smallest AIC  value out of all the test run models that the function went through. The stepwise variable  selection doesn’t conclude a robust model based on the p-value for each variable but more so on  the smallest AIC value possible. This could mean that, in the stepwise Poisson regression model  we could have a couple of insignificant variables which shouldn’t be considered for  interpretation. After we ran the stepwise model, we got the following predictors as the best fit to  predict the rate data: Percentage of Black Population, Registered Firearms per 10k, Crime Index  per 10k, Police Expenditure as a fraction of the total, Population Diversity Index, Percentage of  official action taken against the officer, Urbanization Index, Male proportion in the population,  and the Percentage of State Population in the Age Group 20-45 years. We did something similar  with a Negative Binomial Regression model with count data, but we were satisfied with the  Poisson regression model for the rate data. We concluded that Poisson regression is very  adequate to help us answer our research question.
+
+#### 4. Time Series Forecasting
+
+Our other question was to see if we are able to predict the number of shootings for the rest of the  year. To achieve this goal, we use a concept known as Time Series Forecasting which is to make  predictions about the future where we try to fit a model on a historical date and use them to  predict future observations. For this, we grouped our Washington Post’s fatal shootings by  month from January 2015 to May 2020 and acquired a count for every month, for each year.  Using the ts function in R, we were able to change the vector of counts into a time series data. A  time series is a series of data points indexed in a timely order. In our case, the data is ordered by  Month with every succession in Year. We were then able to plot the time series data.
+
+```{r , echo=F, message = F}
+month_count = shootings_killings%>%
+  group_by(Year,Month)%>%
+  filter(Month!=6 | Year!=2020)%>%
+  tally()
+
+month_count_ts = ts(month_count$n,start = c(2015,1),end = c(2020,5), frequency = 12)
+
+plot(month_count_ts)
+```
+
+The visual above is the observed data of the counts of fatal police shootings over the period  2015-2020. Using the same time series data, we will try to see if there are any similarities in  patterns for each year. 
+
+```{r , echo=F, message = F}
+plot(stl(month_count_ts,s.window = "period"))
+```
+
+The plot above shows seasonality (second row) within the years and a trend (third row) that  grows upwards.
+
+```{r , echo=F, message = F}
+seasonplot(month_count_ts)
+```
+
+As we can observe in the months of February and September, there are huge downfalls of count  from the previous and the next month. In the similar manner, the month of March in the majority  of the years fatal police shootings has peaked. These observations are very important as this is  what we will be looking out when the model is built using certain R functions.
+
+The first method we used for our time series forecasting is called HoltWinters. Holt-Winters is a  model of time series behavior, allowing us to model three aspects of the time series: a typical  value (average), a slope (trend) over time and a cyclical repeating pattern (seasonality). It uses  exponential smoothing to encode lots of values from the past and use them to predict “typical”  values for the future. The three aspects of time series behavior are expressed as three types of  exponential smoothing which we used to test the accuracy and prediction levels as follows:
+
+1. Simple Exponential - includes model levels only
+2. Double Exponential - includes model levels and trend
+3. Triple Exponential - includes model levels, trend, and seasonal components
+
+Out of these three models, the third type turned out to be the best for our forecasting as it has  patterns that fits right in with the historical data and also gives a leeway with the forecasting with  a 95% CI for the point estimate.
+
+We started testing with other models including ARIMA (Autoregressive Integrated Moving  Averages), Arima with non-zero mean, ETS(Exponential Smoothing State Space), Neural  Network Time Series Forecasts, MLP (Multi-Layer Perceptron) and ELM (Extreme Learning  Machines) Time series models for our forecasting.
+
+ETS modeling does not make any assumption of any successive correlations and is usually used  for additive data. ARIMA models assume correlation between successive values and is used for  stationary data (or no apparent trend). If there is an increasing or decreasing trend, you can difference it however many times needed to make it stationary, and you can make the ARIMA  model based on the number of differences. NNAR models are based on neural networking,  taking in lagged inputs, number of nodes, and hidden layers to determine the forecast based on  the data. Currently there are two types of neural networks available for time series forecasting,  both are feed-forward neural networks: 1) MLP and 2) ELM.  A feed-forward neural network is  an Artificial Neural Network (ANN) wherein the connection between the nodes do not form a  cycle. MLP is a class of networks that consists of multiple layers of computational units, usually  interconnected in a feed-forward way. Each neuron in one layer has direct connection to the  neurons of the subsequent layer. MLP also uses backpropagation training to determine the  weights of each path to the next layer until it reaches an output. ELM is an emerging machine  learning technique which is based on the neural network concept and includes both single and  multi-hidden-layer neural networks. Unlike MLP, ELM does not use backpropagation, allowing  for a faster result, but at the cost of accuracy of the result. Both mlp and elp functions are found  in the neuralnet package in R.  
+
+Most of the neural network models for the time series didn't stand out but one with a good  accuracy level and it was the MLP Time series model. We found a good fit using this model  because we let the model choose the number of hidden nodes where we capped the max nodes to  be 10. So the model goes through a different amount of nodes throughout the run and picks the  best on the validation set MSE (Mean Squared Error). For the results, we are only going to  consider the HoltWinters Type 3 and MLP models for our forecastings.
 
 ## Results
 
 ### 1. State Level Poisson Regression Results
 
-We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure. 
+We ran three models of the Poisson Regression: Full model, where the regression takes in all the  variables inputted; Stepwise, where the model chooses what variables are significant for the rate  data; and one-variable model where we specified to look into the percentage of the police  expenditure spent out of the total expenditure.
+
+For each table in this section, there are three columns: Variable, IRR with the confidence interval, and P-Value. The variable column tells us what variable we are looking at. The IRR is the number outside the parentheses and is the exponentiated coefficient. The confidence interval is inside the parentheses, and it tells the probability that it will contain the true value of the coefficient, given a percentage of confidence. We used a 95% confidence variable for these models, so 95% of the time when an experiment like this is run under the model, it will contain the coefficient. The P-Value tells us the significance of the variable in the model. P-values less than 0.05 are considered significant.
 
 1. One-Variable Poisson Model - Police Expenditure Percentage - State Level
 
-We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant......
+We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant.
 
-2. Full Model
+```{r , echo=F, message = F}
+state.one.var.1517 = read_csv("state-one-var-poisson-1517.csv")
+kable(state.one.var.1517, caption = "Table 4: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2017")
+```
+
+We performed a single variable predictor poisson regression using just the Police Expenditure data from 2015 to 2017. As we can see, we have a positive IRR for the variable which suggests that there is a positive association between police expenditure as a percentage of total expenditure and the rate of shootings on average.
+
+```{r , echo=F, message = F}
+state.one.var.1520 = read_csv("state-one-var-poisson-1520.csv")
+kable(state.one.var.1520, caption = "Table 5: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2020")
+```
+
+Here as well, we have a positive IRR which suggests the same as above. But you might notice a slight difference in the IRR values. This is due to the fact that the model is from 2015 to 2020. For this model, we imputed the means of the 3 years of data for police expenditure and pasted it to the remaining years where we have no data available. This move of imputing averages for the full model is justifiable for two reasons:
+
+1. The IRR values for both one predictor Poisson regression models are very similar. They won't have two very drastic changes from one another.
+2. States percentages spent on police from the total from 2015 to 2017 doesn't change a lot. As shown below, you can see that from one year to another, these randomly chosen states don't change a lot.
+
+```{r , echo=F, message = F, warning=F}
+state.random.poliexp = read_csv("state-police-exp-random.csv")
+state.random.poliexp = state.random.poliexp %>% 
+  rename(Year = X1)
+kable(state.random.poliexp, caption = "Table 6: Percentage of Police Expenditure from Total for random States by Years")
+```
+
+Based on the reasons stated above, it’s a valid decision to impute the NA (missing) values with the averages of the available data. So for the next coming models, we will be using imputed data. 
+
+Normally, when we run a summary of a model we get a column named “Estimate” that will gives us β, or the coefficients of this Poisson log-linear regression. From Equations (1) and (2) in section 4.2.3, we can observe that it's easier to understand the change in the rate rather than the change in the log of the rate. That's why we exponentiated the Estimates which will give us the IRR (Incidence Rate Ratio). So now we can clearly understand the changes in the rate based on the IRR of each variable. To know whether a factor causes a reduction or increase, we use this equation: _IRR - 1_, where IRR is the incident rate ratio (or the exponentiated β term) of the factor in mind. If the difference is negative, the factor in mind causes a reduction. If the difference is positive, the factor in mind causes an increase.
+
+The IRR is 1.0881 for the percentage of police expenditure spent out of the total expenditure. If we’re looking at only this variable in respect of the rate of fatal police shootings, then a percent increase in the percentage of the police expenditure spent out of the total expenditure will cause an increase of 8.81% in the rate of shootings on average. We obtain the percentage by using the IRR equation mentioned above which is: _IRR - 1_ = 1.0881 - 1 = 8.81%. Simply put, if there is a percent increase in the percentage of police expenditure spent out of the total expenditure, then there will be a multiplicative increase of 1.0881 in the rate of shootings.
+
+2. Full Poisson Model - State Level
 
 If we were to look at the full model, we will have all the variables used in the model. Below you  will see all the variables used in the model with varying significance.
 
+```{r , echo=F, message = F}
+state.full.poisson = read_csv("state-full-poisson.csv")
+kable(state.full.poisson, caption = "Table 7: Coefficients for Full Poisson Regression Model - State Level 2015-2020")
+```
+
+This model covers all the variables we want to explore in our modeling, hence, the full regression model. The variables we used are Year, Black Population Percentage, Registered Firearm per 10k population, Population Density, Population Diversity, Decision Made on Officer (Charged or Justified), Urbanization Index, Male Percentage in Population, Percentage of state population in the age of 20-45 years, Crime Index per 10k population, and Police Expenditure as a percentage of Total Expenditure. Based on the p-value, we can see from this model that some of the variables which are not significant. Year and Population Density are not significantly associated with the rate of fatal police shootings in this case. 
+
+We are able to use the step function for the Poisson regression so that we may take out variables that may not contribute to the model. As stated in the methods section, the step function determines what variables will produce the lowest AIC value; it does not look at the p-value specifically so there may be some non-significant variables in the stepwise model.
+
+3. Stepwise Poisson Model - State Level
+
+Once we ran our poisson regression model with stepwise variable selection for our rate data with the significant variables, we got the following table:
+
+```{r , echo=F, message = F}
+state.step.poisson = read_csv("state-step-poisson.csv")
+kable(state.step.poisson, caption = "Table 8: Coefficients for Stepwise Poisson Regression Model - State Level 2015-2020")
+```
+
+As we can see above, all the variables are highly significant in terms of p-value (with the exception of Population Density and Decision Made on Officer (Charged or Justified). These variables were chosen by the model using the stepwise variable selection in the function of our full model. We can observe that an unit increase in Black Population Percentage would cause a reduction of 3.64%in the rate of shootings on average. Also, a percent increase in the Population Diversity Index which is the probability of two people being a different race would cause an increase of 1.66% in the rate of shootings on average. 
+
+The variable that will cause the largest reduction is the Urbanization Index with a one unit increase causing a reduction of 3.86%in the rates of shootings on average. On the other hand, Police Expenditure as a percentage of total will cause the largest increase. A one unit increase in Police Expenditure as a percentage of total expenditure will cause an increase of 41.74% in the rates of shootings on average.
+
 ### 2. County Level Poisson Regression
 
-1. Full
-2. Stepwise
-We get the gist at this point
+We ran two models of the Poisson Regression at the county level: Full and stepwise model. In this section, we are focused on the overall result based on these models.
+
+1. Full Poisson Model - County Level
+
+We did the same process of modeling at the county level. Below is the table of all the variables used in the model at this level. We did not have registered firearms at the county level, but we have firearm fatalities, which still deals with the holding of a firearm.
+
+```{r , echo=F, message = F}
+county.full.poisson = read_csv("county-full-poisson.csv")
+kable(county.full.poisson, caption = "Table 9: Coefficients for Full Poisson Regression Model - County Level 2015-2020")
+```
+
+2. Stepwise Poisson Model - County Level
+
+Once we run the model with the step function, we get this table.
+
+```{r , echo=F, message = F}
+county.step.poisson = read_csv("county-step-poisson.csv")
+kable(county.step.poisson, caption = "Table 10: Coefficients for Stepwise Poisson Regression Model - County Level 2015-2020")
+```
+
+As noted with the step function, it takes out the variables that do not decrease the AIC value. In this case, all the variables are highly significant except for Decision Made on Officer (Charged or Justified) and the Intercept. 
+
+The variable that will cause the largest reduction is the Year with a one unit increase causing a reduction of 4.79%in the rates of shootings on average. On the other hand, Male Population Percentage will cause the largest increase. A one unit increase in Male Population Percentage will cause an increase of 10.19% in the rates of shootings on average.
 
 ### 3. Time Series
 
-description
+As we mentioned earlier, we will only be showing the results from the Triple Exponential  HoltWinters and the Multi - Layer Perceptron (MLP) time series model.
+
+Let’s begin with the HoltWinters model. Below is the plot predicted by this model with some  error margins:
+
+```{r , echo=F, message = F}
+month_count = shootings_killings%>%
+  group_by(Year,Month)%>%
+  filter(Month!=6 | Year!=2020)%>%
+  tally()
+
+month_count_ts = ts(month_count$n,start = c(2015,1),end = c(2020,5), frequency = 12)
+fit3 = HoltWinters(month_count_ts)
+plot(forecast(fit3,7))
+
+```
+
+As we can observe, the prediction seems to fit right in the pattern of the pre-existing data from  the Washington Post. We will review the exact number output by the models for the forecasting  from June 2020 to December 2020.
+
+```{r , echo=F, message = F}
+forecast.holtwinters = read_csv("HoltWinters-forecast.csv")
+kable(forecast.holtwinters, caption = "Table 11: Time Series Forecasting with HoltWinters Triple Exponential (Jun 2020 - Dec 2020) 
+")
+
+```
+
+Point forecast is the column of interest as it is the blue line in the middle of the prediction. The  shaded regions are the low and high 85% and 95% respectively. This is a good prediction based  on the pattern we observed with the seasonal plot and we saw that during September the count  goes down and in October it goes up again which is depicted by our model as well. The same thing happens when we move from October to November where the count goes down but not as  much as it does in September.
+
+We will now see how the MLP model compares to the HoltWinters. For this MLP model we  passed through an automatic hidden layer specification which choses an adequate amount of  hidden layers for the model to be trained properly. The prediction by the MLP model is shown  below:
+
+```{r , echo=F, message = F}
+month_count = shootings_killings%>%
+  group_by(Year,Month)%>%
+  filter(Month!=6 | Year!=2020)%>%
+  tally()
+
+month_count_ts = ts(month_count$n,start = c(2015,1),end = c(2020,5), frequency = 12)
+
+mlp2.fit <- mlp(month_count_ts,hd.auto.type="valid",hd.max=10)
+
+plot(forecast(mlp2.fit,7))
+
+```
+
+One distinguishable thing with MLP is that it doesn't provide an error margin when it comes to  time series predictions. The gray lines after mid 2020 are from the training run where the model  tries to reduce the error margin. Once the error margin has reached its minimum, the model  outputs a blue line as its final prediction. These lines could change with each run as the  perceptrons are trained differently each time so it's highly recommended to set a seed in R  beforehand to obtain the same results.
+
+```{r , echo=F, message = F}
+forecast.mlp = read_csv("MLP-forecast.csv")
+kable(forecast.mlp, caption = "Table 12: Time Series Forecasting by MLP model  (Jun 2020 - Dec 2020)
+) 
+")
+
+```
+
+This is the result outputted by the MLP model for our time series forecasting. Since the MLP model doesn't give us a confidence interval, the point forecasts for any month should be interpreted on average. So, in December, there will be 88.52 shootings on average.  Based on the point forecast for the respective months, we notice the same pattern as we saw in the seasonality visual from section 4.2.4. September seems to have the lowest number of shootings as it did for the other 5 years. We also see that July is a little lower compared to June and August which still follows the seasonality for two of the years from the data. What’s interesting to see is that November reached above 95 when it has never reached over 85 in the existing data. Because as we see in the seasonality visual, we see that November has had almost the same number of shootings except for one of the years. Out of those, November outnumbers August which explains why in the prediction table we see that it has outnumbered August just by a count of 3. 
 
 ## Conclusion
 
-Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shooting...
+Although there were many reports that have done research on this topic, there has been no  known research on combining the overall factors that may contribute to the rate of fatal police  shootings, nor have any research known to date referring to how police expenditure affects the  rate of fatal police shootings and the forecasts of fatal police shootings in the future. In this  report, we are trying to see the overall factors that affect the rate of fatal police shootings as well  as focusing on police expenditure and the forecast of future fatal police shootings for the next  seven months. Within our exploratory data analysis, we are able to visually see what factors may  contribute to the increase of the rate of fatal police shootings as well as if there were any  disparities between race and the events that lead up to the fatal shooting. From this stage, we  found that there was no apparent association of race and the events that lead up to the fatal  shooting.
+
+The variables that significantly affects the average rate of fatal police shootings at the state level  are the Black population percentage, Registered Firearm per 10k population, Population  Diversity Index, Urbanization Index, Male percentage in Population, the percent of State  Population between the ages of 20-45, Crime Index per 10k population, and Police Expenditure  as a percentage of Total Expenditure. Looking at the IRR for each variable and based on the  equation that determines , we see that on average, the rate of fatal police shootings decreases if  the percentage of the black population, population density, or urbanization index increases, given  that all other variables stay constant. On average, the rate of fatal police shootings would  increase if firearm registration per 10k population, population diversity index, male percentage in  population, percentage of state population in the age group of 20-45 years old, crime index per  10k population, and the percentage of governmental expenditure spent on the police over the  total, given that all other variables stay constant.
+
+At the state level, we realized that the variable that will cause the greatest change in the average  rate of fatal police shootings is the percentage of government expenditure spent on the police.  For each unit increase of the percentage of expenditure spent on the police over the total, the  average rate of fatal police shootings would increase by 41.74%. At the county level, we realized  that Male Population will cause the greatest change in the average rate of fatal police shootings.  For each unit increase of the percent of Male population, the average rate or fatal police  shootings would increase by 10.19%.As observed from the tables for state and city level, they  have shown that they have different results in what variables are significant and what variables  have the greatest effect on the average rate of fatal police shootings.
+
+We made use of multiple different methods and settled on the one that showed high accuracy and  appropriate fit to the existing data. We were able to build a good forecasting model for our time  series data which doesn’t underfit or overfit the existing data. Both the HoltWinters and MLP  models produced good predictions which had high accuracy. Both the models seem to follow the  pattern that was depicted by the historical data. The predictions were able to capture the key  points such as the peaks and troughs from our time series data. It was clearly shown in the  months of September which always had a lower number of shootings compared to the previous  and the next month. Based on what we found, multiple factors play a role in affecting the rate of  fatal police shootings, with some having greater effect than others.
 
 ## Discussion
 
-This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year...
+This report highlights the many different factors that could affect the rate of fatal police  shootings, with the focus on police expenditure and forecasting the number of fatal police  shootings over the months until the end of the 2020 year. Though our research was thorough to  our best ability, data availability on this topic is limited. There were lots of datasets that were  incomplete and there were not many reports of data from the police departments. There were also  numerous datasets that are not available for free use so that the public knows the knowledge of  this topic. If we were able to work with complete datasets at the time of the research, we will be  able to give a more complete and comprehensive analysis on fatal police shootings in the U.S.
+
+We have contributed to the literature by making use of Police Expenditure and Officer Count in  the state level analysis. We have also contributed by performing a Time Series Forecasting. Not  a lot of people had access to the number of observations of shootings that we did. Hence, it  helped us make a good prediction based on the shootings by month for the 5 Years and 5 Months  of data that we had access to. We also made use of lots of variables in the county level analysis  where we made use of Firearm Fatalities, Officer Count and Distinct Population Diversities.
+
+Based on what we’ve seen, we can make a few suggestions of  what may cause a fatal police  shooting. At the state level, it seems to show that the more money spent on police expenditure, the higher the rate of fatal shootings will be on average. As shown in Figure 7, there is an  upward trend of the percentage of money spent for each state on the Police Department and the  number of shootings that took place in each state for the years of 2015 to 2017. Although more  research is needed to explore the relation of expenditure spent on the police and fatal police  shootings, it seems that there is an association between police expenditure spending and fatal  police shootings. As there seems to be different variables that affect the rate of shootings on  average at each level, there should be implementations that occur both at county and state level  in order to curb the fatal police shootings. State and county-level powers should also  communicate more about police policy so that implementation of police policy is regulated.
+
+Looking at the overall spectrum, one way to decrease the rate of fatal police shootings would be  to have more regulation of owning a firearm, both in the household and training the police force.  There should be appropriate consequences that should be addressed when using a gun  inappropriately. This leads to another idea that there should be a process where the police have to  undergo each time an event like this occurs. There are too many pending investigations of fatal  police shootings when it comes to charging an officer or not, which may not give a sense of  consequence. This can also be extended to the judicial system where they address this issue  quickly and effectively. 
 
 ## References
-I do not know how to format the references in RMarkdown
+Black Lives Matter. (2013, June). Retrieved June 23, 2020, from https://blacklivesmatter.com/
 
+Bureau of Justice Statistics. (2020, January 17). Bureau of Justice Statistics (BJS) - Offenses Known to Law Enforcement in Large Cities, 2018. https://www.bjs.gov/index.cfm?ty=pbdetail&iid=6786
 
+Governing. (2017). State Population By Race, Ethnicity Data. Governing. https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html
 
+Governing. (2018, July 2). Police Employment, Officers Per Capita Rates for U.S. Cities. https://www.governing.com/gov-data/safety-justice/police-officers-per-capita-rates-employment-for-city-departments.html
 
-```{r cars}
-summary(cars)
-```
+Hemenway, D., Azrael, D., Conner, A., & Miller, M. (2019).  Retrieved June 23, 2020. Variation in rates of fatal police shootings across US states: the role of firearm availability. Journal of urban health, 96(1), 63-73.
 
+Hemenway, D., Berrigan, J., Azrael, D., Barber, C., & Miller, M. (2020). Retrieved June 23, 2020. Fatal police shootings of civilians, by rurality. Preventive medicine, 106046.
 
+Kesic, D., Thomas, S. D., & Ogloff, J. R. (2012). Retrieved June 23, 2020. Analysis of fatal police shootings: Time, space, and suicide by police. Criminal Justice and Behavior, 39(8), 1107-1125.
 
+Kivisto, A. J., Ray, B., & Phalen, P. L. (2017). Retrieved June 23, 2020. Firearm legislation and fatal police shootings in the United States. American journal of public health, 107(7), 1068-1075.
+
+Mentch, L. (2020). Retrieved June 23, 2020. On Racial Disparities in Recent Fatal Police Shootings. Statistics and Public Policy, 7(1), 9-18.
+
+Mesic, A., Franklin, L., Cansever, A., Potter, F., Sharma, A., Knopov, A., & Siegel, M. (2018). Retrieved June 23, 2020. The relationship between structural racism and black-white disparities in fatal police shootings at the state level. Journal of the National Medical Association, 110(2), 106-116.
+
+Nagin, D. S. (2020). Retrieved June 23, 2020. Firearm availability and fatal police shootings. The ANNALS of the American Academy of Political and Social Science, 687(1), 49-57.
+
+Pierson, E., Simoiu, C., Overgoor, J., Corbett-Davies, S., Jenson, D., Shoemaker, A., ... & Goel, S. (2020). Retrieved June 23, 2020. A large-scale analysis of racial disparities in police stops across the United States. Nature human behaviour, 1-10.
+
+Ross, C. T. (2015). Retrieved June 23, 2020. A multi-level Bayesian analysis of racial bias in police shootings at the county-level in the United States, 2011–2014. PloS one, 10(11), e0141854.
+
+Shane, J. M., Lawton, B., & Swenson, Z. (2017). Retrieved June 23, 2020. The prevalence of fatal police shootings by US police, 2015–2016: Patterns and answers from a new data set. Journal of criminal justice, 52, 101-111.
+
+Siegel, M., Sherman, R., Li, C., & Knopov, A. (2019). Retrieved June 23, 2020. The Relationship between Racial Residential Segregation and Black-White Disparities in Fatal Police Shootings at the City Level, 2013–2017. Journal of the National Medical Association, 111(6), 580-587.
+
+Sinyangwe, S., & McKesson, D. (n.d.). Mapping Police Violence. Mapping Police Violence. Retrieved June 23, 2020, from https://mappingpoliceviolence.org/
+
+Statista Research Department. (2019, September 5). U.S. - number of registered weapons by state 2019. Statista. https://www.statista.com/statistics/215655/number-of-registered-weapons-in-the-us-by-state/
+
+Tax Policy Center. (2020, June 18). State and Local General Expenditures, Per Capita. https://www.taxpolicycenter.org/statistics/state-and-local-general-expenditures-capita
+
+US Census Bureau. (2019a, February 5). USA Counties: 2011. The United States Census Bureau. https://www.census.gov/library/publications/2011/compendia/usa-counties-2011.html#LND
+
+US Census Bureau. (2019b, December 2). 2010 Census Urban and Rural Classification and Urban Area Criteria. The United States Census Bureau. https://www.census.gov/programs-surveys/geography/guidance/geo-areas/urban-rural/2010-urban-rural.html
+
+US Census Bureau. (2019c, December 30). State Population Totals: 2010-2019. The United States Census Bureau. https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-total.html
+
+US Census Bureau. (2020a, June 22). County Population by Characteristics: 2010-2019. The United States Census Bureau. https://www.census.gov/data/tables/time-series/demo/popest/2010s-counties-detail.html
+
+US Census Bureau. (2020b, June 22). State Population by Characteristics: 2010-2019. The United States Census Bureau. https://www.census.gov/data/tables/time-series/demo/popest/2010s-state-detail.html
+
+Violence Policy Center. State Firearm Suicide Rates, 2016. (n.d.). Retrieved June 23, 2020, from https://vpc.org/press/state-firearm-suicide-rates-2016/
+
+Washington Post. (2015). Fatal Force. https://www.washingtonpost.com/graphics/investigations/police-shootings-database/
+World Population Review. (n.d.). United States by Density 2020. Retrieved June 23, 2020, from https://worldpopulationreview.com/state-rankings/state-densities
 
 
 
