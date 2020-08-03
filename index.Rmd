@@ -1,6 +1,6 @@
 ---
 title: "Analysis and Forecasting of Fatal Police Shootings in the U.S."
-author: "Arbaaz Mohideen & Kimberly Tse - \"Partners in Crime\""
+author: "Arbaaz Mohideen & Kimberly Tse - \"Partners in Crime\"" 
 date: "7/31/2020"
 output: 
   html_document:
@@ -130,14 +130,19 @@ In this report, we will do a comprehensive analysis of fatal police shootings in
 
 People would expect the officer to act on whatever means necessary in order to apprehend the  person and protect themselves and the citizens around the area according to Jon (Shane 2020).  However, with the rising attention of the unnecessary force the police have put upon people,  there is no doubt about the legitimacy of the police force and what they should or should not  have done.
 
-Situational - Race has been a prominent factor of determining its significance for fatal police  shootings, and there seems to be different conclusions of how race affects the likelihood of fatal  police shootings. On one hand, there is research showing that race does impact the likelihood of racial disparities of Blacks and Whites in select cities (Siegel 2019) and at the state level (Mesic  2018). There is also research supporting that there is bias against non-White drivers for traffic stops and searches (Pierson 2020). Though this research is focused on fatal shootings that already occurred, looking at potential situations where people are in confrontation with the police can lead to such occurrences. Further research supports this with resampling of the fatal police shootings when taking the bias out of the sampling (Mentch). There is also research on how the location and economic status relate to racial bias, which shows that there is significant evidence of racial bias in police and even stronger association in metropolitan areas with low income and a sizable amount of Blacks in the area (Ross 2015). On the other hand, there is research that is  against the idea that being a certain race makes you more likely to be shot (Shane 2020).
+### Situational 
+Race has been a prominent factor of determining its significance for fatal police  shootings, and there seems to be different conclusions of how race affects the likelihood of fatal  police shootings. On one hand, there is research showing that race does impact the likelihood of racial disparities of Blacks and Whites in select cities (Siegel 2019) and at the state level (Mesic  2018). There is also research supporting that there is bias against non-White drivers for traffic stops and searches (Pierson 2020). Though this research is focused on fatal shootings that already occurred, looking at potential situations where people are in confrontation with the police can lead to such occurrences. Further research supports this with resampling of the fatal police shootings when taking the bias out of the sampling (Mentch). There is also research on how the location and economic status relate to racial bias, which shows that there is significant evidence of racial bias in police and even stronger association in metropolitan areas with low income and a sizable amount of Blacks in the area (Ross 2015). On the other hand, there is research that is  against the idea that being a certain race makes you more likely to be shot (Shane 2020).
 
-Firearm - Firearm has been another prominent factor observed to see if it has any significance on  fatal police shootings, and it seems as it is so as supported by previous research. One of the  research looked into the relation of firearm availability and fatal police shootings (Nagin 2020),  where another looked into whether people who have a firearm in hand when in police  confrontation have a relation with fatal police shootings (Hemenway 2019). In both cases, there seems to be a strong association with a person carrying a firearm and the likelihood of a fatal  police shooting. There was a study on the relation between the strength of firearm legislation and  fatal police shootings, which they found that stricter firearm legislation can associate with lower  fatal police shootings (Kivisto 2017).
+### Firearm 
+Firearm has been another prominent factor observed to see if it has any significance on  fatal police shootings, and it seems as it is so as supported by previous research. One of the  research looked into the relation of firearm availability and fatal police shootings (Nagin 2020),  where another looked into whether people who have a firearm in hand when in police  confrontation have a relation with fatal police shootings (Hemenway 2019). In both cases, there seems to be a strong association with a person carrying a firearm and the likelihood of a fatal  police shooting. There was a study on the relation between the strength of firearm legislation and  fatal police shootings, which they found that stricter firearm legislation can associate with lower  fatal police shootings (Kivisto 2017).
 
-Behavioral - There has been some research of how the actions of the people in confrontation of  the police relate to fatal police shootings. A research study was conducted to see whether  domestic disturbances were more likely to cause a fatal shooting (Pinchevsky 2018). From this  study, there was no significant association of domestic disturbances and the likelihood of a fatal  police shooting, however, people who have a history of crime or who are equipped with a  weapon at the time of police confrontation are more likely to involve a fatal shooting. There was  also a study of suicides by police where they studied events that occurred that led to the fatal  police shooting, the psychological backgrounds of the victims, and classifying them if that case  is considered as suicide by police (Kesic 2012). Researchers found that with the cases observed,  one third of the cases was considered suicide-by-police, on which these cases contained  decedents who had mental or physical disproders and have backgrounds of suicide attemps.
+### Behavioral 
+There has been some research of how the actions of the people in confrontation of  the police relate to fatal police shootings. A research study was conducted to see whether  domestic disturbances were more likely to cause a fatal shooting (Pinchevsky 2018). From this  study, there was no significant association of domestic disturbances and the likelihood of a fatal  police shooting, however, people who have a history of crime or who are equipped with a  weapon at the time of police confrontation are more likely to involve a fatal shooting. There was  also a study of suicides by police where they studied events that occurred that led to the fatal  police shooting, the psychological backgrounds of the victims, and classifying them if that case  is considered as suicide by police (Kesic 2012). Researchers found that with the cases observed,  one third of the cases was considered suicide-by-police, on which these cases contained  decedents who had mental or physical disproders and have backgrounds of suicide attemps.
 
-Location - There has been some research on how location affects the rate of fatal police  shootings, where there are mixed results. A research study was conducted to see if fatal police  shootings occur disproportionately in urban areas and were comparing fatal police shootings in  different areas (urban, suburban, and rural), with the result being that there is not a significant  difference in the rate of fatal police shootings in urban or rural areas, though suburban rates seem  to be lower than the other two location types.
+### Location
+There has been some research on how location affects the rate of fatal police  shootings, where there are mixed results. A research study was conducted to see if fatal police  shootings occur disproportionately in urban areas and were comparing fatal police shootings in  different areas (urban, suburban, and rural), with the result being that there is not a significant  difference in the rate of fatal police shootings in urban or rural areas, though suburban rates seem  to be lower than the other two location types.
 
+### Outro
 With all these factors observed in previous research, it is no doubt that this is not a new topic.  However, we will like to expand this topic as we found there is no research on how police  expenditure affects the rate of fatal police shootings. The Defunding the Police movement is our  motivation to explore this factor and see whether funding for police departments have a  significant association with fatal police shootings. We will also forecast the number of fatal  police shootings for the next seven months (until December 2020) and observe any  patterns/trends.
 
 ## Data, Method and Analysis
@@ -560,7 +565,154 @@ We used the data on Firearm Fatalities per 100k against the rate of Shootings pe
 
 #### 2. Topic Modeling
 
-WORD CLOUDS WILL HAVE TO WAIT
+With the combined dataset of the Washington Post and the Mapping Police Violence, we are able to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We first proceeded with word clouds, which will give a visualization of the frequency of the words being used; the more frequent the word repeats throughout (in this case, our combined dataset), the bigger that particular word will appear in the visual.
+
+We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event.
+
+```{r, echo=FALSE, warning =F}
+library(here)
+library(webshot)
+library(htmlwidgets)
+
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docs = tm_map(docs, content_transformer(tolower))
+docs = tm_map(docs, removeWords, stopwords("english"))
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+my_graph = wordcloud2(data=df,size=1.2, color='random-dark')
+saveWidget(my_graph, "overallwc.html", selfcontained = F)
+webshot("overallwc.html", "overallwc.png", delay = 5, vwidth = 1000, vheight = 750)
+
+```
+
+We had the idea of separating the word clouds by race, thinking that there may be some characteristics that may differ by group. However, they all share the same similarity of words
+
+```{r, echo=FALSE, message= F, warning =F, fig.show="hold", out.width="50%"}
+invisible(lapply(paste0("package:", names(sessionInfo()$otherPkgs)),   # Unload add-on packages
+                 detach,
+                 character.only = TRUE, unload = TRUE))
+library(stringr)
+library(tidytext)
+library(readr)
+library(tm)
+library(dplyr)
+library(broom)
+
+library(wordcloud2)
+library(here)
+library(webshot)
+library(htmlwidgets)
+
+text = shootings_killings %>% 
+  filter(Race == "W")
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docs = tm_map(docs, content_transformer(tolower))
+docs = tm_map(docs, removeWords, stopwords("english"))
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+my_graph = wordcloud2(data=df,size=1.2, color='random-dark')
+saveWidget(my_graph, "overallwcw.html", selfcontained = F)
+webshot("overallwcw.html", "overallwcw.png", delay = 5, vwidth = 1000, vheight = 750)
+
+
+text = shootings_killings %>% 
+  filter(Race == "B")
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace)
+
+docs = tm_map(docs, content_transformer(tolower))
+docs = tm_map(docs, removeWords, stopwords("english"))
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+my_graph = wordcloud2(data=df,size=1.2, color='random-dark')
+saveWidget(my_graph, "overallwcb.html", selfcontained = F)
+webshot("overallwcb.html", "overallwcb.png", delay = 5, vwidth = 1000, vheight = 750)
+
+
+```
+
+Since many words seem to repeat in each of the groups such as “police,” “officers,” “shot,” and “killed,” we then decided to take out topic-specific words that do not lose the context of the situation.
+
+
+```{r, echo=FALSE, message= F, warning =F, fig.show="hold", out.width="50%"}
+extra = c("police", "shot", "officers", "killed", "said", "officer", "allegedly", "deputies", "deputy", "man")
+
+text = shootings_killings %>% 
+  filter(Race == "W")
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace) %>% 
+  tm_map(content_transformer(tolower)) %>% 
+  tm_map(removeWords, stopwords("english")) %>% 
+  tm_map(removeWords, extra)
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+my_graph = wordcloud2(data=df,size=1.2, color='random-dark', shape = 'circle')
+saveWidget(my_graph, "overallwcw1.html", selfcontained = F)
+webshot("overallwcw1.html", "overallwcw1.png", delay = 5, vwidth = 1750, vheight = 1250)
+
+
+text = shootings_killings %>% 
+  filter(Race == "B")
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %>%
+  tm_map(removeNumbers) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(stripWhitespace) %>% 
+  tm_map(content_transformer(tolower)) %>% 
+  tm_map(removeWords, stopwords("english")) %>% 
+  tm_map(removeWords, extra)
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+my_graph = wordcloud2(data=df,size=1.2, color='random-dark', shape = 'circle')
+saveWidget(my_graph, "overallwcb1.html", selfcontained = F)
+webshot("overallwcb1.html", "overallwcb1.png", delay = 5, vwidth = 1750, vheight = 1250)
+```
 
 Taking out topic-specific words did not seem to help as there were even more words that each  group had in common. There seems to be no distinction between the groups of words for each  race based on these visuals, so we decided to take a different approach to see if we can group  each description by topic and be able to see if there are any patterns of topics for each race.  Topic modeling is a method in text mining that allows us to classify words in groups that share a  focus. The method used for this is Latent Dirichlet allocation, where we can treat each topic as a  mixture of words that will convey something contributing to that particular topic.
 
@@ -568,7 +720,7 @@ We decided to first figure out the optimal amount of topics that we can group th
 
 Again, we took out stop words and topic-specific words that do not take out the context of the  situation. We used method 1 to narrow down our options to a certain range of the number of  topics, which the range of 3-7 topics were optimal.
 
-```{r, echo=FALSE, message= F, warning =F}
+```{r, echo=FALSE, message= F, warning =F, include = F}
 invisible(lapply(paste0("package:", names(sessionInfo()$otherPkgs)),   # Unload add-on packages
                  detach,
                  character.only = TRUE, unload = TRUE))
@@ -627,6 +779,13 @@ result = FindTopicsNumber(
 FindTopicsNumber_plot(result)
 
 ```
+
+```{r, echo=FALSE, message= F, warning =F}
+
+FindTopicsNumber_plot(result)
+
+```
+
 
 We then ran the LDA model manually, going through each number of topics from 3, 4, 5, 6, and  7 and seeing the classification of words of each topic with the interest of seeing what number of  topics would best cover the words without having much overlapping with other topics.
 
