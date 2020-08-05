@@ -1,6 +1,6 @@
 ---
 title: "Analysis and Forecasting of Fatal Police Shootings in the U.S."
-author: "Arbaaz Mohideen & Kimberly Tse - \"Partners in Crime\"" 
+author: "Arbaaz Mohideen & Kimberly Tse - \"Partners in Crime\" , and WITH GREAT REGARDS TO THE ALL MIGHTY research mentor Dr. Sayed Mostafa"
 date: "7/31/2020"
 output: 
   html_document:
@@ -41,25 +41,25 @@ library(rmarkdown)
 ```
 
 ```{r, echo=FALSE,include=FALSE,warning=FALSE}
-shootings_killings <- read_csv("shootings_killings.csv")
+shootings_killings <- read_csv("finalData/shootings_killings.csv")
 
-suicide_race_firearm_pop <- read_csv("suicide_race_firearm_pop.csv")
+suicide_race_firearm_pop <- read_csv("finalData/suicide_race_firearm_pop.csv")
 
-offense <- read_csv("offense.csv")
+offense <- read_csv("finalData/offense.csv")
 
-state_local_expenditures_15_17 <- read_csv("state_local_expenditures_15-17.csv")
+state_local_expenditures_15_17 <- read_csv("finalData/state_local_expenditures_15-17.csv")
 
-policedep_count_complete <- read_csv("policedep_count_complete.csv")
+policedep_count_complete <- read_csv("finalData/policedep_count_complete.csv")
 
-combined_2017_2020_populations <- read_csv("combined_2017_2020_populations.csv")
+combined_2017_2020_populations <- read_csv("finalData/combined_2017_2020_populations.csv")
 
-Correlation_complete_dat <- read_csv("Correlation_complete_dat.csv")
+Correlation_complete_dat <- read_csv("finalData/Correlation_complete_dat.csv")
 
-model_dat <- read_csv("model_dat.csv")
+model_dat <- read_csv("finalData/model_dat.csv")
 
-state_level_model <- read_csv("state_level_model_final.csv")
+state_level_model <- read_csv("finalData/state_level_model_final.csv")
 
-county_level_model <- read_csv("county_level_model.csv")
+county_level_model <- read_csv("finalData/county_level_model.csv")
 ```
 
 ```{r,warning=FALSE,include=FALSE,echo=FALSE}
@@ -188,7 +188,7 @@ So with all the changes applied to the combined dataset, we produced some summar
 
 ```{r Table 1, echo=F, message = F}
 library(knitr)
-state.summary.rate = read_csv("summary-state-rank.csv")
+state.summary.rate = read_csv("finalData/summary-state-rank.csv")
 state.summary.rate = state.summary.rate%>% 
   na.omit()
 kable(state.summary.rate, caption = "Table 1: States Ranked by Shootings per 100k Shooting Rate Jan 2015 - Jun 2020")
@@ -196,13 +196,13 @@ kable(state.summary.rate, caption = "Table 1: States Ranked by Shootings per 100
 
 
 ```{r Table 2, echo=F, message = F}
-state.summary.vars.quant = read_csv("state-summary-vars-quantitative.csv")
+state.summary.vars.quant = read_csv("finalData/state-summary-vars-quantitative.csv")
 kable(state.summary.vars.quant, caption = "Table 2. State Level Summary Statistics for Quantitative Variables  [Mean (SD)]")
 ```
 
 
 ```{r Table 3, echo=F, message = F}
-state.summary.vars.cat = read_csv("state-summary-vars-categorical.csv")
+state.summary.vars.cat = read_csv("finalData/state-summary-vars-categorical.csv")
 kable(state.summary.vars.cat, caption = "Table 3. State Level Summary Statistics for Categorical Variables in Percentages")
 ```
 
@@ -569,7 +569,7 @@ With the combined dataset of the Washington Post and the Mapping Police Violence
 
 We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event.
 
-```{r, echo=FALSE, warning =F}
+```{r, echo=FALSE, warning =F, message = F}
 library(here)
 library(webshot)
 library(htmlwidgets)
@@ -735,7 +735,7 @@ library(dplyr)
 library(broom)
 library(SnowballC)
 
-sk = read_csv("shootings_killings.csv")
+sk = read_csv("finalData/shootings_killings.csv")
 sk_h = sk %>% 
   select(`A brief description of the circumstances surrounding the death`) 
 
@@ -932,14 +932,14 @@ For each table in this section, there are three columns: Variable, IRR with the 
 We decided to first look into a single variable - the percentage of the police expenditure spent  out of the total expenditure. Looking into the table, we can see that this variable is highly  significant.
 
 ```{r , echo=F, message = F}
-state.one.var.1517 = read_csv("state-one-var-poisson-1517.csv")
+state.one.var.1517 = read_csv("finalData/state-one-var-poisson-1517.csv")
 kable(state.one.var.1517, caption = "Table 4: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2017")
 ```
 
 We performed a single variable predictor poisson regression using just the Police Expenditure data from 2015 to 2017. As we can see, we have a positive IRR for the variable which suggests that there is a positive association between police expenditure as a percentage of total expenditure and the rate of shootings on average.
 
 ```{r , echo=F, message = F}
-state.one.var.1520 = read_csv("state-one-var-poisson-1520.csv")
+state.one.var.1520 = read_csv("finalData/state-one-var-poisson-1520.csv")
 kable(state.one.var.1520, caption = "Table 5: Coefficient for One-Variable Poisson Regression Model - State Level 2015-2020")
 ```
 
@@ -949,7 +949,7 @@ Here as well, we have a positive IRR which suggests the same as above. But you m
 2. States percentages spent on police from the total from 2015 to 2017 doesn't change a lot. As shown below, you can see that from one year to another, these randomly chosen states don't change a lot.
 
 ```{r , echo=F, message = F, warning=F}
-state.random.poliexp = read_csv("state-police-exp-random.csv")
+state.random.poliexp = read_csv("finalData/state-police-exp-random.csv")
 state.random.poliexp = state.random.poliexp %>% 
   rename(Year = X1)
 kable(state.random.poliexp, caption = "Table 6: Percentage of Police Expenditure from Total for random States by Years")
@@ -966,7 +966,8 @@ The IRR is 1.0881 for the percentage of police expenditure spent out of the tota
 If we were to look at the full model, we will have all the variables used in the model. Below you  will see all the variables used in the model with varying significance.
 
 ```{r , echo=F, message = F}
-state.full.poisson = read_csv("state-full-poisson.csv")
+state.full.poisson = read_csv("finalData/state-full-poisson.csv")
+state.full.poisson$`P-Value` = format(state.full.poisson$`P-Value`, digits = 3)
 kable(state.full.poisson, caption = "Table 7: Coefficients for Full Poisson Regression Model - State Level 2015-2020")
 ```
 
@@ -979,7 +980,8 @@ We are able to use the step function for the Poisson regression so that we may t
 Once we ran our poisson regression model with stepwise variable selection for our rate data with the significant variables, we got the following table:
 
 ```{r , echo=F, message = F}
-state.step.poisson = read_csv("state-step-poisson.csv")
+state.step.poisson = read_csv("finalData/state-step-poisson.csv")
+state.step.poisson$`P-Value` = format(state.step.poisson$`P-Value`, digits = 3)
 kable(state.step.poisson, caption = "Table 8: Coefficients for Stepwise Poisson Regression Model - State Level 2015-2020")
 ```
 
@@ -996,7 +998,8 @@ We ran two models of the Poisson Regression at the county level: Full and stepwi
 We did the same process of modeling at the county level. Below is the table of all the variables used in the model at this level. We did not have registered firearms at the county level, but we have firearm fatalities, which still deals with the holding of a firearm.
 
 ```{r , echo=F, message = F}
-county.full.poisson = read_csv("county-full-poisson.csv")
+county.full.poisson = read_csv("finalData/county-full-poisson.csv")
+county.full.poisson$`P-Value` = format(county.full.poisson$`P-Value`, digits = 3)
 kable(county.full.poisson, caption = "Table 9: Coefficients for Full Poisson Regression Model - County Level 2015-2020")
 ```
 
@@ -1005,7 +1008,8 @@ kable(county.full.poisson, caption = "Table 9: Coefficients for Full Poisson Reg
 Once we run the model with the step function, we get this table.
 
 ```{r , echo=F, message = F}
-county.step.poisson = read_csv("county-step-poisson.csv")
+county.step.poisson = read_csv("finalData/county-step-poisson.csv")
+county.step.poisson$`P-Value` = format(county.step.poisson$`P-Value`, digits = 3)
 kable(county.step.poisson, caption = "Table 10: Coefficients for Stepwise Poisson Regression Model - County Level 2015-2020")
 ```
 
@@ -1034,7 +1038,7 @@ plot(forecast(fit3,7))
 As we can observe, the prediction seems to fit right in the pattern of the pre-existing data from  the Washington Post. We will review the exact number output by the models for the forecasting  from June 2020 to December 2020.
 
 ```{r , echo=F, message = F}
-forecast.holtwinters = read_csv("HoltWinters-forecast.csv")
+forecast.holtwinters = read_csv("finalData/HoltWinters-forecast.csv")
 kable(forecast.holtwinters, caption = "Table 11: Time Series Forecasting with HoltWinters Triple Exponential (Jun 2020 - Dec 2020) 
 ")
 
@@ -1051,7 +1055,7 @@ month_count = shootings_killings%>%
   tally()
 
 month_count_ts = ts(month_count$n,start = c(2015,1),end = c(2020,5), frequency = 12)
-
+set.seed(1223334444)
 mlp2.fit <- mlp(month_count_ts,hd.auto.type="valid",hd.max=10)
 
 plot(forecast(mlp2.fit,7))
@@ -1061,7 +1065,7 @@ plot(forecast(mlp2.fit,7))
 One distinguishable thing with MLP is that it doesn't provide an error margin when it comes to  time series predictions. The gray lines after mid 2020 are from the training run where the model  tries to reduce the error margin. Once the error margin has reached its minimum, the model  outputs a blue line as its final prediction. These lines could change with each run as the  perceptrons are trained differently each time so it's highly recommended to set a seed in R  beforehand to obtain the same results.
 
 ```{r , echo=F, message = F}
-forecast.mlp = read_csv("MLP-forecast.csv")
+forecast.mlp = read_csv("finalData/MLP-forecast.csv")
 kable(forecast.mlp, caption = "Table 12: Time Series Forecasting by MLP model  (Jun 2020 - Dec 2020)
 ) 
 ")
@@ -1142,5 +1146,188 @@ Violence Policy Center. State Firearm Suicide Rates, 2016. (n.d.). Retrieved Jun
 Washington Post. (2015). Fatal Force. https://www.washingtonpost.com/graphics/investigations/police-shootings-database/
 World Population Review. (n.d.). United States by Density 2020. Retrieved June 23, 2020, from https://worldpopulationreview.com/state-rankings/state-densities
 
+## Acknowledgements
+- NSA, NSF, grant. Need names and numbers. 
+
+
+## Appendix
+
+Here we will provide you the code and (both) the original and tidied datasets so that you can see the process of how we got our results. To get the files, simply click on the link to go to the repository where everything will be there for you.
+
+### Data Wrangling, Cleaning and Processing 
+
+After cleaning up the files, we have what we call "tidy data." ... Tidy data is what we need in order for us to commence data visualizations, modeling, and forecastings.
+
+```{r,warning=FALSE, results = 'hide', message = F}
+# These are the combined datasets that will be used for visuals and models. 
+# NOTE: For the rest of the appendix, please refer to these tables to follow through
+# what dataset we used in order to get the outcome
+#
+# You can find these files from the folder "finalData" in the repository
+# if you want to replicate the data visuals.
+
+shootings_killings <- read_csv("finalData/shootings_killings.csv")
+
+suicide_race_firearm_pop <- read_csv("finalData/suicide_race_firearm_pop.csv")
+
+offense <- read_csv("finalData/offense.csv")
+
+state_local_expenditures_15_17 <- read_csv("finalData/state_local_expenditures_15-17.csv")
+
+policedep_count_complete <- read_csv("finalData/policedep_count_complete.csv")
+
+combined_2017_2020_populations <- read_csv("finalData/combined_2017_2020_populations.csv")
+
+Correlation_complete_dat <- read_csv("finalData/Correlation_complete_dat.csv")
+
+model_dat <- read_csv("finalData/model_dat.csv")
+
+state_level_model <- read_csv("finalData/state_level_model_final.csv")
+
+county_level_model <- read_csv("finalData/county_level_model.csv")
+```
+
+### Data visuals
+Data visuals help us see what variables may have a correlation to the count and rates of fatal police shootings. This will include all the graphs, forecasting plots, and wordclouds.
+
+Here is the code for all the visuals we created. For this section, please note that we will NOT be outputting the results here as the visuals are in the section already.
+
+```{r,warning=FALSE, results = 'hide', message = F}
+# 
+
+
+```
+
+
+### Data modeling 
+
+Any code for the "randomly selected" states?
+
+#### State Level:
+
+```{r, echo = T, results = 'hide', warning = F}
+
+# Running the Chi-Square Goodness-of-Fit Test for state level
+x = goodfit(state_level_model$Count, type = "poisson")
+chisq.test(x$observed,x$fitted)
+
+#Poisson regression with just pol frac total as predictor
+model1.pft = glm(Count ~ Pol_frac_total
+                       + offset(log(Population)),
+                       family = poisson(link="log"),
+                       data = state_level_model)
+summary(model1.pft)
+
+# Running the Chi-Square Goodness-of-Fit Test for state level
+state_small = state_level_model%>%
+  filter(Year%in%c(2015,2016,2017))
+
+x = goodfit(state_small$Count, type = "poisson")
+chisq.test(x$observed,x$fitted)
+
+
+
+# Running the Poisson model at the state level with the offset of log(population).
+# Summary function allows to see the coefficients and significance.
+model1.sig = glm(Count~.
+                       -State 
+                       -Population -Victim_median_Age
+                        - State_median_age
+                       + offset(log(Population)),
+                       family = poisson(link="log"),
+                       data = na.omit(state_level_model))
+
+summary(model1.sig)
+
+# Running the Poisson model at the state level with the offset of log(population).
+# Summary function allows to see the coefficients and significance.
+model1.step = step(glm(Count~.
+                       -State 
+                       -Population 
+                       + offset(log(Population)),
+                       family = poisson(link="log"),
+                       data = na.omit(state_level_model)),
+                   direction = "both")
+
+summary(model1.step)
+
+```
+
+#### County Level:
+
+```{r, echo = T, results = 'hide', warning = F}
+
+# Running the Chi-Square Goodness-of-Fit Test for county level
+x = goodfit(county_level_model$Count, type = "poisson")
+chisq.test(x$observed,x$fitted)
+
+# Running the Poisson model at the county level with the offset of log(population).
+# Summary function allows to see the coefficients and significance.
+model2.full = glm(Count~.-County-State-population+
+                    offset(log(population)),family = poisson(link="log"), data =
+                    county_level_model)
+
+summary(model2.full)
+
+# Running the Poisson model at the county level with the offset of log(population).
+# The step function allows for the function to best determine what variables will be best suited for the model.
+# Summary function allows to see the coefficients and significance.
+model2.step = step(glm(Count~.-County-State-population+
+                         offset(log(population)),
+                    family = poisson(link="log"), data = na.omit(county_level_model)),
+                   direction = "both")
+
+summary(model2.step)
+
+```
+
+
+### Time Series Forecasting
+#### Setting up for time series forecasting
+
+```{r, echo = T, results = 'hide', warning = F, fig.show='hide'}
+## Setting up for the time series forecasting
+
+# Groups the counts of fatal police shootings by month and year from the shootings_killings dataset
+month_count = shootings_killings%>%
+  group_by(Year,Month)%>%
+  filter(Month!=6 | Year!=2020)%>%
+  tally()
+
+# Converts the month_count variable into a time series type, saved as month_count_ts
+month_count_ts = ts(month_count$n,start = c(2015,1),end = c(2020,5), frequency = 12)
+
+```
+
+#### HoltWinters forecasting
+
+```{r, echo = T, results = 'hide', warning = F, fig.show='hide'}
+## HoltWinters
+
+# Fitting the time series variable into the HoltWinters function and plotting the graph
+fit3 = HoltWinters(month_count_ts)
+plot(forecast(fit3,7))
+
+# Getting the table of the month, point forecast, low and high 85%, 95%
+forecast(fit3,7)
+
+```
+
+#### MLP forecasting
+
+```{r, echo = T, results = 'hide', warning = F, fig.show='hide'}
+## MLP
+# Set the seed for this time series.
+set.seed(1223334444)
+
+# Fitting the time series variable into the MLP function and plotting the graph
+mlp2.fit <- mlp(month_count_ts,hd.auto.type="valid",hd.max=10)
+
+plot(forecast(mlp2.fit,7))
+
+# Getting the table of the month and point forecast
+forecast(mlp2.fit,7)
+
+```
 
 
