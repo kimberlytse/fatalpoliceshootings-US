@@ -1,0 +1,7 @@
+﻿Variable,"IRR (2.5%,97.5%)",P-Value
+(Intercept),"4.78E+36 (1.84E+08,1.49E+65)",0.01151
+Year,"0.95213(0.92168,0.98350)",0.00306
+Urbanization Index,"0.97142 (0.96474,0.97831)",3.86E-16
+Population Density,"0.99991 (0.99986,0.99996)",0.00031
+Male Population Percentage,"1.10194 (1.03573,1.17252)",0.00216
+Decision Made on Officer (Charged or Justified),"1.00331 (0.99909,1.00716)",0.10637
