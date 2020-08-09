@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime” , and WITH GREAT REGARDS TO THE ALL MIGHTY research mentor Dr. Sayed Mostafa" />
+<meta name="author" content="Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime”   Research Mentor: Dr. Sayed Mostafa" />
 
 
 <title>Analysis and Forecasting of Fatal Police Shootings in the U.S.</title>
@@ -254,7 +254,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Analysis and Forecasting of Fatal Police Shootings in the U.S.</h1>
-<h4 class="author">Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime” , and WITH GREAT REGARDS TO THE ALL MIGHTY research mentor Dr. Sayed Mostafa</h4>
+<h4 class="author">Arbaaz Mohideen &amp; Kimberly Tse - “Partners in Crime” <br> Research Mentor: Dr. Sayed Mostafa</h4>
 <h4 class="date">7/31/2020</h4>
 
 </div>
@@ -299,6 +299,7 @@ div.tocify {
 <h2>Data, Method and Analysis</h2>
 <div id="data" class="section level3">
 <h3>Data</h3>
+<p>(add note: all datasets will be in repository so that i can be replicated)</p>
 <p>For this study, we made use of publicly available data. We used a combination of multiple different datasets to answer our research question of how multiple different variables affect the rate of shootings in state and county level. So in order to achieve this we need the following datasets:</p>
 <ol style="list-style-type: decimal">
 <li>Fatal Police Shootings data collected by Washington Post over the period of 2015-2020  (Washington Post, 2015).</li>
@@ -2743,22 +2744,38 @@ div.tocify {
 </div>
 <div id="acknowledgements" class="section level2">
 <h2>Acknowledgements</h2>
-<ul>
-<li>NSA, NSF, grant. Need names and numbers.</li>
-</ul>
+<p>The authors acknowledge financial support from the NSF HBCU-UP ACE: NSF HRD-1719498 and Research Experiences for Undergraduate Students in Data Science Analytics, National Security Agency H98230-18-1-0097</p>
 </div>
 <div id="appendix" class="section level2">
 <h2>Appendix</h2>
-<p>Here we will provide you the code and (both) the original and tidied datasets so that you can see the process of how we got our results. To get the files, simply click on the link to go to the repository where everything will be there for you.</p>
+<p>Here we will provide you the code and (both) the original and tidied datasets so that you can see the process of how we got our results. Unless otherwise stated, please use the library list below. To get the files, simply click on the link to go to the repository where everything will be there for you.</p>
+<p>This is a list of all libraries used for this report.</p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(gganimate)
+library(gifski)
+library(wordcloud)
+library(wordcloud2)
+library(RColorBrewer)
+library(tm)
+library(readr)
+library(MASS)
+library(pscl)
+library(jtools)
+library(vcd)
+library(scales)
+library(forecast)
+library(nnfor)
+library(imputeTS)
+library(readxl)
+library(knitr)
+library(rmarkdown)</code></pre>
 <div id="data-wrangling-cleaning-and-processing" class="section level3">
 <h3>Data Wrangling, Cleaning and Processing</h3>
-<p>After cleaning up the files, we have what we call “tidy data.” … Tidy data is what we need in order for us to commence data visualizations, modeling, and forecastings.</p>
+<p>Before we begin, we must get the datasets. Here is the list of all the datasets we will use from the repository.</p>
 <pre class="r"><code># These are the combined datasets that will be used for visuals and models. 
-# NOTE: For the rest of the appendix, please refer to these tables to follow through
-# what dataset we used in order to get the outcome
-#
-# You can find these files from the folder &quot;finalData&quot; in the repository
-# if you want to replicate the data visuals.
 
 shootings_killings &lt;- read_csv(&quot;finalData/shootings_killings.csv&quot;)
 
@@ -2776,21 +2793,717 @@ Correlation_complete_dat &lt;- read_csv(&quot;finalData/Correlation_complete_dat
 
 model_dat &lt;- read_csv(&quot;finalData/model_dat.csv&quot;)
 
+urban_index &lt;- read_xls(&quot;originalData/stateData/urban_index.xls&quot;)
+
+male_pop_perc &lt;- read_xlsx(&quot;originalData/stateData/male_pop_perc.xlsx&quot;)
+
+age_2045_perc &lt;- read_csv(&quot;originalData/stateData/age-percent-20-45.csv&quot;)
+
 state_level_model &lt;- read_csv(&quot;finalData/state_level_model_final.csv&quot;)
 
+policedep_count_complete_15_16 &lt;- read_csv(&quot;originalData/countyData/policedep_count_complete_15_16.csv&quot;)
+
+offense_county_16_18 &lt;- read_xls(&quot;originalData/countyData/offense_county_16_18.xls&quot;)
+
+Pop_diversity_and_black_perc_pop_18 &lt;- read_csv(&quot;originalData/countyData/Pop_diversity_and_black_perc_pop_18.csv&quot;)
+
+Urbanization_PopDensity_2010 &lt;- read_xls(&quot;originalData/countyData/Urbanization_PopDensity_2010.xls&quot;)
+
+Firearm_fatalities_17_20 &lt;- read_xlsx(&quot;originalData/countyData/Firearm_fatalities_17_20.xlsx&quot;)
+
+county_male_percentages_15_19 &lt;- read_csv(&quot;originalData/countyData/county-male-percentages-15-19.csv&quot;)
+
+AgeGroup_20_44_2015_2019 &lt;- read_csv(&quot;originalData/countyData/AgeGroup-20_44-2015-2019.csv&quot;)
+
+LandArea &lt;- read_csv(&quot;originalData/countyData/LandArea.csv&quot;)
+
+
+
 county_level_model &lt;- read_csv(&quot;finalData/county_level_model.csv&quot;)</code></pre>
+<pre class="r"><code>newdat1 = left_join(shootings_killings,suicide_race_firearm_pop,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+newdat11 = newdat1%&gt;%
+  group_by(Year,State,Population)%&gt;%
+  tally()%&gt;%
+  mutate(Shootings_10k = n*10000/Population,Shootings_100k=n*100000/Population)
+
+newdat2 = left_join(newdat1,newdat11,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;Population&quot;))
+
+newdat3 = left_join(newdat2,offense,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;City&quot;))
+
+newdat4 = left_join(newdat3,state_local_expenditures_15_17,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+newdat5 = left_join(newdat4, policedep_count_complete, by=c(&quot;Year&quot;,&quot;County&quot;,&quot;City&quot;,&quot;State&quot;))
+
+complete_dat = left_join(newdat5, combined_2017_2020_populations, by=c(&quot;Year&quot;,&quot;State&quot;))
+
+#This is saved and furthered cleaned in excel. The cleaned version is used for the model
+model_complete_dat = complete_dat%&gt;%
+  mutate(armed_simplified = ifelse(Shootings_armed%in%c(&quot;air pistol&quot;,&quot;Airsoft pistol&quot;,
+                                              &quot;BB gun&quot;,&quot;BB gun and vehicle&quot;,
+                                              &quot;bean-bag gun&quot;,&quot;gun&quot;,&quot;gun and car&quot;,
+                                              &quot;gun and knife&quot;,&quot;gun and sword&quot;,
+                                              &quot;gun and vehicle&quot;, &quot;guns and explosives&quot;,
+                                              &quot;hatchet and gun&quot;, &quot;machete and gun&quot;,
+                                              &quot;nail gun&quot;, &quot;pellet gun&quot;),1,0),
+         official_action = ifelse(`Official disposition of death (justified or other)`%in%
+                                    c(&quot;Charged&quot;, &quot;Charged with 2nd degree murder&quot;,
+                              &quot;Charged with a crime&quot;, &quot;Charged with felony murder&quot;,
+                              &quot;Charged with manslaughter&quot;, &quot;Charged with manslaughter, acquitted&quot;,
+                              &quot;Charged with murder&quot;, &quot;Charged with murder, Acquitted&quot;,
+                              &quot;Charged with negligent homicide, Acquitted&quot;,
+                              &quot;Charged with reckless homicide&quot;, &quot;Charged, Acquitted&quot;,
+                              &quot;Charged, Convicted of 2nd degree manslaughter, Sentenced to 4 years&quot;,
+                              &quot;Charged, convicted of manslaughter&quot;, &quot;Charged, Convicted of manslaughter, Sentenced to 2.5 years in prison&quot;,
+                              &quot;Charged, Convicted, Sentenced to 5 years in prison&quot;,
+                              &quot;Charged, Mistrial declared&quot;, &quot;Charged, Mistrial declared, Pled Guilty for Violating Scott&#39;s Civil Rights&quot;,
+                              &quot;Criminal&quot;, &quot;Unjustified, Officer fired&quot;),&quot;Charged&quot;,
+                              ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Justified&quot;, &quot;Justified by Attorney General&quot;,
+                              &quot;Justified by County Attorney&quot;,&quot;Justified by County Prosecutor&quot;,
+                              &quot;Justified by District Attorney&quot;, &quot;Justified by Fifth Judicial Circuit Solicitor&quot;,
+                              &quot;Justified by outside agency&quot;, &quot;Justified by Prosecuting Attorney&quot;,
+                              &quot;Justified by Prosecutor&quot;,&quot;Justified by Prosecutor&#39;s Office&quot;,
+                              &quot;Justified by State&#39;s Attorney&quot;,&quot;Justified by State Attorney&quot;,
+                              &quot;Justified; New York State Police investigation; Schwalm&#39;s brother offered condolences to the deputy because of his brother&#39;s illness.&quot;),&quot;Justified&quot;, ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Ongoing investigation&quot;, &quot;Under investigation&quot;),&quot;Ongoing&quot;,ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Grand jury/No bill or Cleared&quot;,&quot;No Known Charges&quot;,&quot;Unknown&quot;,&quot;Unreported&quot;),&quot;Unreported&quot;,&quot;Pending&quot;)))),
+         Victim_Criminal_Charges_Simplified = ifelse(`Criminal Charges?`%in%c(&quot;Charged with a crime&quot;,&quot;Charged with manslaughter&quot;,&quot;Charged, Acquitted&quot;,&quot;Charged, Convicted, Sentenced to 2.5 years in prison&quot;,&quot;Charged, Convicted, Sentenced to 4 years&quot;,&quot;Charged, Convicted, Sentenced to 40 years in prison&quot;,&quot;Charged, Convicted, Sentenced to 5 years in prison&quot;,&quot;Charged, Mistrial&quot;,&quot;Charged, Mistrial, Plead Guilty to Civil Rights Charges&quot;),&quot;Charged&quot;,&quot;No Charges&quot;))</code></pre>
+<p>Once you run all of these datasets, we will now be able to proceed with creating the datasets for the models and visuals.</p>
+<pre class="r"><code>## State Level Modeling
+
+state_model = model_complete_dat%&gt;%
+  mutate(police_frac_total_expend = police_expenditure/total_expenditure,
+         Race = factor(Race,levels = c(&quot;W&quot;,&quot;H&quot;,&quot;B&quot;,&quot;A&quot;,&quot;N&quot;,&quot;O&quot;)),
+         Shootings_flee = factor(Shootings_flee,levels = c(&quot;Not fleeing&quot;,&quot;Car&quot;,&quot;Foot&quot;,&quot;Other&quot;)),
+         density_p_mi = (density_p_mi2_2020+density_p_mi2_2020)/2,
+         pop_diversity_index = 1-((White_Percent/100)^2+(Black_Percent/100)^2+
+                                    (Hispanic_Percent/100)^2+(Asian_Percent/100)^2+
+                                    (Other_Percent/100)^2))%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(Count = mean(ifelse(Year==2020,2*n,n)),
+            Age= median(Age,na.rm = T),
+            Population = round(mean(Population)),
+            Black_pop_perc = round(mean(Black_Percent),2),
+            Firearm_10k = round(mean(Firearm_per_10k,na.rm = T),2),
+            Crime_10k = round(mean(Crime_Index_10k,na.rm = T),2),
+            Pol_frac_total = round(mean(police_frac_total_expend,na.rm = T),5),
+            pop_density = round(mean((density_p_mi2_2017+density_p_mi2_2020)/2),2),
+            pop_diversity = round(mean(1-((White_Percent/100)^2+(Black_Percent/100)^2+
+                                            (Hispanic_Percent/100)^2+(Asian_Percent/100)^2+
+                                            (Other_Percent/100)^2)),2))
+
+#Offical action
+act_1 = model_complete_dat%&gt;%
+  group_by(Year,State,official_action)%&gt;%
+  tally()%&gt;%
+  na.omit()
+act_2 = act_1%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(perc=round(n*100/sum(n),2))
+act_1=cbind(act_1[,-4],&quot;Percentage&quot;=act_2$perc)
+act_final = spread(act_1,official_action,Percentage)
+names(act_final)[3:7] = paste(c(&quot;Official_action_Charged&quot;,&quot;Official_action_Justified&quot;,&quot;Official_action_Ongoing&quot;,&quot;Official_action_Pending&quot;,&quot;Official_action_Unreported&quot;))
+
+state_model = left_join(state_model,act_final,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+
+#Urbanization_Index
+state_model = left_join(state_model,urban_index,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+#Male population percentage
+state_model = left_join(state_model,male_pop_perc,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+#Percent population of ages 20-45
+state_model = left_join(state_model,age_2045_perc,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+## write.csv(state_model,&#39;state_level_model.csv&#39;,row.names = F) ##</code></pre>
+<pre class="r"><code>#County Level
+cdat1 = shootings_killings%&gt;%
+  group_by(Year,State,County)%&gt;%
+  summarise(Count=n())
+
+shootings_killings = left_join(shootings_killings,cdat1,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+  
+county_dat1 = left_join(shootings_killings,policedep_count_complete_15_16,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;City&quot;,&quot;County&quot;))
+
+county_dat2 = left_join(county_dat1,offense_county_16_18,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+
+county_dat3 = left_join(county_dat2,Pop_diversity_and_black_perc_pop_18,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_dat4 = left_join(county_dat3,Urbanization_PopDensity_2010,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_dat5 = left_join(county_dat4,Firearm_fatalities_17_20,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+
+county_dat6 = left_join(county_dat5,county_male_percentages_15_19,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+
+county_dat7 = left_join(county_dat6,AgeGroup_20_44_2015_2019,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+
+county_dat8 = left_join(county_dat7,LandArea,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_complete = county_dat8%&gt;%
+  mutate(Crime_Index_10k = Total_Crime*10000/Population,
+         Pop_Density = Population/LandArea)
+
+## write.csv(county_complete,&#39;county_complete_dat.csv&#39;,row.names = F) ##
+
+officer_mean = county_complete%&gt;%
+  group_by(State,County)%&gt;%
+  summarise(officer_mean = round(mean(officers_per_10k_pop,na.rm = T),2))
+
+county_complete = left_join(county_complete,officer_mean,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_complete = county_complete%&gt;%
+  mutate(officers_per_10k_pop = ifelse(Year%in%c(2015,2016),
+                                       officers_per_10k_pop,officer_mean))
+crime_mean = county_complete%&gt;%
+  group_by(State,County)%&gt;%
+  summarise(crime_mean = round(mean(Crime_Index_10k,na.rm = T),2))
+
+county_complete = left_join(county_complete,crime_mean,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_complete = county_complete%&gt;%
+  mutate(Crime_Index_10k = ifelse(Year%in%c(2016,2017,2018),
+                                  Crime_Index_10k,crime_mean))
+
+fire_state = Firearm_fatalities_17_20%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(fire_min_state=min(Numer_of_Firearm_Fatalities,na.rm = T))
+
+## write.csv(fire_state,&#39;firearm_fatality_mean_state.csv&#39;,row.names =F) ##
+
+Firearm_fatalities_17_20 = left_join(Firearm_fatalities_17_20,fire_state,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+Firearm_fatalities_17_20 = Firearm_fatalities_17_20%&gt;%
+   mutate(Numer_of_Firearm_Fatalities = round(ifelse(Numer_of_Firearm_Fatalities==0,
+                                               fire_min_state,Numer_of_Firearm_Fatalities)))
+
+firearm_mean = Firearm_fatalities_17_20%&gt;%
+   group_by(State,County)%&gt;%
+   summarise(firearm_mean = round(mean(Numer_of_Firearm_Fatalities,na.rm = T),2))
+
+county_complete = left_join(county_complete,firearm_mean,by=c(&quot;State&quot;,&quot;County&quot;))
+
+county_complete = county_complete%&gt;%
+   mutate(Numer_of_Firearm_Fatalities = ifelse(Year%in%c(2017,2018,2019,2020),
+                                               Numer_of_Firearm_Fatalities,
+                                               firearm_mean))
+
+county_level = county_complete%&gt;%
+  group_by(Year,State,County)%&gt;%
+  summarise(Count = round(mean(Count)),
+            officer_10k = round(mean(officers_per_10k_pop,na.rm = T),2),
+            crime_10k = round(mean(Crime_Index_10k,na.rm = T),2),
+            pop_diversity = round(mean(Population_Diversity_Index,na.rm = T),2),
+            black_pop_perc = round(mean(Black_pop_perc,na.rm = T),2),
+            urbanization_index = round(mean(Urban_pop_perc,na.rm = T),2),
+            firearm_fatalities_100k = round(mean(Numer_of_Firearm_Fatalities,na.rm = T),2),
+            population = round(mean(Population,na.rm = T),2),
+            pop_density = round(mean(Pop_Density,na.rm = T),2),
+            male_perc = round(mean(male_percentage,na.rm = T),2),
+            age_20_45_perc = round(mean(AgeGroup_20_45_percentage,na.rm = T),2))
+
+county_level = county_level%&gt;%
+  mutate(Count = ifelse(Year==2020,2*Count,Count))
+
+act_1 = shootings_killings%&gt;%
+  mutate(armed_simplified = ifelse(Shootings_armed%in%c(&quot;air pistol&quot;,&quot;Airsoft pistol&quot;,
+                                                        &quot;BB gun&quot;,&quot;BB gun and vehicle&quot;,
+                                                        &quot;bean-bag gun&quot;,&quot;gun&quot;,&quot;gun and car&quot;,
+                                                        &quot;gun and knife&quot;,&quot;gun and sword&quot;,
+                                                        &quot;gun and vehicle&quot;, &quot;guns and explosives&quot;,
+                                                        &quot;hatchet and gun&quot;, &quot;machete and gun&quot;,
+                                                        &quot;nail gun&quot;, &quot;pellet gun&quot;),1,0),
+         official_action = ifelse(`Official disposition of death (justified or other)`%in%
+                                    c(&quot;Charged&quot;, &quot;Charged with 2nd degree murder&quot;,
+                                      &quot;Charged with a crime&quot;, &quot;Charged with felony murder&quot;,
+                                      &quot;Charged with manslaughter&quot;, &quot;Charged with manslaughter, acquitted&quot;,
+                                      &quot;Charged with murder&quot;, &quot;Charged with murder, Acquitted&quot;,
+                                      &quot;Charged with negligent homicide, Acquitted&quot;,
+                                      &quot;Charged with reckless homicide&quot;, &quot;Charged, Acquitted&quot;,
+                                      &quot;Charged, Convicted of 2nd degree manslaughter, Sentenced to 4 years&quot;,
+                                      &quot;Charged, convicted of manslaughter&quot;, &quot;Charged, Convicted of manslaughter, Sentenced to 2.5 years in prison&quot;,
+                                      &quot;Charged, Convicted, Sentenced to 5 years in prison&quot;,
+                                      &quot;Charged, Mistrial declared&quot;, &quot;Charged, Mistrial declared, Pled Guilty for Violating Scott&#39;s Civil Rights&quot;,
+                                      &quot;Criminal&quot;, &quot;Unjustified, Officer fired&quot;),&quot;Charged&quot;,
+                                  ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Justified&quot;, &quot;Justified by Attorney General&quot;,
+                                                                                                   &quot;Justified by County Attorney&quot;,&quot;Justified by County Prosecutor&quot;,
+                                                                                                   &quot;Justified by District Attorney&quot;, &quot;Justified by Fifth Judicial Circuit Solicitor&quot;,
+                                                                                                   &quot;Justified by outside agency&quot;, &quot;Justified by Prosecuting Attorney&quot;,
+                                                                                                   &quot;Justified by Prosecutor&quot;,&quot;Justified by Prosecutor&#39;s Office&quot;,
+                                                                                                   &quot;Justified by State&#39;s Attorney&quot;,&quot;Justified by State Attorney&quot;,
+                                                                                                   &quot;Justified; New York State Police investigation; Schwalm&#39;s brother offered condolences to the deputy because of his brother&#39;s illness.&quot;),&quot;Justified&quot;, ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Ongoing investigation&quot;, &quot;Under investigation&quot;),&quot;Ongoing&quot;,ifelse(`Official disposition of death (justified or other)`%in%c(&quot;Grand jury/No bill or Cleared&quot;,&quot;No Known Charges&quot;,&quot;Unknown&quot;,&quot;Unreported&quot;),&quot;Unreported&quot;,&quot;Pending&quot;)))),
+         Victim_Criminal_Charges_Simplified = ifelse(`Criminal Charges?`%in%c(&quot;Charged with a crime&quot;,&quot;Charged with manslaughter&quot;,&quot;Charged, Acquitted&quot;,&quot;Charged, Convicted, Sentenced to 2.5 years in prison&quot;,&quot;Charged, Convicted, Sentenced to 4 years&quot;,&quot;Charged, Convicted, Sentenced to 40 years in prison&quot;,&quot;Charged, Convicted, Sentenced to 5 years in prison&quot;,&quot;Charged, Mistrial&quot;,&quot;Charged, Mistrial, Plead Guilty to Civil Rights Charges&quot;),&quot;Charged&quot;,&quot;No Charges&quot;))%&gt;%
+  group_by(Year,State,County,official_action)%&gt;%
+  tally()%&gt;%
+  na.omit()
+act_2 = act_1%&gt;%
+  group_by(Year,State,County)%&gt;%
+  summarise(perc=round(n*100/sum(n),2))
+act_1=cbind(act_1[,-5],&quot;Percentage&quot;=act_2$perc)
+act_final = spread(act_1,official_action,Percentage)
+names(act_final)[4:8] = paste(c(&quot;Official_action_Charged&quot;,&quot;Official_action_Justified&quot;,&quot;Official_action_Ongoing&quot;,&quot;Official_action_Pending&quot;,&quot;Official_action_Unreported&quot;))
+
+county_level = left_join(county_level,act_final,by=c(&quot;Year&quot;,&quot;State&quot;,&quot;County&quot;))
+
+## write.csv(county_level,&#39;county_level_model.csv&#39;,row.names = F) ##</code></pre>
 </div>
 <div id="data-visuals" class="section level3">
 <h3>Data visuals</h3>
 <p>Data visuals help us see what variables may have a correlation to the count and rates of fatal police shootings. This will include all the graphs, forecasting plots, and wordclouds.</p>
-<p>Here is the code for all the visuals we created. For this section, please note that we will NOT be outputting the results here as the visuals are in the section already.</p>
-<pre class="r"><code># </code></pre>
+<div id="graphs" class="section level4">
+<h4>Graphs</h4>
+<pre class="r"><code>### Data Visual Plots
+
+## Fig 1
+# Doubling count of fatal police shootings in 2020 since the data cutoff is May 2020. We assume a constant rate of fatal police shootings over the year.
+s_k_count = shootings_killings%&gt;%
+  group_by(Year,State)%&gt;%
+  tally()%&gt;%
+  mutate(n_changed=ifelse(Year==2020,2*n,n))
+
+# Getting the counts of fatal police shootings for each state, each year, sorting them in descending order of counts (greatest to least)
+s_k_count_arr = s_k_count%&gt;%
+  group_by(State)%&gt;%
+  summarise(total_n=sum(n_changed))%&gt;%
+  arrange(desc(total_n))
+
+# Getting the top ten states, plot the top ten states
+newdat2%&gt;%
+  group_by(Year,State)%&gt;%
+  filter(State%in%s_k_count_arr$State[1:10])%&gt;%
+  mutate(n_changed=ifelse(Year==2020,2*n,n))%&gt;%
+  ggplot(aes(x=Year,y=n_changed,col=State))+
+  geom_line(show.legend = F)+
+  scale_y_continuous(trans=&#39;log10&#39;)+
+  geom_text(aes(label=paste(n_changed,State)),vjust=-0.5,size=3,check_overlap = T,show.legend = F)+
+  labs(x=&quot;Year&quot;,y=&quot;Number of Shootings&quot;,title=&quot;Annual number of shootings (Top 10 States)&quot;)</code></pre>
+<pre class="r"><code>## Fig 2
+# Group by year and state, double the rate of fatal police shootings for all groupings with the year 2020
+sk_shoot = newdat2%&gt;%
+  group_by(Year,State)%&gt;%
+  mutate(shoot_100k = ifelse(Year==2020,2*Shootings_100k,Shootings_100k))%&gt;%
+  summarise(shoot_100k_changed = mean(shoot_100k))
+
+# Sort the grouping in descending order: greatest to least in rate of fatal police shootings
+sk_shoot_arr = sk_shoot%&gt;%
+  group_by(State)%&gt;%
+  summarise(total_shoot = sum(shoot_100k_changed))%&gt;%
+  arrange(desc(total_shoot))
+
+# Plotting the top ten states of the rates of fatal police shootings over the years of 2015-2020
+sk_shoot%&gt;%
+  filter(State%in%sk_shoot_arr$State[1:10])%&gt;%
+  ggplot(aes(x=Year,y=shoot_100k_changed,col=State))+
+  geom_line(show.legend = F)+
+  geom_text(aes(label=paste(State,round(shoot_100k_changed,2))),vjust=-1,size=3,check_overlap = T,show.legend = F)+
+  labs(X=&quot;Year&quot;,y=&quot;Shootings per 100k&quot;,title = &quot;Annual Shootings per 100k (Top 10 States)&quot;)</code></pre>
+<pre class="r"><code>## Fig 3
+# Group the counts of fatal police shootings by month and year, set the cutoff to be January 2015 - May 2020 as June 2020 is not compelete yet. Then, plot the graph, showing the numbers of shootings per month, per year. 
+shootings_killings%&gt;%
+  group_by(Year,Month)%&gt;%
+  tally()%&gt;%
+  mutate(m_y=as.Date(paste(Year,Month,&quot;01&quot;,sep = &quot;-&quot;),format=&quot;%Y-%m-%d&quot;))%&gt;%
+  filter(Year!=2020 | Month!=6)%&gt;% #Removing the sixth month as we dont have full month data
+  ggplot(
+    aes( x=m_y,
+         y=n,
+         col=Year)
+    ) +
+  geom_point(show.legend = F)+
+  geom_line(show.legend = F)+
+  geom_text(aes(label=n),vjust=-0.8,size=3,check_overlap = F,col=&quot;black&quot;)+
+  theme(axis.text.x=element_text(angle=90),axis.text=element_text(size=6))+
+  labs(x=&quot;Month &amp; Year&quot;,y=&quot;Number of shootings&quot;,title=&quot;Full view of number of shootings 2015-2020&quot;)+
+  scale_x_date(date_labels = &quot;%b %Y&quot;, breaks = seq(as.Date(&quot;2015-01-01&quot;), as.Date(&quot;2020-5-31&quot;), by=&quot;1 month&quot;))</code></pre>
+<pre class="r"><code>## Fig 4
+# Group by Year and State, then plot all 50 states and counts in a barplot in descending order.
+newdat2%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(Shoot_100k = mean(Shootings_100k,na.rm = T))%&gt;%
+  ggplot(aes(x = State, y = Shoot_100k,fill=Year))+
+  geom_bar(aes(reorder(State,-Shoot_100k)),show.legend = T,position = &quot;stack&quot;,stat=&quot;identity&quot;)+
+  labs(x=&quot;State&quot;,y=&quot;Number of shootings per 100k&quot;,title= &quot;Fatal Shootings by state 2015-2020&quot;)+
+  scale_y_continuous()+
+  theme(axis.text.x=element_text(angle=45),axis.text=element_text(size=6))</code></pre>
+<pre class="r"><code>## Fig 5
+# Find the weekdays of the counts of fatal police shootings. Then, group by Year and weekday. then, plot the counts of fatal police shootings by days of the week, faceted by year.
+shootings_killings%&gt;%
+  mutate(date_modified =as.Date(paste(Year,Month,Day,sep = &quot;-&quot;),&quot;%Y-%m-%d&quot;),
+         weekday = weekdays(date_modified))%&gt;%
+  group_by(Year,weekday)%&gt;%
+  tally()%&gt;%
+  ggplot(aes(x=factor(weekday,level=c(&quot;Monday&quot;,&quot;Tuesday&quot;,&quot;Wednesday&quot;,&quot;Thursday&quot;,&quot;Friday&quot;,&quot;Saturday&quot;,&quot;Sunday&quot;)),y=n,fill=weekday))+
+  geom_bar(stat=&quot;identity&quot;,show.legend = F)+
+  geom_text(aes(label=n),vjust=1.5,size=2.5,show.legend = F)+
+  facet_wrap(~Year,scales=&quot;free&quot;)+
+  scale_x_discrete(labels=c(&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;,&quot;Sun&quot;))+
+  theme(axis.text.x=element_text(angle=90))+
+  labs(x=&quot;Days of the week&quot;,y=&quot;Numer of Shootings&quot;,title=&quot;Number of shootings by days of the week&quot;)</code></pre>
+<pre class="r"><code>## Fig 6
+# Taking out unnecessary rows
+new_state_expediture = state_local_expenditures_15_17[-c(1,2,9,16,22,30,43,48,54,61,62,69,76,82,90,103,108,114,121,122,129,136,142,150,163,168,174),]
+
+# Plot the police expenditure per capita for all 50 states, for all years
+new_state_expediture%&gt;%
+  ggplot(aes(x=State, y = police_expenditure))+
+  geom_bar(aes(fill=Year,reorder(State,-police_expenditure)),position =&quot;stack&quot;,stat=&quot;identity&quot;)+
+  labs(x=&quot;State&quot;,y=&quot;Police Expenditure&quot;,title = &quot;Expenditure on PD Per-Capita 2015-2017&quot;)+
+  theme(axis.text.x=element_text(angle=90))+
+  scale_fill_continuous(limits=c(2015, 2017), breaks=seq(2015,2017,by=1))</code></pre>
+<pre class="r"><code>## Fig 7
+# Plot all 50 states of the rate of fatal police shootings over the fraction of police expenditure from the total expenditure. Facet by year.
+newdat4%&gt;%
+  mutate(pol_frac_tot = police_expenditure/total_expenditure)%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(shoot_100k = mean(Shootings_100k),p_f_t = mean(pol_frac_tot))%&gt;%
+  filter(Year%in%c(2015,2016,2017))%&gt;%
+  ggplot(aes(x=p_f_t,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=1.2,size=3)+
+  facet_wrap(~Year,scales=&quot;free&quot;)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  labs(x=&quot;Fraction of police from total expenditure&quot;,y=&quot;Shootings per 100k&quot;,title=&quot;Shootings per 100k vs police fraction of total expenditure 2015-2017&quot;)</code></pre>
+<pre class="r"><code>## Fig 8
+# Plotting the average fraction of police expenditure over total expenditure for each state of the years 2015-2017
+newdat4%&gt;%
+  mutate(pol_frac_tot = police_expenditure/total_expenditure)%&gt;%
+  filter(Year%in%c(2015,2016,2017))%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(shoot_100k = mean(Shootings_100k),p_f_t = mean(pol_frac_tot*100))%&gt;%
+  group_by(State)%&gt;%
+  summarise(shoot_100k = sum(shoot_100k)/3,p_f_t = sum(p_f_t)/3)%&gt;%
+  ggplot(aes(x=p_f_t,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=1.2,size=3)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  labs(x=&quot;Annualized percentage of police from total expenditure&quot;,y=&quot;Annualized Shootings per 100k&quot;,title=&quot;Annualized Shootings per 100k vs police fraction of total expenditure 2015-2017&quot;)</code></pre>
+<pre class="r"><code>## Fig 9
+# Plot the rate of fatal police shootings over population diversity for each state. 
+state_level_model%&gt;%
+  mutate(shootings_100k = Count*100000/Population)%&gt;%
+  group_by(State)%&gt;%
+  summarise(shoot_100k = sum(shootings_100k)/6,
+            pop_div = mean(pop_diversity))%&gt;%
+  ggplot(aes(x=pop_div,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=-0.5,size=3)+
+  geom_smooth(method= &quot;lm&quot;,se=F,col=&quot;blue&quot;)+
+  labs(x=&quot;Population Diversity&quot;,y=&quot;Shootings per 100k&quot;, title = &quot;Shootings per 100k vs Population Diversity 2015-2020&quot;)</code></pre>
+<pre class="r"><code>## Fig 10
+# Get the annualized (average) of the crime index for each state from the years 2015-2018. Then, get the plot of Shootings per 10k over Crime Index per 10k
+annual_crime=newdat3%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(s_s=mean(Shootings_10k),s_c=mean(Crime_Index_10k,na.rm=T))%&gt;%
+  filter(Year%in%c(2015,2016,2017,2018))
+
+annual_crime%&gt;%
+  group_by(State)%&gt;%
+  summarise(s_a_s=sum(s_s)/4,s_a_c=sum(s_c)/4)%&gt;%
+  ggplot(aes(x=s_a_c,y=s_a_s))+
+  scale_x_continuous(trans=&#39;log10&#39;) +
+  scale_y_continuous(trans=&#39;log10&#39;) +
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),show.legend = F,check_overlap = T,vjust=1,hjust=-0.2)+
+  labs(x=&quot;Crime Index per 10k (log10)&quot;,y=&quot;Shootings per 10k (log10)&quot;,title=&quot;Shootings vs Crime Index 2015-2018&quot;)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;orange&quot;)</code></pre>
+<pre class="r"><code>## Fig 11
+# We first group the counts of fatal police shootings by year and by race, omitting any NA values.
+shooting_race = shootings_killings%&gt;%
+  group_by(Year,Race)%&gt;%
+  tally()%&gt;%
+  na.omit()
+
+attach(shooting_race)
+race_perc = round(c(n[1:6]/sum(n[1:6]),n[7:12]/sum(n[7:12]),n[13:18]/sum(n[13:18]),
+  n[19:24]/sum(n[19:24]),n[25:30]/sum(n[25:30]),n[31:36]/sum(n[31:36]))*100,3)
+
+# The races are A B H N O W
+#Manually collected diversity data for the entire US
+pop_perc = c(5  ,  12  , 18  , 1   , 2  , 62,   #2015
+             5  ,  12  , 18  , 2   , 2  , 61,   #2016
+             6  ,  12  , 18  , 1   , 2  , 61,   #2017
+             6  ,  12  , 18  , 2   , 2  , 60,   #2018
+             5.9,  13.4, 18.5, 0.6 , 1.5, 60.1, #2019
+             5.83, 12.54,18.73,2.29, 0.91,59.7) #2020
+
+shooting_race = cbind(shooting_race,race_perc,pop_perc)
+names(shooting_race)[4] = paste(&quot;Race_perc&quot;)
+names(shooting_race)[5] = paste(&quot;Pop_perc&quot;)
+
+shooting_race_visual = shooting_race[,-3] 
+
+srv = shooting_race_visual%&gt;%
+  gather(&quot;Percentage&quot;,&quot;Value&quot;,-c(Year, Race))
+
+srv%&gt;%
+  ggplot(aes(x = Race, y = Value,fill=Percentage))+
+  geom_col(aes(reorder(Race,-Value)),position=&quot;dodge&quot;)+
+  facet_wrap(~Year)+
+  labs(y=&quot;Percentage&quot;,y=&quot;Race&quot;,title=&quot;Population vs Shooting by Race 2015-2020&quot;)+
+  scale_fill_discrete(name = &quot;&quot;, labels = c(&quot;Population&quot;, &quot;Shooting&quot;))+
+  theme(axis.text.x=element_text(size=13))</code></pre>
+<pre class="r"><code>## Fig 12
+# Get the counts of fatal police shootings by Year, state, and race.
+black_shootings = complete_dat%&gt;%
+  group_by(Year,State,Race)%&gt;%
+  tally()%&gt;%
+  mutate(shooting_race = n*100/sum(n))%&gt;%
+  filter(Race==&quot;B&quot;)
+
+black_pop = suicide_race_firearm_pop[,c(1,2,6)]
+
+black_proportions = left_join(black_shootings,black_pop,by=c(&quot;Year&quot;,&quot;State&quot;))
+
+black_proportions%&gt;%
+  group_by(State)%&gt;%
+  summarise(s_r_a=sum(shooting_race)/5.4166667,b_p_a=mean(Black_Percent))%&gt;%
+  ggplot(aes(x=b_p_a,y=s_r_a))+
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),size=3,vjust=1)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  scale_x_continuous(breaks = seq(0,45,5))+
+  labs(x=&quot;Percentage of Black Population&quot;,y=&quot;Percentage of Black Shootings&quot;,title=&quot;Black Population vs Shootings&quot;)</code></pre>
+<pre class="r"><code>## Fig 13
+# Plot the rate of fatal police shootings over officers per 10k, faceted by year
+complete_dat%&gt;%
+  filter(Year%in%c(2015,2016))%&gt;%
+  ggplot(aes(x=officers_per_10k_pop,y=Shootings_10k,col=Police_Dept))+
+  geom_point(show.legend = F)+
+  scale_x_continuous(trans=&#39;log10&#39;)+
+  scale_y_continuous(trans=&#39;log10&#39;)+
+  facet_wrap(~Year,scales=&quot;free&quot;)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  labs(x=&quot;Officer per 10k by Department (log10)&quot;,y=&quot;Shootings per 10k(log10)&quot;,title=&quot;Fatal Shootings vs Officer per 10k&quot;)</code></pre>
+<pre class="r"><code>## Fig 14
+# Plot the rate of fatal police shootings over the percentage a decision was made on an officer (justified or charged)
+state_level_model%&gt;%
+  mutate(Count = ifelse(Year==2020,Count/2,Count),
+         Shootings_100k = Count*100000/Population)%&gt;%
+  filter(official_action_taken!=0)%&gt;%
+  ggplot(aes(x=official_action_taken,y=Shootings_100k))+
+  geom_point()+
+  geom_smooth(method=&quot;lm&quot;,se=F)+
+  geom_text(aes(label=State),vjust=-0.5,size=2.5,check_overlap = T)+
+  labs(x=&quot;Decision Made on Officer (Charged or Justified)&quot;,y = &quot;Shootings per 100k&quot;)</code></pre>
+<pre class="r"><code>## Fig 15
+# Group by Year and State for the counts of fatal police shootings
+annual_ss = newdat2%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(shoot_100k = mean(Shootings_100k),suicide_100k = mean(Suicide_Rate_100k))
+
+# Plot Annualized Shootings per 100k over Annualized Suicide Rates
+annual_ss%&gt;%
+  group_by(State)%&gt;%
+  summarise(shoot_annual_100k = sum(shoot_100k)/5.41666667,
+            suicide_annual_100k = sum(suicide_100k)/5.41666667)%&gt;%
+  na.omit()%&gt;% #Since we dont have data on suicide rates for DC
+  ggplot(aes(x=suicide_annual_100k,y=shoot_annual_100k))+
+  geom_point(show.legend = F)+
+  geom_text(aes(label=State),vjust=-1,size=3,check_overlap = T)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  labs(x=&quot;Annualized Suicide Rates per 100k&quot;,y=&quot;Annualized Shootings per 100k&quot;,title=&quot;Annualized Shootings vs Suicide Rates by state&quot;)</code></pre>
+<pre class="r"><code>## Fig 16
+# Using the firearm_annual dataset, create a plot of Shootings per 100k over Registered Firearms per 100k
+firearm_annual = newdat2%&gt;%
+  group_by(Year,State)%&gt;%
+  summarise(shoot_100k = mean(Shootings_100k),firearm = mean(Firearm_per_10k)*10) #since its 10k we would like it to be per 100k
+
+firearm_annual%&gt;%
+  group_by(State)%&gt;%
+  summarise(shoot_a = sum(shoot_100k)/5.41666667,
+            firearm_a = sum(firearm)/5.41666667)%&gt;%
+  ggplot(aes(x=firearm_a, y=shoot_a))+
+  geom_point(show.legend = F)+
+  scale_x_continuous(trans=&#39;log10&#39;)+
+  scale_y_continuous(trans=&#39;log10&#39;)+
+  geom_text(aes(label=State),vjust=-1,size=3,check_overlap = T)+
+  geom_smooth(method=&quot;lm&quot;,se=F,col=&quot;blue&quot;)+
+  labs(x=&quot;Registered Firearms per 100k&quot;,y=&quot;Shootings per 100k&quot;,title=&quot;Shootings vs Registered Firearms &quot;)</code></pre>
+<pre class="r"><code>## Fig 17
+# Using the state_level_model dataset, create a plot of Shootings per 100k over Urbanization Index
+state_level_model%&gt;%
+  mutate(shootings_100k = Count*100000/Population)%&gt;%
+  group_by(State)%&gt;%
+  summarise(shoot_100k = sum(shootings_100k)/5.4166667,
+            Urban_Index = mean(Urbanization_Index))%&gt;%
+  ggplot(aes(x=Urban_Index,y=shoot_100k))+
+  geom_point()+
+  geom_text(aes(label=State),vjust=-0.5,size=3)+
+  geom_smooth(method= &quot;lm&quot;,se=F,col=&quot;red&quot;)+
+  labs(x=&quot;Urbanization Index&quot;,y=&quot;Shootings per 100k&quot;)</code></pre>
+<pre class="r"><code>## Fig 18
+# Using the county_level_model dataset, create a plot of Shootings per 10k over Firearm Fatalities (County Level)
+# Log-scaled both axes for better readability
+county_level_model%&gt;%
+  mutate(shootings_10k = Count*10000/population)%&gt;%
+  ggplot(aes(y=log(shootings_10k),x=log(firearm_fatalities_100k)))+
+  geom_point()+
+  geom_smooth(method = &quot;lm&quot;,se=F)+
+  labs(x = &quot;Log of Firearm Fatalitites in 100k&quot;, y = &quot;Log of Shootings per 10k&quot;)</code></pre>
+</div>
+<div id="topic-modeling-pt.-1---wordclouds" class="section level4">
+<h4>Topic Modeling Pt. 1 - Wordclouds</h4>
+<pre class="r"><code>### Topic Modeling Pt. 1
+## Overall Wordcloud
+
+# Many libraries in R have overlapping functions with the same name, so for this part, we will detach all libraries and input the ones needed for this section.
+invisible(lapply(paste0(&quot;package:&quot;, names(sessionInfo()$otherPkgs)),   # Unload add-on packages
+                 detach,
+                 character.only = TRUE, unload = TRUE))
+library(stringr)
+library(tidytext)
+library(readr)
+library(tm)
+library(dplyr)
+library(broom)
+
+library(wordcloud2)
+library(here)
+library(webshot)
+library(htmlwidgets)
+
+# Look at the &quot;brief description&quot; column and make it into a corpus
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+# As a corpus, we are now able to remove numbers, punctuation, and strip extra white space between words
+docs = docs %&gt;%
+  tm_map(removeNumbers) %&gt;%
+  tm_map(removePunctuation) %&gt;%
+  tm_map(stripWhitespace)
+
+docs = tm_map(docs, content_transformer(tolower))
+docs = tm_map(docs, removeWords, stopwords(&quot;english&quot;))
+
+# Convert back to a dataframe
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+# Plot the wordcloud given a dataframe
+wordcloud2(data=df,size=1.2, color=&#39;random-dark&#39;)
+
+
+## Wordclouds (specific race)
+
+# Look at the &quot;brief description&quot; column and make it into a corpus, filtering it to whatever race you want to see
+# In this case, we have Race == &quot;W,&quot; but you can use it for other races such as &quot;B&quot; (Black), &quot;A&quot; (Asian) or &quot;H&quot; (Hispanic)
+text = shootings_killings %&gt;% 
+  filter(Race == &quot;W&quot;) # You may choose whatever race you want to filter for
+text = shootings_killings$`A brief description of the circumstances surrounding the death`
+docs = Corpus(VectorSource(text))
+
+docs = docs %&gt;%
+  tm_map(removeNumbers) %&gt;%
+  tm_map(removePunctuation) %&gt;%
+  tm_map(stripWhitespace)
+
+docs = tm_map(docs, content_transformer(tolower))
+docs = tm_map(docs, removeWords, stopwords(&quot;english&quot;))
+
+dtm = TermDocumentMatrix(docs) 
+matrix = as.matrix(dtm) 
+words = sort(rowSums(matrix),decreasing=TRUE) 
+df = data.frame(word = names(words),freq=words)
+
+wordcloud2(data=df,size=1.2, color=&#39;random-dark&#39;)</code></pre>
+</div>
+<div id="topic-modeling-pt.-2---lda" class="section level4">
+<h4>Topic Modeling Pt. 2 - LDA</h4>
+<pre class="r"><code>### Topic Modeling Pt. 2
+# Many libraries in R have overlapping functions with the same name, so for this part, we will detach all libraries and input the ones needed for this section.
+invisible(lapply(paste0(&quot;package:&quot;, names(sessionInfo()$otherPkgs)),   # Unload add-on packages
+                 detach,
+                 character.only = TRUE, unload = TRUE))
+library(&quot;ldatuning&quot;)
+library(&quot;topicmodels&quot;)
+library(stringr)
+library(ggplot2)
+library(tidytext)
+library(readr)
+library(tm)
+library(dplyr)
+library(broom)
+library(SnowballC)
+
+# Get the data
+sk = read_csv(&quot;finalData/shootings_killings.csv&quot;)
+sk_h = sk %&gt;% 
+  select(`A brief description of the circumstances surrounding the death`) 
+
+# 1 - Getting topic range
+df_corpus = Corpus(VectorSource(sk_h))
+
+
+# remove topic specific words
+topicStopWords = c(&quot;police&quot;, &quot;shot&quot;, &quot;officers&quot;, &quot;killed&quot;, &quot;said&quot;, &quot;officer&quot;, 
+                   &quot;deputies&quot;, &quot;deputy&quot;, &quot;responded&quot;, &quot;around&quot;,
+                   &quot;according&quot;, &quot;began&quot;, &quot;stop&quot;, &quot;arrived&quot;, &quot;report&quot;, 
+                   &quot;reportedly&quot;, &quot;got&quot;, &quot;county&quot;)
+
+# Remove punctuation, numbers, stopwords, topic specific words (topicStopWords), strip the extra white space, and make the words all lowercase
+df_corpus = df_corpus %&gt;% 
+  tm_map(tolower) %&gt;% 
+  tm_map(removePunctuation) %&gt;% 
+  tm_map(removeNumbers) %&gt;% 
+  tm_map(removeWords, stopwords(&quot;english&quot;)) %&gt;% 
+  tm_map(removeWords, topicStopWords) %&gt;% 
+  tm_map(stripWhitespace)
+
+# Make the corpus into dataframe
+dtm = DocumentTermMatrix(df_corpus) 
+matrix = as.matrix(dtm)
+words = sort(rowSums(matrix), decreasing = T)
+df = data.frame(word = names(words), freq = words)
+
+# Computation of the optimal number of topics given the dataframe. The function FindTopicNumber() requires the document-term-matrix, range of number of topics, control (seed), and the number of cores of your computer. As this is a computational-intensive function, it is best to be able to use the maximum amount of cores in your computer specifically in order for this function to complete in minimal time.
+# Keep the metrics, method, and verbose as is. 
+
+## NOTE: The following will be commented out for the sake of showing the code. Please uncomment so that you may use and see the result and plot of this section. ##
+
+# result = FindTopicsNumber(
+#   dtm,
+#   topics = seq(from = 2, to = 20, by = 1),
+#   metrics = c(&quot;Griffiths2004&quot;, &quot;CaoJuan2009&quot;, &quot;Arun2010&quot;, &quot;Deveaud2014&quot;),
+#   method = &quot;Gibbs&quot;,
+#   control = list(seed = 100),
+#   mc.cores = 4L,
+#   verbose = TRUE
+# )
+# 
+# 
+# FindTopicsNumber_plot(result)</code></pre>
+<pre class="r"><code># 2 - LDA Modeling
+
+# turn the corpus into a document term matrix 
+DocToMat = DocumentTermMatrix(df_corpus)
+
+# Use the LDA function. You need the document-term0matrix, the number of topics you want (the &quot;k&quot;), and control (in this case, we use a seed of 100).
+ap_lda = LDA(DocToMat, k = 3, control = list(seed = 100))
+
+# Tidy the LDA variable
+ap_topics = tidy(ap_lda, matrix = &quot;beta&quot;)
+
+#P Setting up to plot the words underneath each topic
+ap_top_terms = ap_topics %&gt;%
+  group_by(topic) %&gt;%
+  top_n(10, beta) %&gt;%
+  ungroup() %&gt;%
+  arrange(topic, -beta)
+
+# Plot the words for each topic number.
+ap_top_terms %&gt;%
+  mutate(term = reorder_within(term, beta, topic)) %&gt;%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = &quot;free&quot;) +
+  coord_flip() +
+  scale_x_reordered()</code></pre>
+</div>
 </div>
 <div id="data-modeling" class="section level3">
 <h3>Data modeling</h3>
-<p>Any code for the “randomly selected” states?</p>
 <div id="state-level" class="section level4">
-<h4>State Level:</h4>
+<h4>State Level</h4>
 <pre class="r"><code># Running the Chi-Square Goodness-of-Fit Test for state level
 x = goodfit(state_level_model$Count, type = &quot;poisson&quot;)
 chisq.test(x$observed,x$fitted)
@@ -2836,7 +3549,7 @@ model1.step = step(glm(Count~.
 summary(model1.step)</code></pre>
 </div>
 <div id="county-level" class="section level4">
-<h4>County Level:</h4>
+<h4>County Level</h4>
 <pre class="r"><code># Running the Chi-Square Goodness-of-Fit Test for county level
 x = goodfit(county_level_model$Count, type = &quot;poisson&quot;)
 chisq.test(x$observed,x$fitted)
