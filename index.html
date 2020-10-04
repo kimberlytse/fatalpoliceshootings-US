@@ -260,10 +260,8 @@ div.tocify {
 </div>
 
 
-<div id="abstract" class="section level2">
-<h2>Abstract</h2>
+<p>Centered Text  ## Abstract</p>
 <p>Fatal police shootings have been an interest in the political, social, and academic field, as there  has been discrepancy of whether the police used force to protect the people. With the increased  awareness of the Black Lives Matter Movement (BLM) and the movement of Defunding the  Police, there are speculations of the legitimacy of police use-of-force. In this report, we will do  comprehensive analyses making use of factors that may increase the likelihood of fatal police  shootings and whether funding for police departments have a significant relation with fatal police  shootings. To achieve this, we will use multiple different datasets and combine them together.  We were able to observe which factors have a strong correlation on the rate of shootings through  Exploratory Data Analysis which allowed us to see the univariate and multivariate distributions.  We will address the above research questions by making use of Poisson Regression for the rate  of shootings at the state and county levels, and Time Series Forecasting for the monthly number  of shootings in the U.S.</p>
-</div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Fatal police shootings have been an increasing interest in the political, social, and academic field  (Shane 2017). The police use-of-force is meant to be used as a means to apprehend the person  and keep citizens and themselves safe. However, with the increased awareness of the BLM  movement and the movement of Defunding the Police, there are speculations of the legitimacy of  police use-of-force.</p>
@@ -333,7 +331,7 @@ div.tocify {
 </ol>
 <p>So with all the changes applied to the combined dataset, we produced some summary statistics with the variables that will be used in our Poisson Regression models.</p>
 <table>
-<caption>Table 1: States Ranked by Shootings per 100k Shooting Rate Jan 2015 - Jun 2020</caption>
+<caption>Table 1: US States Ranked by Total # Shootings per 100k (Shooting Rate) over the period of Jan 2015 - June 2020</caption>
 <thead>
 <tr class="header">
 <th align="right">Rank</th>
@@ -652,7 +650,7 @@ div.tocify {
 </tbody>
 </table>
 <table>
-<caption>Table 2. State Level Summary Statistics for Quantitative Variables [Mean (SD)]</caption>
+<caption>Table 2: State Level Summary Statistics for Quantitative Variables [Mean (SD) of Annual Values]</caption>
 <colgroup>
 <col width="2%" />
 <col width="9%" />
@@ -1307,7 +1305,7 @@ div.tocify {
 </tbody>
 </table>
 <table>
-<caption>Table 3. State Level Summary Statistics for Categorical Variables in Percentages</caption>
+<caption>Table 3: State Level Summary Statistics for Categorical Variables in Percentages</caption>
 <colgroup>
 <col width="2%" />
 <col width="5%" />
@@ -2116,11 +2114,11 @@ div.tocify {
 <div id="topic-modeling" class="section level4">
 <h4>2. Topic Modeling</h4>
 <p>With the combined dataset of the Washington Post and the Mapping Police Violence, we are able to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We first proceeded with word clouds, which will give a visualization of the frequency of the words being used; the more frequent the word repeats throughout (in this case, our combined dataset), the bigger that particular word will appear in the visual.</p>
-<p>We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event.</p>
+<p>We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event. Here, we have the overall wordcloud of the most frequent words in the descriptions of each incident.</p>
 <p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
-<p>We had the idea of separating the word clouds by race, thinking that there may be some characteristics that may differ by group. However, they all share the same similarity of words</p>
+<p>We had the idea of separating the word clouds by race, thinking that there may be some characteristics that may differ by group. However, they all share the same similarity of words. Here we have a wordcloud on the left of the words that describes the incidences that involves White decedents, and on the right are the words that describes the incidences involving African American decedents.</p>
 <p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="50%" /><img src="index_files/figure-html/unnamed-chunk-23-2.png" width="50%" /></p>
-<p>Since many words seem to repeat in each of the groups such as “police,” “officers,” “shot,” and “killed,” we then decided to take out topic-specific words that do not lose the context of the situation.</p>
+<p>Since many words seem to repeat in each of the groups such as “police,” “officers,” “shot,” and “killed,” we then decided to take out topic-specific words that do not lose the context of the situation. Here we have a wordcloud on the left of the words that describes the incidences that involves White decedents, and on the right are the words that describes the incidences involving Afrinca American decedents.</p>
 <p><img src="index_files/figure-html/unnamed-chunk-24-1.png" width="50%" /><img src="index_files/figure-html/unnamed-chunk-24-2.png" width="50%" /></p>
 <p>Taking out topic-specific words did not seem to help as there were even more words that each  group had in common. There seems to be no distinction between the groups of words for each  race based on these visuals, so we decided to take a different approach to see if we can group  each description by topic and be able to see if there are any patterns of topics for each race.  Topic modeling is a method in text mining that allows us to classify words in groups that share a  focus. The method used for this is Latent Dirichlet allocation, where we can treat each topic as a  mixture of words that will convey something contributing to that particular topic.</p>
 <p>We decided to first figure out the optimal amount of topics that we can group the words, keeping  in mind of maximum coverage and minimum overlapping. We want each topic to span over all  the words that can be relevant to that topic and avoid leaving out key words that can fall into that  particular topic. At the same time, we want the minimum overlapping of words so that we can  avoid confusion of the topics presented and find distinction between other topics. The following  two methods are used to find the appropriate amount of topics: 1) To train the LDA model of a  sequence of topics and select the number of topics that will best give us both maximum coverage  and minimum overlapping, and 2) To manually run the data for each number of topics and see  what number of topics are best fit for our dataset.</p>

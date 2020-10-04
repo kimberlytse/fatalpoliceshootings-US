@@ -112,7 +112,7 @@ model_complete_dat = complete_dat%>%
          Victim_Criminal_Charges_Simplified = ifelse(`Criminal Charges?`%in%c("Charged with a crime","Charged with manslaughter","Charged, Acquitted","Charged, Convicted, Sentenced to 2.5 years in prison","Charged, Convicted, Sentenced to 4 years","Charged, Convicted, Sentenced to 40 years in prison","Charged, Convicted, Sentenced to 5 years in prison","Charged, Mistrial","Charged, Mistrial, Plead Guilty to Civil Rights Charges"),"Charged","No Charges"))
 ```
 
-
+\center Centered Text \center
 ## Abstract
 
 Fatal police shootings have been an interest in the political, social, and academic field, as there  has been discrepancy of whether the police used force to protect the people. With the increased  awareness of the Black Lives Matter Movement (BLM) and the movement of Defunding the  Police, there are speculations of the legitimacy of police use-of-force. In this report, we will do  comprehensive analyses making use of factors that may increase the likelihood of fatal police  shootings and whether funding for police departments have a significant relation with fatal police  shootings. To achieve this, we will use multiple different datasets and combine them together.  We were able to observe which factors have a strong correlation on the rate of shootings through  Exploratory Data Analysis which allowed us to see the univariate and multivariate distributions.  We will address the above research questions by making use of Poisson Regression for the rate  of shootings at the state and county levels, and Time Series Forecasting for the monthly number  of shootings in the U.S.
@@ -193,19 +193,19 @@ library(knitr)
 state.summary.rate = read_csv("finalData/summary-state-rank.csv")
 state.summary.rate = state.summary.rate%>% 
   na.omit()
-kable(state.summary.rate, caption = "Table 1: States Ranked by Shootings per 100k Shooting Rate Jan 2015 - Jun 2020")
+kable(state.summary.rate, caption = "Table 1: US States Ranked by Total # Shootings per 100k (Shooting Rate) over the period of Jan 2015 - June 2020")
 ```
 
 
 ```{r Table 2, echo=F, message = F}
 state.summary.vars.quant = read_csv("finalData/state-summary-vars-quantitative.csv")
-kable(state.summary.vars.quant, caption = "Table 2. State Level Summary Statistics for Quantitative Variables  [Mean (SD)]")
+kable(state.summary.vars.quant, caption = "Table 2: State Level Summary Statistics for Quantitative Variables  [Mean (SD) of Annual Values]")
 ```
 
 
 ```{r Table 3, echo=F, message = F}
 state.summary.vars.cat = read_csv("finalData/state-summary-vars-categorical.csv")
-kable(state.summary.vars.cat, caption = "Table 3. State Level Summary Statistics for Categorical Variables in Percentages")
+kable(state.summary.vars.cat, caption = "Table 3: State Level Summary Statistics for Categorical Variables in Percentages")
 ```
 
 
@@ -569,7 +569,7 @@ We used the data on Firearm Fatalities per 100k against the rate of Shootings pe
 
 With the combined dataset of the Washington Post and the Mapping Police Violence, we are able to look at the descriptions of each of the victims of fatal police shootings from 2015 to 2020. We first proceeded with word clouds, which will give a visualization of the frequency of the words being used; the more frequent the word repeats throughout (in this case, our combined dataset), the bigger that particular word will appear in the visual.
 
-We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event.
+We first created a word cloud encompassing all the words used in the description of each fatal shooting in the dataset to see what kinds of words were used throughout. We took out stop words such as “at,” “the,” and “which” since it doesn’t add to the context of what happened at the fatal shooting event. Here, we have the overall wordcloud of the most frequent words in the descriptions of each incident.
 
 ```{r, echo=FALSE, warning =F, message = F}
 library(here)
@@ -598,7 +598,7 @@ webshot("overallwc.html", "overallwc.png", delay = 5, vwidth = 1000, vheight = 7
 
 ```
 
-We had the idea of separating the word clouds by race, thinking that there may be some characteristics that may differ by group. However, they all share the same similarity of words
+We had the idea of separating the word clouds by race, thinking that there may be some characteristics that may differ by group. However, they all share the same similarity of words. Here we have a wordcloud on the left of the words that describes the incidences that involves White decedents, and on the right are the words that describes the incidences involving African American decedents.
 
 ```{r, echo=FALSE, message= F, warning =F, fig.show="hold", out.width="50%"}
 invisible(lapply(paste0("package:", names(sessionInfo()$otherPkgs)),   # Unload add-on packages
@@ -664,7 +664,7 @@ webshot("overallwcb.html", "overallwcb.png", delay = 5, vwidth = 1000, vheight =
 
 ```
 
-Since many words seem to repeat in each of the groups such as “police,” “officers,” “shot,” and “killed,” we then decided to take out topic-specific words that do not lose the context of the situation.
+Since many words seem to repeat in each of the groups such as “police,” “officers,” “shot,” and “killed,” we then decided to take out topic-specific words that do not lose the context of the situation. Here we have a wordcloud on the left of the words that describes the incidences that involves White decedents, and on the right are the words that describes the incidences involving Afrinca American decedents.
 
 
 ```{r, echo=FALSE, message= F, warning =F, fig.show="hold", out.width="50%"}
